@@ -31,7 +31,9 @@ texto y poda lo que tenga más de 45 días.
 3. **Secret.** En el repo de GitHub: *Settings → Secrets and variables → Actions* →
    nuevo secret `IG_API_TOKEN` con el token.
 4. **Pages.** *Settings → Pages* → *Deploy from a branch* → rama `main`, carpeta `/ (root)`.
-5. **Contacto.** Cambia el email de retirada en el pie de [`index.html`](index.html).
+5. **Contacto.** Cada protectora gestiona sus adopciones con sus normas: el sitio enlaza a la
+   publicación original de Instagram y no incluye un contacto genérico. Edita el pie de
+   [`index.html`](index.html) si quieres cambiar ese texto.
 
 El workflow [`update.yml`](.github/workflows/update.yml) corre solo cada día; puedes
 lanzarlo a mano desde la pestaña *Actions* (*Run workflow*).
@@ -48,6 +50,6 @@ python3 -m http.server                      # sirve el sitio en localhost:8000
 
 - **Términos de Instagram:** leer cuentas ajenas sin permiso está en zona gris de sus
   términos. El uso aquí es vecinal y sin ánimo de lucro; enlazamos siempre al post original
-  y ofrecemos un contacto de retirada. El proveedor asume la parte técnica.
+  y el contacto para adopciones es directo con cada protectora. El proveedor asume la parte técnica.
 - **Ajustar volumen:** `POSTS_PER_ACCOUNT` y `RETENTION_DAYS` en `scripts/fetch.mjs`.
 - **Fuera de alcance (v1):** buscador de texto, filtro por zona, pre-render para SEO.
