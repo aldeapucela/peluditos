@@ -1,12 +1,9 @@
 const grid = document.getElementById('grid');
 const empty = document.getElementById('empty');
 const shelterSel = document.getElementById('shelter');
-const typeBtns = document.querySelectorAll('[data-type]');
 const PLACEHOLDER = 'img/placeholder.svg';
-const TYPE_LABEL = { perro: '🐶 Perro', gato: '🐱 Gato', otro: '🐾 Otro' };
 
 let posts = [];
-let filterType = 'todos';
 let filterShelter = 'todas';
 
 const escapeHtml = (s) =>
@@ -27,7 +24,6 @@ function card(p) {
     <img class="card__img" loading="lazy" alt="Publicación de ${escapeHtml(p.shelter)}"
          src="${p.image || PLACEHOLDER}" onerror="this.onerror=null;this.src='${PLACEHOLDER}'">
     <div class="card__body">
-      <span class="badge">${TYPE_LABEL[p.type] || '🐾 Otro'}</span>
       <p class="card__text">${escapeHtml(p.excerpt)}</p>
       <div class="card__meta">
         <span class="card__shelter">${escapeHtml(p.shelter)}</span>
@@ -38,11 +34,7 @@ function card(p) {
 }
 
 function render() {
-  const list = posts.filter(
-    (p) =>
-      (filterType === 'todos' || p.type === filterType) &&
-      (filterShelter === 'todas' || p.shelter === filterShelter)
-  );
+  const list = posts.filter((p) => filterShelter === 'todas' || p.shelter === filterShelter);
 
   grid.innerHTML = '';
   empty.hidden = list.length > 0;
@@ -76,14 +68,6 @@ function initFilters() {
     filterShelter = shelterSel.value;
     render();
   });
-  typeBtns.forEach((b) =>
-    b.addEventListener('click', () => {
-      typeBtns.forEach((x) => x.classList.remove('is-active'));
-      b.classList.add('is-active');
-      filterType = b.dataset.type;
-      render();
-    })
-  );
 }
 
 fetch('data/posts.json')

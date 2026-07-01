@@ -14,8 +14,7 @@ shelters.json → scripts/fetch.mjs (cron diario) → data/posts.json + img/ →
 ```
 
 El script pide a un servicio de datos de Instagram los últimos posts de cada cuenta,
-guarda solo los nuevos, descarga sus imágenes a `img/`, clasifica perro/gato/otro por el
-texto y poda lo que tenga más de 45 días.
+guarda solo los nuevos, descarga sus imágenes a `img/` y poda lo que tenga más de 45 días.
 
 ## Puesta en marcha
 

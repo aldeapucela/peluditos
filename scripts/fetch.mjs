@@ -20,22 +20,6 @@ const POSTS_PER_ACCOUNT = 6;    // últimos posts a pedir por cuenta en cada eje
 
 // ---------- helpers puros (cubiertos por --self-test) ----------
 
-const norm = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-
-const DOG = ['perr', 'cachorr', 'canin', ' can ', '🐕', '🐶'];
-const CAT = ['gat', 'felin', 'michi', 'minin', '🐱', '🐈'];
-
-// ponytail: clasificación por palabras clave del texto; si casa ambos o ninguno → "otro".
-// Heurística, fallará a veces. Upgrade: lista de términos más rica o clasificador real.
-export function classify(caption) {
-  const c = ' ' + norm(caption) + ' ';
-  const isDog = DOG.some((k) => c.includes(k));
-  const isCat = CAT.some((k) => c.includes(k));
-  if (isDog && !isCat) return 'perro';
-  if (isCat && !isDog) return 'gato';
-  return 'otro';
-}
-
 export function excerpt(caption, n = 180) {
   const c = (caption || '').trim().replace(/\s+/g, ' ');
   return c.length > n ? c.slice(0, n - 1) + '…' : c;
@@ -126,7 +110,6 @@ async function main() {
       excerpt: excerpt(p.caption),
       image: await downloadImage(p.imageUrl, p.shortCode),
       permalink: p.permalink,
-      type: classify(p.caption),
     });
   }
 
@@ -149,10 +132,6 @@ async function main() {
 // ---------- self-test ----------
 function selfTest() {
   const assert = (c, m) => { if (!c) throw new Error('self-test FALLÓ: ' + m); };
-  assert(classify('Precioso PERRO en adopción') === 'perro', 'perro');
-  assert(classify('gatita muy cariñosa 🐱') === 'gato', 'gato');
-  assert(classify('busca hogar urgente') === 'otro', 'sin señales → otro');
-  assert(classify('perro y gato juntos') === 'otro', 'ambos → otro');
   assert(excerpt('a'.repeat(200)).length === 180, 'excerpt corta a 180');
   assert(excerpt('hola') === 'hola', 'excerpt corto intacto');
   assert(prune([{ date: new Date().toISOString() }, { date: '2000-01-01' }], Date.now()).length === 1, 'prune elimina viejos');
