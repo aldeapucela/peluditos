@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Peluditos — Adopciones de las protectoras de Valladolid</title>
+  <meta name="description" content="Animales en adopción de todas las protectoras de Valladolid, en una sola página. Un servicio de Aldea Pucela.">
+  <link rel="icon" href="img/placeholder.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site">
+    <h1>🐾 Peluditos</h1>
+    <p>Animales en adopción de las protectoras de Valladolid, todos en un mismo sitio.
+       Un servicio de <a href="https://aldeapucela.org" target="_blank" rel="noopener">Aldea Pucela</a>.</p>
+  </header>
+
+  <nav class="filters">
+    <div class="filters__types" role="group" aria-label="Filtrar por tipo de animal">
+      <button data-type="todos" class="is-active">Todos</button>
+      <button data-type="perro">🐶 Perros</button>
+      <button data-type="gato">🐱 Gatos</button>
+      <button data-type="otro">🐾 Otros</button>
+    </div>
+    <label class="filters__shelter">
+      Protectora:
+      <select id="shelter"><option value="todas">Todas</option></select>
+    </label>
+  </nav>
+
+  <main>
+    <div id="grid"></div>
+    <p id="empty" class="empty" hidden>Aún no hay publicaciones. Vuelve pronto 🐾</p>
+  </main>
+
+  <footer class="site">
+    <p>Cada protectora gestiona sus adopciones con sus propias normas: el contacto es directo con ella
+       a través de su publicación en Instagram. Las imágenes y textos pertenecen a cada protectora
+       y enlazamos siempre a la publicación original.</p>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
