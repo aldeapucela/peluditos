@@ -106,11 +106,17 @@ async function classifyWithAI(caption, imageFile, apiKey) {
     generationConfig: { temperature: 0, maxOutputTokens: 16, thinkingConfig: { thinkingBudget: 0 } },
   });
 
-  // Pocos reintentos y cortos: absorben un pico puntual de RPM sin quemar la cuota diaria.
+  // 429 = cuota real → aborta el run. 5xx = sobrecarga transitoria del modelo
+  // ("high demand"): reintenta con backoff y, si insiste, salta este post (sigue el resto).
   let lastErr = '';
-  for (let attempt = 0; attempt < 3; attempt++) {
+  for (let attempt = 0; attempt < 4; attempt++) {
     const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body });
-    if (res.status === 429 || res.status >= 500) { lastErr = `${res.status} ${(await res.text()).slice(0, 240)}`; await sleep(5000 * (attempt + 1)); continue; }
+    if (res.status === 429) {
+      const e = new Error('429 ' + (await res.text()).slice(0, 160));
+      e.quotaExceeded = true;
+      throw e;
+    }
+    if (res.status >= 500) { lastErr = String(res.status); await sleep(5000 * (attempt + 1)); continue; }
     if (!res.ok) throw new Error(`Gemini ${res.status}: ${(await res.text()).slice(0, 200)}`);
     const data = await res.json();
     const cand = data?.candidates?.[0];
@@ -120,9 +126,7 @@ async function classifyWithAI(caption, imageFile, apiKey) {
     if (!text) console.warn(`Gemini: respuesta vacía (finishReason=${cand?.finishReason})`);
     return 'otro';
   }
-  const err = new Error('límite tras reintentos → ' + lastErr);
-  err.rateLimited = true;
-  throw err;
+  throw new Error(`Gemini ${lastErr} sobrecarga; se salta y se reintenta en el próximo run`);
 }
 
 // Clasifica los posts que aún no tienen `type` (nuevos + backfill de los existentes).
@@ -140,11 +144,11 @@ async function classifyMissing(posts, apiKey) {
       p.type = await classifyWithAI(p.caption, imageFile, apiKey);
       done++;
     } catch (e) {
-      if (e.rateLimited) {
-        console.warn(`Límite de Gemini (${e.message}); quedan ${pending.length - done} para la próxima ejecución`);
-        break; // no seguir: el resto también daría 429 y gastaría cuota en balde
+      if (e.quotaExceeded) {
+        console.warn(`Cuota de Gemini agotada (${e.message}); quedan ${pending.length - done} para la próxima ejecución`);
+        break; // solo abortamos por cuota real (429)
       }
-      console.error(`Clasificación falló para ${p.id}:`, e.message); // sin type → se reintenta la próxima vez
+      console.error(`Clasificación falló para ${p.id} (se salta): ${e.message}`); // 503/otros → siguiente post
     }
     await sleep(CLASSIFY_DELAY_MS);
   }
