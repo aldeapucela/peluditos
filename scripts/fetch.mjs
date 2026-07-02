@@ -17,8 +17,9 @@ const IMG_DIR = path.join(ROOT, 'img');
 
 const RETENTION_DAYS = 45;      // solo "lo nuevo": se poda lo más antiguo
 const POSTS_PER_ACCOUNT = 6;    // últimos posts a pedir por cuenta en cada ejecución
-const GEMINI_MODEL = 'gemini-2.5-flash';  // modelo multimodal del tier gratuito
-const CLASSIFY_DELAY_MS = 7000; // pausa entre clasificaciones (< 10 req/min del tier gratuito)
+const GEMINI_MODEL = 'gemini-2.5-flash-lite';  // multimodal, barato/rápido, cuota diaria propia
+const CLASSIFY_DELAY_MS = 7000;      // pausa entre clasificaciones (< 10 req/min del tier gratuito)
+const MAX_CLASSIFY_PER_RUN = 60;     // techo por ejecución; el resto espera al siguiente run
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -105,10 +106,10 @@ async function classifyWithAI(caption, imageFile, apiKey) {
     generationConfig: { temperature: 0, maxOutputTokens: 16, thinkingConfig: { thinkingBudget: 0 } },
   });
 
-  // reintentos con backoff para 429/5xx (el tier gratuito es 10 req/min).
-  for (let attempt = 0; attempt < 5; attempt++) {
+  // Pocos reintentos y cortos: absorben un pico puntual de RPM sin quemar la cuota diaria.
+  for (let attempt = 0; attempt < 3; attempt++) {
     const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body });
-    if (res.status === 429 || res.status >= 500) { await sleep(Math.min(60000, 10000 * (attempt + 1))); continue; }
+    if (res.status === 429 || res.status >= 500) { await sleep(5000 * (attempt + 1)); continue; }
     if (!res.ok) throw new Error(`Gemini ${res.status}: ${(await res.text()).slice(0, 200)}`);
     const data = await res.json();
     const cand = data?.candidates?.[0];
@@ -118,7 +119,9 @@ async function classifyWithAI(caption, imageFile, apiKey) {
     if (!text) console.warn(`Gemini: respuesta vacía (finishReason=${cand?.finishReason})`);
     return 'otro';
   }
-  throw new Error('Gemini: agotados los reintentos (429/5xx)');
+  const err = new Error('Gemini: límite de peticiones (429) tras reintentos');
+  err.rateLimited = true;
+  throw err;
 }
 
 // Clasifica los posts que aún no tienen `type` (nuevos + backfill de los existentes).
@@ -130,12 +133,16 @@ async function classifyMissing(posts, apiKey) {
     return 0;
   }
   let done = 0;
-  for (const p of pending) {
+  for (const p of pending.slice(0, MAX_CLASSIFY_PER_RUN)) {
     const imageFile = p.image ? path.join(ROOT, p.image) : null;
     try {
       p.type = await classifyWithAI(p.caption, imageFile, apiKey);
       done++;
     } catch (e) {
+      if (e.rateLimited) {
+        console.warn(`Límite diario de Gemini alcanzado; quedan ${pending.length - done} para la próxima ejecución`);
+        break; // no seguir: el resto también daría 429 y gastaría cuota en balde
+      }
       console.error(`Clasificación falló para ${p.id}:`, e.message); // sin type → se reintenta la próxima vez
     }
     await sleep(CLASSIFY_DELAY_MS);
