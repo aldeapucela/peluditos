@@ -2,7 +2,7 @@ name: Actualizar publicaciones
 
 on:
   schedule:
-    - cron: '0 6 * * *'   # cada día a las 06:00 UTC
+    - cron: '0 9 * * *'   # cada día a las 09:00 UTC (tras el reset de cuota de Gemini: 07:00-08:00 UTC / medianoche Pacífico)
   workflow_dispatch:       # permite lanzarlo a mano
 
 permissions:

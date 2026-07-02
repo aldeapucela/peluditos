@@ -107,9 +107,10 @@ async function classifyWithAI(caption, imageFile, apiKey) {
   });
 
   // Pocos reintentos y cortos: absorben un pico puntual de RPM sin quemar la cuota diaria.
+  let lastErr = '';
   for (let attempt = 0; attempt < 3; attempt++) {
     const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body });
-    if (res.status === 429 || res.status >= 500) { await sleep(5000 * (attempt + 1)); continue; }
+    if (res.status === 429 || res.status >= 500) { lastErr = `${res.status} ${(await res.text()).slice(0, 240)}`; await sleep(5000 * (attempt + 1)); continue; }
     if (!res.ok) throw new Error(`Gemini ${res.status}: ${(await res.text()).slice(0, 200)}`);
     const data = await res.json();
     const cand = data?.candidates?.[0];
@@ -119,7 +120,7 @@ async function classifyWithAI(caption, imageFile, apiKey) {
     if (!text) console.warn(`Gemini: respuesta vacía (finishReason=${cand?.finishReason})`);
     return 'otro';
   }
-  const err = new Error('Gemini: límite de peticiones (429) tras reintentos');
+  const err = new Error('límite tras reintentos → ' + lastErr);
   err.rateLimited = true;
   throw err;
 }
@@ -140,7 +141,7 @@ async function classifyMissing(posts, apiKey) {
       done++;
     } catch (e) {
       if (e.rateLimited) {
-        console.warn(`Límite diario de Gemini alcanzado; quedan ${pending.length - done} para la próxima ejecución`);
+        console.warn(`Límite de Gemini (${e.message}); quedan ${pending.length - done} para la próxima ejecución`);
         break; // no seguir: el resto también daría 429 y gastaría cuota en balde
       }
       console.error(`Clasificación falló para ${p.id}:`, e.message); // sin type → se reintenta la próxima vez
