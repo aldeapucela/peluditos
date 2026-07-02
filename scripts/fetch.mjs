@@ -18,7 +18,7 @@ const IMG_DIR = path.join(ROOT, 'img');
 const RETENTION_DAYS = 45;      // solo "lo nuevo": se poda lo más antiguo
 const POSTS_PER_ACCOUNT = 6;    // últimos posts a pedir por cuenta en cada ejecución
 const GEMINI_MODEL = 'gemini-2.5-flash';  // modelo multimodal del tier gratuito
-const CLASSIFY_DELAY_MS = 6000; // pausa entre clasificaciones (respeta el límite req/min)
+const CLASSIFY_DELAY_MS = 7000; // pausa entre clasificaciones (< 10 req/min del tier gratuito)
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -100,18 +100,22 @@ async function classifyWithAI(caption, imageFile, apiKey) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
   const body = JSON.stringify({
     contents: [{ parts }],
-    generationConfig: { temperature: 0, maxOutputTokens: 10 },
+    // thinkingBudget:0 es CLAVE: 2.5-flash "piensa" por defecto y ese pensamiento
+    // consume maxOutputTokens, devolviendo texto vacío (finishReason MAX_TOKENS).
+    generationConfig: { temperature: 0, maxOutputTokens: 16, thinkingConfig: { thinkingBudget: 0 } },
   });
 
-  // ponytail: 3 reintentos con backoff para 429/5xx; suficiente para el volumen diario.
-  for (let attempt = 0; attempt < 3; attempt++) {
+  // reintentos con backoff para 429/5xx (el tier gratuito es 10 req/min).
+  for (let attempt = 0; attempt < 5; attempt++) {
     const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body });
-    if (res.status === 429 || res.status >= 500) { await sleep(5000 * (attempt + 1)); continue; }
+    if (res.status === 429 || res.status >= 500) { await sleep(Math.min(60000, 10000 * (attempt + 1))); continue; }
     if (!res.ok) throw new Error(`Gemini ${res.status}: ${(await res.text()).slice(0, 200)}`);
     const data = await res.json();
-    const text = (data?.candidates?.[0]?.content?.parts?.[0]?.text || '').toLowerCase();
+    const cand = data?.candidates?.[0];
+    const text = (cand?.content?.parts || []).map((x) => x.text || '').join(' ').toLowerCase();
     if (text.includes('perro')) return 'perro';
     if (text.includes('gato')) return 'gato';
+    if (!text) console.warn(`Gemini: respuesta vacía (finishReason=${cand?.finishReason})`);
     return 'otro';
   }
   throw new Error('Gemini: agotados los reintentos (429/5xx)');
