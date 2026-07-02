@@ -2,7 +2,7 @@
 // Peluditos — sincroniza las publicaciones recientes de las cuentas de Instagram
 // de las protectoras hacia data/posts.json. Node 20+, sin dependencias.
 //
-// Uso:  IG_API_TOKEN=xxxx node scripts/fetch.mjs
+// Uso:  IG_API_TOKEN=xxxx GEMINI_API_KEY=yyyy node scripts/fetch.mjs
 //       node scripts/fetch.mjs --self-test
 
 import { readFile, writeFile, mkdir, readdir, unlink } from 'node:fs/promises';
@@ -17,6 +17,10 @@ const IMG_DIR = path.join(ROOT, 'img');
 
 const RETENTION_DAYS = 45;      // solo "lo nuevo": se poda lo más antiguo
 const POSTS_PER_ACCOUNT = 6;    // últimos posts a pedir por cuenta en cada ejecución
+const GEMINI_MODEL = 'gemini-2.5-flash';  // modelo multimodal del tier gratuito
+const CLASSIFY_DELAY_MS = 6000; // pausa entre clasificaciones (respeta el límite req/min)
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ---------- helpers puros (cubiertos por --self-test) ----------
 
@@ -74,6 +78,67 @@ async function downloadImage(imageUrl, id) {
   }
 }
 
+// ---------- clasificación por IA (perro / gato / otro) ----------
+// AISLADO A PROPÓSITO: cambiar de proveedor de IA = editar SOLO esta función.
+// Gemini multimodal: mira la imagen Y el texto (incluido el texto de carteles).
+async function classifyWithAI(caption, imageFile, apiKey) {
+  const prompt =
+    'Clasifica esta publicación de Instagram de una protectora de animales. ' +
+    'Fíjate en la imagen y en el texto y responde con UNA sola palabra en minúsculas: ' +
+    '"perro" si el animal protagonista es un perro, "gato" si es un gato, ' +
+    '"otro" para cualquier otro animal o si no hay un animal claro (carteles, eventos, comida, logos...). ' +
+    'Texto de la publicación: ' + (caption || '(sin texto)');
+
+  const parts = [{ text: prompt }];
+  if (imageFile) {
+    try {
+      const b64 = (await readFile(imageFile)).toString('base64');
+      parts.push({ inline_data: { mime_type: 'image/jpeg', data: b64 } });
+    } catch { /* sin imagen legible: se clasifica solo por texto */ }
+  }
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const body = JSON.stringify({
+    contents: [{ parts }],
+    generationConfig: { temperature: 0, maxOutputTokens: 10 },
+  });
+
+  // ponytail: 3 reintentos con backoff para 429/5xx; suficiente para el volumen diario.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body });
+    if (res.status === 429 || res.status >= 500) { await sleep(5000 * (attempt + 1)); continue; }
+    if (!res.ok) throw new Error(`Gemini ${res.status}: ${(await res.text()).slice(0, 200)}`);
+    const data = await res.json();
+    const text = (data?.candidates?.[0]?.content?.parts?.[0]?.text || '').toLowerCase();
+    if (text.includes('perro')) return 'perro';
+    if (text.includes('gato')) return 'gato';
+    return 'otro';
+  }
+  throw new Error('Gemini: agotados los reintentos (429/5xx)');
+}
+
+// Clasifica los posts que aún no tienen `type` (nuevos + backfill de los existentes).
+async function classifyMissing(posts, apiKey) {
+  const pending = posts.filter((p) => p.type === undefined);
+  if (!pending.length) return 0;
+  if (!apiKey) {
+    console.warn(`Sin GEMINI_API_KEY: ${pending.length} posts quedan sin clasificar (se reintentará)`);
+    return 0;
+  }
+  let done = 0;
+  for (const p of pending) {
+    const imageFile = p.image ? path.join(ROOT, p.image) : null;
+    try {
+      p.type = await classifyWithAI(p.caption, imageFile, apiKey);
+      done++;
+    } catch (e) {
+      console.error(`Clasificación falló para ${p.id}:`, e.message); // sin type → se reintenta la próxima vez
+    }
+    await sleep(CLASSIFY_DELAY_MS);
+  }
+  return done;
+}
+
 async function main() {
   const token = process.env.IG_API_TOKEN;
   if (!token) throw new Error('Falta la variable IG_API_TOKEN');
@@ -117,6 +182,8 @@ async function main() {
     (a, b) => Date.parse(b.date) - Date.parse(a.date)
   );
 
+  const classified = await classifyMissing(merged, process.env.GEMINI_API_KEY);
+
   await writeFile(DATA, JSON.stringify(merged, null, 2) + '\n');
 
   // poda de imágenes huérfanas (posts ya caducados)
@@ -126,7 +193,7 @@ async function main() {
     await unlink(path.join(IMG_DIR, f)).catch(() => {});
   }
 
-  console.log(`${fresh.length} nuevos · ${merged.length} totales`);
+  console.log(`${fresh.length} nuevos · ${classified} clasificados · ${merged.length} totales`);
 }
 
 // ---------- self-test ----------
