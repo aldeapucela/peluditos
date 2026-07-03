@@ -223,12 +223,13 @@ a { color: var(--brand-600); }
   border: 1px solid var(--line);
   background: #fff;
   color: var(--slate-600);
-  padding: .4rem .9rem;
-  border-radius: 999px;
+  min-height: 2.6rem;
+  padding: .55rem 1.1rem;
+  border-radius: .7rem;
   cursor: pointer;
   font-family: var(--font-body);
-  font-size: .875rem;
-  font-weight: 500;
+  font-size: .95rem;
+  font-weight: 600;
   transition: background .2s, color .2s, border-color .2s;
 }
 .filters button:hover { background: var(--brand-50); color: var(--brand-700); }
@@ -236,12 +237,13 @@ a { color: var(--brand-600); }
 .filters__shelter { font-size: .875rem; color: var(--slate-600); }
 .filters__shelter select {
   margin-left: .35rem;
-  padding: .4rem .6rem;
-  border-radius: .6rem;
+  padding: .55rem .7rem;
+  border-radius: .7rem;
   border: 1px solid var(--line);
   background: #fff;
   color: var(--ink);
   font: inherit;
+  font-size: .95rem;
 }
 
 /* ===== Contenido ===== */
