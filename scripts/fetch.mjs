@@ -18,8 +18,9 @@ const IMG_DIR = path.join(ROOT, 'img');
 const RETENTION_DAYS = 45;      // solo "lo nuevo": se poda lo más antiguo
 const POSTS_PER_ACCOUNT = 6;    // últimos posts a pedir por cuenta en cada ejecución
 const GEMINI_MODEL = 'gemini-2.5-flash-lite';  // multimodal, barato/rápido, cuota diaria propia
-const CLASSIFY_DELAY_MS = 7000;      // pausa entre clasificaciones (< 10 req/min del tier gratuito)
-const MAX_CLASSIFY_PER_RUN = 60;     // techo por ejecución; el resto espera al siguiente run
+const FAST = !!process.env.CLASSIFY_FAST;       // clave de pago sin límites → sin frenos (para backfill)
+const CLASSIFY_DELAY_MS = FAST ? 400 : 7000;    // pausa entre clasificaciones (gratuita: < 10 req/min)
+const MAX_CLASSIFY_PER_RUN = FAST ? 1000 : 60;  // techo por ejecución; el resto espera al siguiente run
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
