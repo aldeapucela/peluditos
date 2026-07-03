@@ -90,6 +90,36 @@ async function fetchFromProvider(usernames, token) {
     .filter((p) => p.shortCode && p.date);
 }
 
+// Descarga los avatares de perfil (logos de las protectoras) a img/shelters/.
+// Solo corre con FETCH_AVATARS=1 (una llamada extra a Apify; los logos apenas cambian).
+async function fetchAvatars(shelters, token) {
+  const input = {
+    directUrls: shelters.map((s) => `https://www.instagram.com/${s.username}/`),
+    resultsType: 'details',
+    resultsLimit: 1,
+    addParentData: false,
+  };
+  const url = `https://api.apify.com/v2/acts/apify~instagram-scraper/run-sync-get-dataset-items?token=${encodeURIComponent(token)}&timeout=300`;
+  const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(input) });
+  if (!res.ok) throw new Error(`Apify avatars ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const items = await res.json();
+  const dir = path.join(IMG_DIR, 'shelters');
+  await mkdir(dir, { recursive: true });
+  let n = 0;
+  for (const it of items) {
+    const username = (it.username || '').toLowerCase();
+    const pic = it.profilePicUrlHD || it.profilePicUrl;
+    if (!username || !pic) continue;
+    try {
+      const r = await fetch(pic);
+      if (!r.ok) continue;
+      await writeFile(path.join(dir, `${username}.jpg`), Buffer.from(await r.arrayBuffer()));
+      n++;
+    } catch { /* avatar que falla no rompe el resto */ }
+  }
+  console.log(`Avatares descargados: ${n}/${shelters.length}`);
+}
+
 async function downloadImage(imageUrl, id) {
   if (!imageUrl) return null;
   try {
@@ -225,6 +255,11 @@ async function main() {
   const existing = [...current, ...(await loadArchivePosts())];
   const seen = new Set(existing.map((p) => p.id));
 
+  if (process.env.FETCH_AVATARS) {
+    try { await fetchAvatars(shelters, token); }
+    catch (e) { console.error('Avatares fallaron (no bloquea):', e.message); }
+  }
+
   let raw = [];
   try {
     raw = await fetchFromProvider([...byUser.keys()], token);
@@ -280,7 +315,7 @@ async function main() {
   // ponytail: conservamos imágenes de portada Y archivo (crecen ~100MB/año; poner tope si molesta).
   const keep = new Set(all.map((p) => p.image && path.basename(p.image)).filter(Boolean));
   for (const f of await readdir(IMG_DIR)) {
-    if (f === 'placeholder.svg' || keep.has(f)) continue;
+    if (f === 'placeholder.svg' || f === 'shelters' || f === 'hero.jpg' || keep.has(f)) continue;
     await unlink(path.join(IMG_DIR, f)).catch(() => {});
   }
 

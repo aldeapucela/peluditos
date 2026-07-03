@@ -30,13 +30,13 @@ function card(p) {
     <img class="card__img" loading="lazy" alt="Publicación de ${escapeHtml(p.shelter)}"
          src="${p.image || PLACEHOLDER}" onerror="this.onerror=null;this.src='${PLACEHOLDER}'">
     <div class="card__body">
+      <span class="card__shelter">${escapeHtml(p.shelter)}</span>
       <div class="badges">
         <span class="badge">${TYPE_LABEL[p.type] || '🐾 Otro'}</span>
         ${CAT_LABEL[p.tipo] ? `<span class="badge badge--cat">${CAT_LABEL[p.tipo]}</span>` : ''}
       </div>
       <p class="card__text">${escapeHtml(p.excerpt)}</p>
       <div class="card__meta">
-        <span class="card__shelter">${escapeHtml(p.shelter)}</span>
         <span class="card__cta">Ver en Instagram →</span>
       </div>
     </div>`;

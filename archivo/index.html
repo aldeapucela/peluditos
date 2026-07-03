@@ -6,14 +6,33 @@
   <base href="../">
   <title>Archivo — Peluditos</title>
   <meta name="description" content="Archivo por años de las publicaciones de las protectoras y asociaciones de animales de Valladolid.">
-  <link rel="icon" href="img/placeholder.svg">
+  <link rel="icon" href="img/logo.svg">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body data-source="archive">
-  <header class="site">
-    <h1>🐾 Peluditos · Archivo</h1>
-    <p>Publicaciones de más de 4 meses, por año. <a href="index.html">← Volver a la portada</a></p>
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="./">
+        <img class="brand__logo" src="img/logo.svg" alt="Peluditos">
+        <span class="brand__text">
+          <span class="brand__kicker">Aldea Pucela</span>
+          <span class="brand__title">Peluditos</span>
+        </span>
+      </a>
+      <nav class="mainnav" aria-label="Menú principal">
+        <a href="./">Inicio</a>
+        <a href="archivo/" class="is-active">Archivo</a>
+        <a href="protectoras/">Protectoras y Asociaciones</a>
+        <a href="https://aldeapucela.org" target="_blank" rel="noopener">Comunidad</a>
+        <a href="https://t.me/aldeapucela/244" target="_blank" rel="noopener">Chat</a>
+      </nav>
+    </div>
   </header>
+
+  <div class="container">
+    <h1 class="page-title">Archivo</h1>
+    <p class="page-lead">Publicaciones de más de 4 meses, agrupadas por año.</p>
+  </div>
 
   <nav class="filters">
     <div class="filters__types" role="group" aria-label="Filtrar por tipo de animal">
@@ -37,14 +56,19 @@
     </label>
   </nav>
 
-  <main>
+  <main class="container">
     <div id="grid"></div>
     <p id="empty" class="empty" hidden>Todavía no hay nada en el archivo. Las publicaciones pasan aquí al superar los 4 meses.</p>
   </main>
 
-  <footer class="site">
-    <p>Animales de las asociaciones y protectoras de Valladolid, todos en un mismo sitio.
-       Una web de la comunidad de <a href="https://aldeapucela.org" target="_blank" rel="noopener">Aldea Pucela</a>.</p>
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>Animales de las asociaciones y protectoras de Valladolid, todos en un mismo sitio.
+         Una web de la comunidad de <a href="https://aldeapucela.org" target="_blank" rel="noopener">Aldea Pucela</a>.</p>
+      <p class="fineprint">Cada protectora gestiona sus adopciones con sus propias normas: el contacto es directo con ella
+         a través de su publicación en Instagram. Las imágenes y textos pertenecen a cada protectora
+         y enlazamos siempre a la publicación original.</p>
+    </div>
   </footer>
 
   <script src="app.js" defer></script>

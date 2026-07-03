@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="../">
+  <title>Protectoras y Asociaciones — Peluditos</title>
+  <meta name="description" content="Protectoras y asociaciones de animales de Valladolid presentes en Peluditos, con sus enlaces y perfiles.">
+  <link rel="icon" href="img/logo.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="./">
+        <img class="brand__logo" src="img/logo.svg" alt="Peluditos">
+        <span class="brand__text">
+          <span class="brand__kicker">Aldea Pucela</span>
+          <span class="brand__title">Peluditos</span>
+        </span>
+      </a>
+      <nav class="mainnav" aria-label="Menú principal">
+        <a href="./">Inicio</a>
+        <a href="archivo/">Archivo</a>
+        <a href="protectoras/" class="is-active">Protectoras y Asociaciones</a>
+        <a href="https://aldeapucela.org" target="_blank" rel="noopener">Comunidad</a>
+        <a href="https://t.me/aldeapucela/244" target="_blank" rel="noopener">Chat</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 class="page-title">Protectoras y Asociaciones</h1>
+    <p class="page-lead">Las protectoras y asociaciones de animales de Valladolid cuyas publicaciones
+       se muestran en esta web. Síguelas y colabora con ellas directamente.</p>
+    <div id="shelters" class="shelters"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>Animales de las asociaciones y protectoras de Valladolid, todos en un mismo sitio.
+         Una web de la comunidad de <a href="https://aldeapucela.org" target="_blank" rel="noopener">Aldea Pucela</a>.</p>
+      <p class="fineprint">Cada protectora gestiona sus adopciones con sus propias normas: el contacto es directo con ella
+         a través de su publicación en Instagram. Las imágenes y textos pertenecen a cada protectora
+         y enlazamos siempre a la publicación original.</p>
+    </div>
+  </footer>
+
+  <script>
+    const esc = (s) => (s || '').replace(/[&<>"']/g, (c) =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const ok = (u) => /^https?:\/\//i.test(u || '');
+
+    fetch('shelters.json')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((shelters) => {
+        const grid = document.getElementById('shelters');
+        for (const s of shelters) {
+          const logo = s.logo || `img/shelters/${s.username}.jpg`;
+          const links = [
+            ok(s.instagramUrl) && `<a href="${s.instagramUrl}" target="_blank" rel="noopener">Instagram</a>`,
+            ok(s.web) && `<a href="${s.web}" target="_blank" rel="noopener">Web</a>`,
+            ok(s.facebook) && `<a href="${s.facebook}" target="_blank" rel="noopener">Facebook</a>`,
+          ].filter(Boolean).join('');
+          const card = document.createElement('div');
+          card.className = 'shelter-card';
+          card.innerHTML = `
+            <img class="shelter-card__logo" loading="lazy" alt="Logo de ${esc(s.name)}"
+                 src="${logo}" onerror="this.onerror=null;this.src='img/logo.svg'">
+            <h2 class="shelter-card__name">${esc(s.name)}</h2>
+            <span class="shelter-card__zone">${esc(s.zone)}</span>
+            <div class="shelter-card__links">${links}</div>`;
+          grid.appendChild(card);
+        }
+      });
+  </script>
+</body>
+</html>
