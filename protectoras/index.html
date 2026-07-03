@@ -64,16 +64,30 @@
           const wa = (s.whatsapp || '').startsWith('http')
             ? s.whatsapp
             : (s.whatsapp ? `https://wa.me/${s.whatsapp.replace(/\D/g, '')}` : '');
-          const links = [
-            ok(s.instagramUrl) && `<a href="${s.instagramUrl}" target="_blank" rel="noopener">Instagram</a>`,
-            ok(s.web) && `<a href="${s.web}" target="_blank" rel="noopener">🌐 Web</a>`,
-            okPhone(s.phone) && `<a href="tel:${s.phone.replace(/[\s.-]/g, '')}">📞 ${esc(s.phone)}</a>`,
-            okMail(s.email) && `<a href="mailto:${esc(s.email)}">✉️ Email</a>`,
-            ok(wa) && `<a href="${wa}" target="_blank" rel="noopener">WhatsApp</a>`,
-            ok(s.facebook) && `<a href="${s.facebook}" target="_blank" rel="noopener">Facebook</a>`,
-            ok(s.contactForm) && `<a href="${s.contactForm}" target="_blank" rel="noopener">Contacto</a>`,
-            ok(s.linktree) && `<a href="${s.linktree}" target="_blank" rel="noopener">Más enlaces</a>`,
-          ].filter(Boolean).join('');
+          const L = (href, icon, label, external = true) =>
+            `<a href="${href}"${external ? ' target="_blank" rel="noopener"' : ''}><span class="ico">${icon}</span>${label}</a>`;
+          const rows = [
+            // Línea 1: Web
+            [ok(s.web) && L(s.web, '🌐', 'Web')],
+            // Línea 2: Email · Teléfono
+            [
+              okMail(s.email) && L(`mailto:${esc(s.email)}`, '✉️', 'Email', false),
+              okPhone(s.phone) && L(`tel:${s.phone.replace(/[\s.-]/g, '')}`, '📞', esc(s.phone), false),
+            ],
+            // Línea 3: Redes sociales y mensajería
+            [
+              ok(s.instagramUrl) && L(s.instagramUrl, '📷', 'Instagram'),
+              ok(s.facebook) && L(s.facebook, '📘', 'Facebook'),
+              ok(wa) && L(wa, '💬', 'WhatsApp'),
+              ok(s.contactForm) && L(s.contactForm, '📝', 'Contacto'),
+              ok(s.linktree) && L(s.linktree, '🔗', 'Más enlaces'),
+            ],
+          ];
+          const contactHtml = rows
+            .map((r) => r.filter(Boolean))
+            .filter((r) => r.length)
+            .map((r) => `<div class="shelter-card__links">${r.join('')}</div>`)
+            .join('');
           const card = document.createElement('div');
           card.className = 'shelter-card';
           card.innerHTML = `
@@ -81,7 +95,7 @@
                  src="${logo}" onerror="this.onerror=null;this.src='img/logo.svg'">
             <h2 class="shelter-card__name">${esc(s.name)}</h2>
             <span class="shelter-card__zone">${esc(s.zone)}</span>
-            <div class="shelter-card__links">${links}</div>`;
+            <div class="shelter-card__contact">${contactHtml}</div>`;
           grid.appendChild(card);
         }
       });

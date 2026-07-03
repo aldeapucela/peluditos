@@ -351,8 +351,12 @@ main.container { padding-bottom: 3rem; }
 }
 .shelter-card__name { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--ink); margin: 0; }
 .shelter-card__zone { font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--slate-500); }
-.shelter-card__links { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; margin-top: .2rem; }
+.shelter-card__contact { display: flex; flex-direction: column; gap: .4rem; width: 100%; margin-top: .2rem; }
+.shelter-card__links { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; }
 .shelter-card__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
   font-size: .78rem;
   font-weight: 600;
   text-decoration: none;
@@ -363,6 +367,7 @@ main.container { padding-bottom: 3rem; }
   transition: background .2s, color .2s;
 }
 .shelter-card__links a:hover { background: var(--brand-500); color: #fff; }
+.shelter-card__links .ico { font-size: .95em; line-height: 1; }
 
 /* ===== Pie ===== */
 .site-footer {
