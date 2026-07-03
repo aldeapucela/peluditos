@@ -2,11 +2,14 @@ const grid = document.getElementById('grid');
 const empty = document.getElementById('empty');
 const shelterSel = document.getElementById('shelter');
 const typeBtns = document.querySelectorAll('[data-type]');
+const catBtns = document.querySelectorAll('[data-cat]');
 const PLACEHOLDER = 'img/placeholder.svg';
 const TYPE_LABEL = { perro: '🐶 Perro', gato: '🐱 Gato', otro: '🐾 Otro' };
+const CAT_LABEL = { adopcion: '🏠 Adopción', acogida: '🤝 Acogida', perdido: '🔍 Perdido', donacion: '💚 Donación', evento: '📅 Evento' };
 
 let posts = [];
 let filterType = 'todos';
+let filterCat = 'todas';
 let filterShelter = 'todas';
 
 const escapeHtml = (s) =>
@@ -27,7 +30,10 @@ function card(p) {
     <img class="card__img" loading="lazy" alt="Publicación de ${escapeHtml(p.shelter)}"
          src="${p.image || PLACEHOLDER}" onerror="this.onerror=null;this.src='${PLACEHOLDER}'">
     <div class="card__body">
-      <span class="badge">${TYPE_LABEL[p.type] || '🐾 Otro'}</span>
+      <div class="badges">
+        <span class="badge">${TYPE_LABEL[p.type] || '🐾 Otro'}</span>
+        ${CAT_LABEL[p.tipo] ? `<span class="badge badge--cat">${CAT_LABEL[p.tipo]}</span>` : ''}
+      </div>
       <p class="card__text">${escapeHtml(p.excerpt)}</p>
       <div class="card__meta">
         <span class="card__shelter">${escapeHtml(p.shelter)}</span>
@@ -41,6 +47,7 @@ function render() {
   const list = posts.filter(
     (p) =>
       (filterType === 'todos' || (p.type || 'otro') === filterType) &&
+      (filterCat === 'todas' || (p.tipo || 'otro') === filterCat) &&
       (filterShelter === 'todas' || p.shelter === filterShelter)
   );
 
@@ -81,6 +88,14 @@ function initFilters() {
       typeBtns.forEach((x) => x.classList.remove('is-active'));
       b.classList.add('is-active');
       filterType = b.dataset.type;
+      render();
+    })
+  );
+  catBtns.forEach((b) =>
+    b.addEventListener('click', () => {
+      catBtns.forEach((x) => x.classList.remove('is-active'));
+      b.classList.add('is-active');
+      filterCat = b.dataset.cat;
       render();
     })
   );

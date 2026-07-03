@@ -79,15 +79,43 @@ async function downloadImage(imageUrl, id) {
   }
 }
 
-// ---------- clasificación por IA (perro / gato / otro) ----------
+// ---------- clasificación por IA (animal + tipo de publicación) ----------
+const norm = (s) => (s || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+const ANIMALS = ['perro', 'gato', 'otro'];
+const TIPOS = ['adopcion', 'acogida', 'perdido', 'donacion', 'evento', 'otro'];
+
+// Extrae { animal, tipo } de la respuesta del modelo (tolerante a markdown/texto alrededor).
+export function parseClassification(text) {
+  let animal = 'otro', tipo = 'otro';
+  const m = (text || '').match(/\{[\s\S]*?\}/);
+  if (m) {
+    try {
+      const j = JSON.parse(m[0]);
+      animal = norm(j.animal);
+      tipo = norm(j.tipo);
+    } catch { /* deja los valores por defecto */ }
+  }
+  if (!ANIMALS.includes(animal)) animal = 'otro';
+  if (!TIPOS.includes(tipo)) tipo = 'otro';
+  return { animal, tipo };
+}
+
 // AISLADO A PROPÓSITO: cambiar de proveedor de IA = editar SOLO esta función.
-// Gemini multimodal: mira la imagen Y el texto (incluido el texto de carteles).
+// Gemini multimodal: mira la imagen Y el texto (incluido el de los carteles).
+// Devuelve { animal, tipo } en una sola llamada (no duplica consumo de cuota).
 async function classifyWithAI(caption, imageFile, apiKey) {
   const prompt =
-    'Clasifica esta publicación de Instagram de una protectora de animales. ' +
-    'Fíjate en la imagen y en el texto y responde con UNA sola palabra en minúsculas: ' +
-    '"perro" si el animal protagonista es un perro, "gato" si es un gato, ' +
-    '"otro" para cualquier otro animal o si no hay un animal claro (carteles, eventos, comida, logos...). ' +
+    'Eres un clasificador para una web que agrega publicaciones de protectoras de animales de Valladolid. ' +
+    'Mira la imagen Y el texto y responde SOLO con un JSON compacto, sin markdown, con dos campos: ' +
+    '{"animal":"perro|gato|otro","tipo":"adopcion|acogida|perdido|donacion|evento|otro"}. ' +
+    'animal = el animal protagonista ("otro" si es otro animal o no hay animal claro). ' +
+    'tipo = el propósito de la publicación: ' +
+    'adopcion (se busca familia definitiva); ' +
+    'acogida (se busca hogar temporal o casa de acogida hasta que se adopte); ' +
+    'perdido (animal perdido, desaparecido, extraviado o encontrado; se pide ayuda para localizarlo); ' +
+    'donacion (se piden donaciones, ayudas, dinero, comida o recursos); ' +
+    'evento (mercadillo solidario, feria, exposición, mesa informativa u otro evento); ' +
+    'otro (no encaja en las anteriores). ' +
     'Texto de la publicación: ' + (caption || '(sin texto)');
 
   const parts = [{ text: prompt }];
@@ -103,7 +131,7 @@ async function classifyWithAI(caption, imageFile, apiKey) {
     contents: [{ parts }],
     // thinkingBudget:0 es CLAVE: 2.5-flash "piensa" por defecto y ese pensamiento
     // consume maxOutputTokens, devolviendo texto vacío (finishReason MAX_TOKENS).
-    generationConfig: { temperature: 0, maxOutputTokens: 16, thinkingConfig: { thinkingBudget: 0 } },
+    generationConfig: { temperature: 0, maxOutputTokens: 64, thinkingConfig: { thinkingBudget: 0 } },
   });
 
   // 429 = cuota real → aborta el run. 5xx = sobrecarga transitoria del modelo
@@ -125,18 +153,16 @@ async function classifyWithAI(caption, imageFile, apiKey) {
     if (!res.ok) throw new Error(`Gemini ${res.status}: ${(await res.text()).slice(0, 200)}`);
     const data = await res.json();
     const cand = data?.candidates?.[0];
-    const text = (cand?.content?.parts || []).map((x) => x.text || '').join(' ').toLowerCase();
-    if (text.includes('perro')) return 'perro';
-    if (text.includes('gato')) return 'gato';
-    if (!text) console.warn(`Gemini: respuesta vacía (finishReason=${cand?.finishReason})`);
-    return 'otro';
+    const text = (cand?.content?.parts || []).map((x) => x.text || '').join(' ');
+    if (!text.trim()) console.warn(`Gemini: respuesta vacía (finishReason=${cand?.finishReason})`);
+    return parseClassification(text);
   }
   throw new Error(`Gemini ${lastErr} sobrecarga; se salta y se reintenta en el próximo run`);
 }
 
-// Clasifica los posts que aún no tienen `type` (nuevos + backfill de los existentes).
+// Clasifica los posts a los que falta `type` o `tipo` (nuevos + backfill de los existentes).
 async function classifyMissing(posts, apiKey) {
-  const pending = posts.filter((p) => p.type === undefined);
+  const pending = posts.filter((p) => p.type === undefined || p.tipo === undefined);
   if (!pending.length) return 0;
   if (!apiKey) {
     console.warn(`Sin GEMINI_API_KEY: ${pending.length} posts quedan sin clasificar (se reintentará)`);
@@ -146,7 +172,9 @@ async function classifyMissing(posts, apiKey) {
   for (const p of pending.slice(0, MAX_CLASSIFY_PER_RUN)) {
     const imageFile = p.image ? path.join(ROOT, p.image) : null;
     try {
-      p.type = await classifyWithAI(p.caption, imageFile, apiKey);
+      const r = await classifyWithAI(p.caption, imageFile, apiKey);
+      p.type = r.animal;
+      p.tipo = r.tipo;
       done++;
     } catch (e) {
       if (e.quotaExceeded) {
@@ -223,6 +251,11 @@ function selfTest() {
   assert(excerpt('a'.repeat(200)).length === 180, 'excerpt corta a 180');
   assert(excerpt('hola') === 'hola', 'excerpt corto intacto');
   assert(prune([{ date: new Date().toISOString() }, { date: '2000-01-01' }], Date.now()).length === 1, 'prune elimina viejos');
+  assert(parseClassification('{"animal":"perro","tipo":"adopcion"}').tipo === 'adopcion', 'parse ok');
+  assert(parseClassification('{"animal":"Gato","tipo":"Adopción"}').tipo === 'adopcion', 'parse normaliza acentos/mayus');
+  assert(parseClassification('```json {"animal":"otro","tipo":"evento"} ```').tipo === 'evento', 'parse tolera markdown');
+  assert(parseClassification('sin json aquí').animal === 'otro', 'parse fallback');
+  assert(parseClassification('{"animal":"x","tipo":"y"}').tipo === 'otro', 'valores invalidos → otro');
   console.log('self-test OK');
 }
 
