@@ -280,7 +280,7 @@ async function main() {
   // ponytail: conservamos imágenes de portada Y archivo (crecen ~100MB/año; poner tope si molesta).
   const keep = new Set(all.map((p) => p.image && path.basename(p.image)).filter(Boolean));
   for (const f of await readdir(IMG_DIR)) {
-    if (f === 'placeholder.svg' || f === 'shelters' || f === 'hero.jpg' || keep.has(f)) continue;
+    if (f === 'placeholder.svg' || f === 'shelters' || f === 'hero.jpg' || f === 'og.jpg' || keep.has(f)) continue;
     await unlink(path.join(IMG_DIR, f)).catch(() => {});
   }
 
