@@ -112,7 +112,12 @@ async function classifyWithAI(caption, imageFile, apiKey) {
   for (let attempt = 0; attempt < 4; attempt++) {
     const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body });
     if (res.status === 429) {
-      const e = new Error('429 ' + (await res.text()).slice(0, 160));
+      const bodyText = await res.text();
+      const m = bodyText.match(/"retryDelay":\s*"(\d+(?:\.\d+)?)s"/);
+      const delaySec = m ? Math.ceil(parseFloat(m[1])) : null;
+      // retryDelay corto = límite por minuto → espera y reintenta; largo/ausente = límite diario → aborta.
+      if (delaySec !== null && delaySec <= 90) { await sleep((delaySec + 2) * 1000); continue; }
+      const e = new Error('429 ' + bodyText.replace(/\s+/g, ' ').slice(0, 300));
       e.quotaExceeded = true;
       throw e;
     }
