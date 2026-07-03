@@ -50,6 +50,8 @@
     const esc = (s) => (s || '').replace(/[&<>"']/g, (c) =>
       ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const ok = (u) => /^https?:\/\//i.test(u || '');
+    const okMail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e || '');
+    const okPhone = (t) => /^[+\d][\d\s.-]{7,}$/.test(t || '');
 
     fetch('shelters.json')
       .then((r) => (r.ok ? r.json() : []))
@@ -57,10 +59,18 @@
         const grid = document.getElementById('shelters');
         for (const s of shelters) {
           const logo = s.logo || `img/shelters/${s.username}.jpg`;
+          const wa = (s.whatsapp || '').startsWith('http')
+            ? s.whatsapp
+            : (s.whatsapp ? `https://wa.me/${s.whatsapp.replace(/\D/g, '')}` : '');
           const links = [
             ok(s.instagramUrl) && `<a href="${s.instagramUrl}" target="_blank" rel="noopener">Instagram</a>`,
-            ok(s.web) && `<a href="${s.web}" target="_blank" rel="noopener">Web</a>`,
+            ok(s.web) && `<a href="${s.web}" target="_blank" rel="noopener">🌐 Web</a>`,
+            okPhone(s.phone) && `<a href="tel:${s.phone.replace(/[\s.-]/g, '')}">📞 ${esc(s.phone)}</a>`,
+            okMail(s.email) && `<a href="mailto:${esc(s.email)}">✉️ Email</a>`,
+            ok(wa) && `<a href="${wa}" target="_blank" rel="noopener">WhatsApp</a>`,
             ok(s.facebook) && `<a href="${s.facebook}" target="_blank" rel="noopener">Facebook</a>`,
+            ok(s.contactForm) && `<a href="${s.contactForm}" target="_blank" rel="noopener">Contacto</a>`,
+            ok(s.linktree) && `<a href="${s.linktree}" target="_blank" rel="noopener">Más enlaces</a>`,
           ].filter(Boolean).join('');
           const card = document.createElement('div');
           card.className = 'shelter-card';

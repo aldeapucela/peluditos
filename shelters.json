@@ -4,45 +4,70 @@
     "name": "Propatas",
     "zone": "Valladolid",
     "instagramUrl": "https://www.instagram.com/propatas.oficial/",
-    "web": "",
-    "facebook": "",
-    "logo": ""
+    "web": "http://www.propatas.es/",
+    "facebook": "https://www.facebook.com/propatas.va/",
+    "logo": "",
+    "email": "propatas@gmail.com",
+    "phone": "",
+    "whatsapp": "",
+    "contactForm": "http://www.propatas.es/Contacto/",
+    "linktree": ""
   },
   {
     "username": "protectora_santuario_scooby",
     "name": "Scooby",
     "zone": "Medina del Campo",
     "instagramUrl": "https://www.instagram.com/protectora_santuario_scooby/",
-    "web": "",
-    "facebook": "",
-    "logo": ""
+    "web": "https://scoobymedina.com/",
+    "facebook": "https://www.facebook.com/spascooby/",
+    "logo": "",
+    "email": "refugio@scoobymedina.org",
+    "phone": "+34 618 38 32 88",
+    "whatsapp": "",
+    "contactForm": "",
+    "linktree": ""
   },
   {
     "username": "patitascallejerasvalladolid",
     "name": "Patitas Callejeras",
     "zone": "Valladolid",
     "instagramUrl": "https://www.instagram.com/patitascallejerasvalladolid/",
-    "web": "",
-    "facebook": "",
-    "logo": ""
+    "web": "https://patitascallejeras.es/",
+    "facebook": "https://www.facebook.com/patitascallejerasvalladolid",
+    "logo": "",
+    "email": "patitascallejerasvalladolid@gmail.com",
+    "phone": "",
+    "whatsapp": "",
+    "contactForm": "",
+    "linktree": ""
   },
   {
     "username": "entrehuellasybigotes",
     "name": "Entre Huellas y Bigotes",
     "zone": "Valladolid",
     "instagramUrl": "https://www.instagram.com/entrehuellasybigotes/",
-    "web": "",
-    "facebook": "",
-    "logo": ""
+    "web": "https://www.entrehuellasybigotes.com/",
+    "facebook": "https://www.facebook.com/EntreHuellasYBigotes/",
+    "logo": "",
+    "email": "info@entrehuellasybigotes.com",
+    "phone": "+34 661 68 68 55",
+    "whatsapp": "",
+    "contactForm": "https://www.entrehuellasybigotes.com/contacta-con-nosotros/",
+    "linktree": ""
   },
   {
     "username": "elhogardelgato",
     "name": "El Hogar del Gato",
     "zone": "Valladolid",
     "instagramUrl": "https://www.instagram.com/elhogardelgato/",
-    "web": "",
-    "facebook": "",
-    "logo": ""
+    "web": "https://elhogardelgato.com/",
+    "facebook": "https://www.facebook.com/profile.php?id=100083040563612",
+    "logo": "",
+    "email": "",
+    "phone": "",
+    "whatsapp": "",
+    "contactForm": "https://elhogardelgato.com/?page_id=38",
+    "linktree": "https://linktr.ee/elhogardelgato"
   },
   {
     "username": "protelaguna",
@@ -50,17 +75,27 @@
     "zone": "Laguna de Duero",
     "instagramUrl": "https://www.instagram.com/protelaguna/",
     "web": "",
-    "facebook": "",
-    "logo": ""
+    "facebook": "https://www.facebook.com/protectoralaguna",
+    "logo": "",
+    "email": "protelaguna@gmail.com",
+    "phone": "",
+    "whatsapp": "",
+    "contactForm": "",
+    "linktree": ""
   },
   {
     "username": "la_estacion_de_los_gatos",
     "name": "La Estación de los Gatos",
     "zone": "Valladolid",
     "instagramUrl": "https://www.instagram.com/la_estacion_de_los_gatos/",
-    "web": "",
-    "facebook": "",
-    "logo": ""
+    "web": "https://laestaciondelosgatos.es/",
+    "facebook": "https://www.facebook.com/estaciondelosgatos/",
+    "logo": "",
+    "email": "laestaciondelosgatos@gmail.com",
+    "phone": "+34 633 820 340",
+    "whatsapp": "",
+    "contactForm": "",
+    "linktree": ""
   },
   {
     "username": "cer_parquesol",
@@ -68,8 +103,13 @@
     "zone": "Valladolid",
     "instagramUrl": "https://www.instagram.com/cer_parquesol/",
     "web": "",
-    "facebook": "",
-    "logo": ""
+    "facebook": "https://www.facebook.com/p/CER-Parquesol-100070679010185/",
+    "logo": "",
+    "email": "cerparquesol@gmail.com",
+    "phone": "",
+    "whatsapp": "",
+    "contactForm": "",
+    "linktree": "https://linktr.ee/cerparquesol"
   },
   {
     "username": "colonia_felina_doce_de_octubre",
@@ -77,8 +117,13 @@
     "zone": "Valladolid",
     "instagramUrl": "https://www.instagram.com/colonia_felina_doce_de_octubre/",
     "web": "",
-    "facebook": "",
-    "logo": ""
+    "facebook": "https://www.facebook.com/profile.php?id=61587053472210",
+    "logo": "",
+    "email": "",
+    "phone": "",
+    "whatsapp": "",
+    "contactForm": "",
+    "linktree": "https://lnk.bio/Colonia_felina_Doce_De_Octubre"
   },
   {
     "username": "lagatarenata_",
@@ -87,7 +132,12 @@
     "instagramUrl": "https://www.instagram.com/lagatarenata_/",
     "web": "",
     "facebook": "",
-    "logo": ""
+    "logo": "",
+    "email": "",
+    "phone": "",
+    "whatsapp": "",
+    "contactForm": "",
+    "linktree": "https://linktr.ee/lagatarenata"
   },
   {
     "username": "guardianesfelinosdela_noche",
@@ -95,8 +145,13 @@
     "zone": "Valladolid",
     "instagramUrl": "https://www.instagram.com/guardianesfelinosdela_noche/",
     "web": "",
-    "facebook": "",
-    "logo": ""
+    "facebook": "https://www.facebook.com/people/Guardianes-Felinos-De-la-Noche/61574596826180/",
+    "logo": "",
+    "email": "",
+    "phone": "",
+    "whatsapp": "",
+    "contactForm": "",
+    "linktree": ""
   },
   {
     "username": "conexionfelinavalladolid",
@@ -105,6 +160,11 @@
     "instagramUrl": "https://www.instagram.com/conexionfelinavalladolid/",
     "web": "",
     "facebook": "",
-    "logo": ""
+    "logo": "",
+    "email": "conexionfelinavalladolid@gmail.com",
+    "phone": "",
+    "whatsapp": "+34 625 73 45 71",
+    "contactForm": "",
+    "linktree": ""
   }
 ]

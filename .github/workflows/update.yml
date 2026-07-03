@@ -43,5 +43,6 @@ jobs:
             echo "Sin cambios que publicar"
           else
             git commit -m "Actualizar publicaciones ($(date -u +%F))"
+            git pull --rebase origin main || true
             git push
           fi
