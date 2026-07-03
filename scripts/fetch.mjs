@@ -13,9 +13,10 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SHELTERS = path.join(ROOT, 'shelters.json');
 const DATA = path.join(ROOT, 'data', 'posts.json');
+const ARCHIVE_DIR = path.join(ROOT, 'data', 'archive');
 const IMG_DIR = path.join(ROOT, 'img');
 
-const RETENTION_DAYS = 45;      // solo "lo nuevo": se poda lo más antiguo
+const CURRENT_DAYS = 122;       // portada: ~4 meses; lo más antiguo va al archivo por años
 const POSTS_PER_ACCOUNT = 6;    // últimos posts a pedir por cuenta en cada ejecución
 const GEMINI_MODEL = 'gemini-2.5-flash-lite';  // multimodal, barato/rápido, cuota diaria propia
 const FAST = !!process.env.CLASSIFY_FAST;       // clave de pago sin límites → sin frenos (para backfill)
@@ -31,9 +32,30 @@ export function excerpt(caption, n = 180) {
   return c.length > n ? c.slice(0, n - 1) + '…' : c;
 }
 
-export function prune(posts, now, days = RETENTION_DAYS) {
+// Separa en portada (últimos `days` días) y archivo (el resto).
+export function partitionByAge(posts, now, days = CURRENT_DAYS) {
   const cutoff = now - days * 864e5;
-  return posts.filter((p) => Date.parse(p.date) >= cutoff);
+  const current = [], older = [];
+  for (const p of posts) (Date.parse(p.date) >= cutoff ? current : older).push(p);
+  return { current, older };
+}
+
+// Agrupa por año (clave 'YYYY') a partir de la fecha ISO.
+export function groupByYear(posts) {
+  const by = {};
+  for (const p of posts) {
+    const y = (p.date || '').slice(0, 4);
+    if (/^\d{4}$/.test(y)) (by[y] ||= []).push(p);
+  }
+  return by;
+}
+
+// Carga todos los posts ya archivados (data/archive/YYYY.json).
+async function loadArchivePosts() {
+  if (!existsSync(ARCHIVE_DIR)) return [];
+  const files = (await readdir(ARCHIVE_DIR)).filter((f) => /^\d{4}\.json$/.test(f));
+  const arrs = await Promise.all(files.map((f) => readFile(path.join(ARCHIVE_DIR, f), 'utf8').then(JSON.parse)));
+  return arrs.flat();
 }
 
 // ---------- proveedor de datos ----------
@@ -199,7 +221,8 @@ async function main() {
   await mkdir(IMG_DIR, { recursive: true });
   await mkdir(path.dirname(DATA), { recursive: true });
 
-  const existing = existsSync(DATA) ? JSON.parse(await readFile(DATA, 'utf8')) : [];
+  const current = existsSync(DATA) ? JSON.parse(await readFile(DATA, 'utf8')) : [];
+  const existing = [...current, ...(await loadArchivePosts())];
   const seen = new Set(existing.map((p) => p.id));
 
   let raw = [];
@@ -228,22 +251,40 @@ async function main() {
     });
   }
 
-  const merged = prune([...fresh, ...existing], Date.now()).sort(
-    (a, b) => Date.parse(b.date) - Date.parse(a.date)
+  const all = [...fresh, ...existing];
+  const classified = await classifyMissing(all, process.env.GEMINI_API_KEY);
+
+  const byDateDesc = (a, b) => Date.parse(b.date) - Date.parse(a.date);
+  const { current: portada, older } = partitionByAge(all, Date.now());
+  portada.sort(byDateDesc);
+  await writeFile(DATA, JSON.stringify(portada, null, 2) + '\n');
+
+  // Archivo por años: un fichero por año + índice de años disponibles.
+  await mkdir(ARCHIVE_DIR, { recursive: true });
+  const byYear = groupByYear(older);
+  const years = Object.keys(byYear).sort().reverse();
+  for (const y of years) {
+    byYear[y].sort(byDateDesc);
+    await writeFile(path.join(ARCHIVE_DIR, `${y}.json`), JSON.stringify(byYear[y], null, 2) + '\n');
+  }
+  await writeFile(
+    path.join(ARCHIVE_DIR, 'index.json'),
+    JSON.stringify(years.map((y) => ({ year: Number(y), count: byYear[y].length })), null, 2) + '\n'
   );
+  // borra ficheros de años que hayan quedado sin posts
+  const yearSet = new Set(years.map((y) => `${y}.json`));
+  for (const f of (await readdir(ARCHIVE_DIR)).filter((f) => /^\d{4}\.json$/.test(f))) {
+    if (!yearSet.has(f)) await unlink(path.join(ARCHIVE_DIR, f)).catch(() => {});
+  }
 
-  const classified = await classifyMissing(merged, process.env.GEMINI_API_KEY);
-
-  await writeFile(DATA, JSON.stringify(merged, null, 2) + '\n');
-
-  // poda de imágenes huérfanas (posts ya caducados)
-  const keep = new Set(merged.map((p) => p.image && path.basename(p.image)).filter(Boolean));
+  // ponytail: conservamos imágenes de portada Y archivo (crecen ~100MB/año; poner tope si molesta).
+  const keep = new Set(all.map((p) => p.image && path.basename(p.image)).filter(Boolean));
   for (const f of await readdir(IMG_DIR)) {
     if (f === 'placeholder.svg' || keep.has(f)) continue;
     await unlink(path.join(IMG_DIR, f)).catch(() => {});
   }
 
-  console.log(`${fresh.length} nuevos · ${classified} clasificados · ${merged.length} totales`);
+  console.log(`${fresh.length} nuevos · ${classified} clasificados · portada ${portada.length} · archivo ${older.length}`);
 }
 
 // ---------- self-test ----------
@@ -251,7 +292,9 @@ function selfTest() {
   const assert = (c, m) => { if (!c) throw new Error('self-test FALLÓ: ' + m); };
   assert(excerpt('a'.repeat(200)).length === 180, 'excerpt corta a 180');
   assert(excerpt('hola') === 'hola', 'excerpt corto intacto');
-  assert(prune([{ date: new Date().toISOString() }, { date: '2000-01-01' }], Date.now()).length === 1, 'prune elimina viejos');
+  const part = partitionByAge([{ date: new Date().toISOString() }, { date: '2000-01-01' }], Date.now());
+  assert(part.current.length === 1 && part.older.length === 1, 'partitionByAge separa por edad');
+  assert(groupByYear([{ date: '2026-03-01T00:00:00Z' }, { date: '2025-12-01T00:00:00Z' }])['2026'].length === 1, 'groupByYear clave YYYY');
   assert(parseClassification('{"animal":"perro","tipo":"adopcion"}').tipo === 'adopcion', 'parse ok');
   assert(parseClassification('{"animal":"Gato","tipo":"Adopción"}').tipo === 'adopcion', 'parse normaliza acentos/mayus');
   assert(parseClassification('```json {"animal":"otro","tipo":"evento"} ```').tipo === 'evento', 'parse tolera markdown');

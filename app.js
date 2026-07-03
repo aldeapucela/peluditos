@@ -101,8 +101,21 @@ function initFilters() {
   );
 }
 
-fetch('data/posts.json')
-  .then((r) => (r.ok ? r.json() : []))
+// Carga el archivo por años: índice → un fichero JSON por año → todo junto.
+async function loadArchive() {
+  const idx = await fetch('data/archive/index.json').then((r) => (r.ok ? r.json() : [])).catch(() => []);
+  const years = (Array.isArray(idx) ? idx : []).map((y) => y.year);
+  const arrs = await Promise.all(
+    years.map((y) => fetch(`data/archive/${y}.json`).then((r) => (r.ok ? r.json() : [])).catch(() => []))
+  );
+  return arrs.flat();
+}
+
+const source = document.body.dataset.source === 'archive'
+  ? loadArchive()
+  : fetch('data/posts.json').then((r) => (r.ok ? r.json() : []));
+
+source
   .then((data) => {
     posts = Array.isArray(data) ? data : [];
     initFilters();

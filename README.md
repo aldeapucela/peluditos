@@ -14,8 +14,9 @@ shelters.json → scripts/fetch.mjs (cron diario) → data/posts.json + img/ →
 ```
 
 El script pide a un servicio de datos de Instagram los últimos posts de cada cuenta,
-guarda solo los nuevos, descarga sus imágenes a `img/`, clasifica cada post en
-perro/gato/otro con Gemini (mirando la imagen **y** el texto) y poda lo que tenga más de 45 días.
+guarda solo los nuevos, descarga sus imágenes a `img/`, clasifica cada post con Gemini
+(animal + categoría, mirando la imagen **y** el texto) y reparte: portada (`data/posts.json`,
+últimos ~4 meses) y archivo por años (`data/archive/AAAA.json`).
 
 ## Puesta en marcha
 
@@ -54,7 +55,7 @@ python3 -m http.server                      # sirve el sitio en localhost:8000
 - **Términos de Instagram:** leer cuentas ajenas sin permiso está en zona gris de sus
   términos. El uso aquí es vecinal y sin ánimo de lucro; enlazamos siempre al post original
   y el contacto para adopciones es directo con cada protectora. El proveedor asume la parte técnica.
-- **Ajustar volumen:** `POSTS_PER_ACCOUNT` y `RETENTION_DAYS` en `scripts/fetch.mjs`.
+- **Ajustar volumen:** `POSTS_PER_ACCOUNT` y `CURRENT_DAYS` (ventana de portada) en `scripts/fetch.mjs`.
 - **Clasificación:** solo se clasifican los posts nuevos (una vez, y se guarda el resultado);
   el volumen cabe de sobra en el tier gratuito de Gemini. Modelo en `GEMINI_MODEL`.
 - **Fuera de alcance (v1):** buscador de texto, filtro por zona, pre-render para SEO.
