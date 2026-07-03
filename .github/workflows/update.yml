@@ -10,10 +10,6 @@ on:
         type: choice
         options: [free, paid]
         default: free
-      avatars:
-        description: 'Descargar también los avatares/logos de las protectoras (una llamada extra a Apify)'
-        type: boolean
-        default: false
 
 permissions:
   contents: write
@@ -32,7 +28,6 @@ jobs:
           # 'paid' (dispatch manual) usa la clave sin límites; cron y uso normal usan la gratuita.
           GEMINI_API_KEY: ${{ github.event.inputs.gemini == 'paid' && secrets.GEMINI_API_KEY_2 || secrets.GEMINI_API_KEY }}
           CLASSIFY_FAST: ${{ github.event.inputs.gemini == 'paid' && '1' || '' }}
-          FETCH_AVATARS: ${{ github.event.inputs.avatars == 'true' && '1' || '' }}
         run: node scripts/fetch.mjs
       - name: Publicar cambios
         run: |

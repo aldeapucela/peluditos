@@ -19,7 +19,8 @@
           <span class="brand__title">Peluditos</span>
         </span>
       </a>
-      <nav class="mainnav" aria-label="Menú principal">
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mainnav">☰</button>
+      <nav class="mainnav" id="mainnav" aria-label="Menú principal">
         <a href="./">Inicio</a>
         <a href="archivo/">Archivo</a>
         <a href="protectoras/" class="is-active">Protectoras y Asociaciones</a>
@@ -46,6 +47,7 @@
     </div>
   </footer>
 
+  <script src="nav.js" defer></script>
   <script>
     const esc = (s) => (s || '').replace(/[&<>"']/g, (c) =>
       ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
