@@ -29,9 +29,11 @@ guarda solo los nuevos, descarga sus imágenes a `img/`, clasifica cada post con
 2. **Servicio de datos.** Crea una cuenta en [Apify](https://apify.com) (capa gratuita,
    ~3.300 posts/mes) y copia tu API token. El código usa el actor `apify/instagram-scraper`;
    cambiar de proveedor = editar solo la función `fetchFromProvider` de `scripts/fetch.mjs`.
-3. **Clasificación IA.** Crea una clave gratis en [Google AI Studio](https://aistudio.google.com/apikey)
-   (Gemini, sin tarjeta). Se usa para clasificar perro/gato/otro; cambiar de IA = editar solo
-   la función `classifyWithAI`. Si no pones clave, la web funciona igual pero sin categorías.
+3. **Clasificación IA.** Crea una clave en [Google AI Studio](https://aistudio.google.com/apikey)
+   (Gemini). Con clave de **pago (prepago, nivel 1)** va sin freno y sin saltarse posts; la
+   **gratuita** también sirve, pero es lenta y a veces salta posts por saturación (503). Se usa
+   para clasificar animal + categoría; cambiar de IA = editar solo `classifyWithAI`. Sin clave,
+   la web funciona igual pero sin categorías.
 4. **Secrets.** En el repo de GitHub (*Settings → Secrets and variables → Actions*) crea dos
    secrets: `IG_API_TOKEN` (Apify) y `GEMINI_API_KEY` (Gemini).
 5. **Pages.** *Settings → Pages* → *Deploy from a branch* → rama `main`, carpeta `/ (root)`.
@@ -56,6 +58,7 @@ python3 -m http.server                      # sirve el sitio en localhost:8000
   términos. El uso aquí es vecinal y sin ánimo de lucro; enlazamos siempre al post original
   y el contacto para adopciones es directo con cada protectora. El proveedor asume la parte técnica.
 - **Ajustar volumen:** `POSTS_PER_ACCOUNT` y `CURRENT_DAYS` (ventana de portada) en `scripts/fetch.mjs`.
-- **Clasificación:** solo se clasifican los posts nuevos (una vez, y se guarda el resultado);
-  el volumen cabe de sobra en el tier gratuito de Gemini. Modelo en `GEMINI_MODEL`.
+- **Solo lo nuevo:** cada ejecución solo **ingiere** posts de los últimos `INGEST_MAX_DAYS` días
+  (no arrastra publicaciones antiguas no vistas). Y solo se **clasifica** una vez por post.
+  Con `CLASSIFY_FAST=1` (clave de pago) va sin el freno de 7s. Modelo en `GEMINI_MODEL`.
 - **Fuera de alcance (v1):** buscador de texto, filtro por zona, pre-render para SEO.

@@ -17,6 +17,7 @@ const ARCHIVE_DIR = path.join(ROOT, 'data', 'archive');
 const IMG_DIR = path.join(ROOT, 'img');
 
 const CURRENT_DAYS = 122;       // portada: ~4 meses; lo más antiguo va al archivo por años
+const INGEST_MAX_DAYS = 2;      // solo se ingieren posts de los últimos 2 días (no backfill de días anteriores)
 const POSTS_PER_ACCOUNT = 6;    // últimos posts a pedir por cuenta en cada ejecución
 const GEMINI_MODEL = 'gemini-2.5-flash-lite';  // multimodal, barato/rápido, cuota diaria propia
 const FAST = !!process.env.CLASSIFY_FAST;       // clave de pago sin límites → sin frenos (para backfill)
@@ -233,8 +234,10 @@ async function main() {
   }
 
   const fresh = [];
+  const ingestCutoff = Date.now() - INGEST_MAX_DAYS * 864e5;
   for (const p of raw) {
     if (seen.has(p.shortCode)) continue;
+    if (Date.parse(p.date) < ingestCutoff) continue; // solo lo recién publicado; no arrastramos días anteriores
     const shelter = byUser.get(p.username);
     if (!shelter) continue; // item de una cuenta que no está en shelters.json
     seen.add(p.shortCode);

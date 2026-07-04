@@ -4,12 +4,6 @@ on:
   schedule:
     - cron: '0 9 * * *'   # cada día a las 09:00 UTC (tras el reset de cuota de Gemini: 07:00-08:00 UTC / medianoche Pacífico)
   workflow_dispatch:       # permite lanzarlo a mano
-    inputs:
-      gemini:
-        description: 'Clave de Gemini (free = gratuita con límites; paid = de pago sin frenos, para backfill)'
-        type: choice
-        options: [free, paid]
-        default: free
 
 permissions:
   contents: write
@@ -27,9 +21,8 @@ jobs:
       - name: Sincronizar publicaciones
         env:
           IG_API_TOKEN: ${{ secrets.IG_API_TOKEN }}
-          # 'paid' (dispatch manual) usa la clave sin límites; cron y uso normal usan la gratuita.
-          GEMINI_API_KEY: ${{ github.event.inputs.gemini == 'paid' && secrets.GEMINI_API_KEY_2 || secrets.GEMINI_API_KEY }}
-          CLASSIFY_FAST: ${{ github.event.inputs.gemini == 'paid' && '1' || '' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}   # clave de pago (prepago, nivel 1)
+          CLASSIFY_FAST: '1'                               # sin freno de 7s: la clave de pago admite alto ritmo
         run: node scripts/fetch.mjs
       - name: Publicar cambios
         run: |
