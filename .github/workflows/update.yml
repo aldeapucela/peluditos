@@ -13,6 +13,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   update:
@@ -41,3 +43,25 @@ jobs:
             git pull --rebase origin main || true
             git push
           fi
+
+  # El push del job anterior usa GITHUB_TOKEN y NO dispara deploy-pages.yml (regla
+  # anti-recursión de GitHub). Por eso desplegamos aquí mismo, en la misma tanda.
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main   # el commit recién publicado por el job update
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
