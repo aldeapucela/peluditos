@@ -17,8 +17,12 @@ const escapeHtml = (s) =>
 
 const safeUrl = (u) => (/^https?:\/\//i.test(u || '') ? u : '#');
 
-const fmtDay = (iso) =>
-  new Date(iso).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+const fmtDay = (iso) => {
+  const s = new Date(iso).toLocaleDateString('es-ES', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Madrid',
+  });
+  return s.charAt(0).toUpperCase() + s.slice(1); // solo la primera letra en mayúscula
+};
 
 function card(p) {
   const a = document.createElement('a');
@@ -57,12 +61,12 @@ function render() {
   let cards = null;
   let lastDay = '';
   for (const p of list) {
-    const day = (p.date || '').slice(0, 10);
+    const day = fmtDay(p.date); // agrupar por la MISMA etiqueta que se muestra (hora de Madrid)
     if (day !== lastDay) {
       lastDay = day;
       const h = document.createElement('h2');
       h.className = 'day';
-      h.textContent = fmtDay(p.date);
+      h.textContent = day;
       grid.appendChild(h);
       cards = document.createElement('div');
       cards.className = 'cards';

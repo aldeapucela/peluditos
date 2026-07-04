@@ -253,7 +253,6 @@ main.container { padding-bottom: 3rem; }
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 700;
-  text-transform: capitalize;
   color: var(--brand-700);
   margin: 2.25rem 0 1rem;
   padding-bottom: .45rem;
