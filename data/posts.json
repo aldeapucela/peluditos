@@ -1,5 +1,18 @@
 [
   {
+    "id": "DaXjL8UuRq8",
+    "shelter": "Scooby",
+    "shelterUrl": "https://www.instagram.com/protectora_santuario_scooby/",
+    "zone": "Medina del Campo",
+    "date": "2026-07-04T10:40:08.000Z",
+    "caption": "💛 Jesse & James: a second chance begins with a foster home. 🐾\n\nDo you remember Jesse and James?\n\nThey are two of the galgos rescued around Halloween from a terrible situation of neglect and abuse. They were terrified of people and had never learned to trust.\n\nToday, thanks to Fermin, they are almost unrecognisable. Watching them relaxed, playful and happy is the greatest reward.\n\nThis is the power of a foster home.\n\nA shelter can provide safety, food and medical care. But a foster family can offer something just as important: the chance to heal emotionally, to discover that people can be kind, and to learn how to live in a home.\n\nFor dogs carrying deep emotional scars, foster care can truly change everything.\n\nIf you think you could open your home to a dog in need, please get in touch. You could change a life forever. 💛\n\nA huge thank you to Fermin, who opens his home to Scooby's most vulnerable dogs, giving hope to those who might otherwise never have the chance to experience family life.\n\n📩 Adoptions & Foster: adopciones@scoobymedina.org\n🐾 All available dogs: https://www.scoobymedina.org/animales-en-adopcion/available_dogs.php\n🌍 scoobymedina.com\n\n#galgo #adoptdontshop #fosteringsaveslives #ScoobyMedina #rescue",
+    "excerpt": "💛 Jesse & James: a second chance begins with a foster home. 🐾 Do you remember Jesse and James? They are two of the galgos rescued around Halloween from a terrible situation of n…",
+    "image": "img/DaXjL8UuRq8.jpg",
+    "permalink": "https://www.instagram.com/p/DaXjL8UuRq8/",
+    "type": "perro",
+    "tipo": "acogida"
+  },
+  {
     "id": "DaXOrSnI77b",
     "shelter": "Propatas",
     "shelterUrl": "https://www.instagram.com/propatas.oficial/",
@@ -892,7 +905,9 @@
     "caption": "‼️‼️ESTAMOS HOY EN KIWOKO DE RÍO SHOPPING‼️‼️\n\nPÁSATE A PREGUNTARNOS POR PUMUKI❤️‍🩹, POR NUESTROS DISPONIBLES EN ADOPCIÓN ❤️🥰\nESTAMOS RECOGIENDO PIENSO Y LATITAS O CHURUS PARA LOS CALLEJERITOS 🐈‍⬛🐈🐈🐈‍⬛🐈‍⬛",
     "excerpt": "‼️‼️ESTAMOS HOY EN KIWOKO DE RÍO SHOPPING‼️‼️ PÁSATE A PREGUNTARNOS POR PUMUKI❤️‍🩹, POR NUESTROS DISPONIBLES EN ADOPCIÓN ❤️🥰 ESTAMOS RECOGIENDO PIENSO Y LATITAS O CHURUS PARA LO…",
     "image": "img/DYZa9NFiKz2.jpg",
-    "permalink": "https://www.instagram.com/p/DYZa9NFiKz2/"
+    "permalink": "https://www.instagram.com/p/DYZa9NFiKz2/",
+    "type": "gato",
+    "tipo": "donacion"
   },
   {
     "id": "DYVYzp1iDJu",
@@ -903,7 +918,9 @@
     "caption": "❤️🦁‼️PUMUKI EN CASA‼️🦁❤️\n\nPumuki ya tiene el alta hospitalaria, mañana seguiremos revisiones en Valladolid. Sus valores hepaticos siguen elevados pero dentro de rango. Ahora preocupa su cicatriz, ya que tiene líquido inflamatorio debajo de los puntos. El está animado, juega y come muy bien, ahora toca descansar que el hospital no gusta a nadie 🥰",
     "excerpt": "❤️🦁‼️PUMUKI EN CASA‼️🦁❤️ Pumuki ya tiene el alta hospitalaria, mañana seguiremos revisiones en Valladolid. Sus valores hepaticos siguen elevados pero dentro de rango. Ahora preo…",
     "image": "img/DYVYzp1iDJu.jpg",
-    "permalink": "https://www.instagram.com/p/DYVYzp1iDJu/"
+    "permalink": "https://www.instagram.com/p/DYVYzp1iDJu/",
+    "type": "gato",
+    "tipo": "otro"
   },
   {
     "id": "DV9Q5fnjb2F",
@@ -927,6 +944,8 @@
     "caption": "Hoy queremos rendir homenaje a Consuelo, una de las alimentadoras más veteranas de Valladolid. 🐾\n\nAhora mismo se encuentra ingresada en el hospital, atravesando un momento delicado, y desde aquí queremos mandarle todo nuestro cariño, nuestra fuerza y nuestro agradecimiento.\n\nMucho antes de que las colonias felinas fueran reconocidas, Consuelo ya estaba ahí. \nCada día, con su carro de la compra, recorría las calles de Valladolid para alimentar a los gatos de las colonias repartidas por la ciudad. Lo hacía con constancia, con entrega y con un corazón enorme, sin buscar reconocimiento, solo movida por el amor y el compromiso con los animales.\n\nGracias a personas como ella, muchas vidas salieron adelante. \nGracias a su esfuerzo silencioso, a su tiempo, a su dedicación diaria, los gatos de colonia tuvieron alimento, cuidado y una oportunidad.\n\nHoy queremos decirte, Consuelo: gracias. \nGracias por tantos años de generosidad. \nGracias por no mirar hacia otro lado. \nGracias por ser ejemplo de humanidad y de amor por los gatos.\n\nValladolid tiene una deuda de cariño con personas como tú. 💛🐱 \nTe enviamos un abrazo enorme y nuestros mejores deseos de recuperación.",
     "excerpt": "Hoy queremos rendir homenaje a Consuelo, una de las alimentadoras más veteranas de Valladolid. 🐾 Ahora mismo se encuentra ingresada en el hospital, atravesando un momento delicad…",
     "image": "img/DVgTIvkCogE.jpg",
-    "permalink": "https://www.instagram.com/p/DVgTIvkCogE/"
+    "permalink": "https://www.instagram.com/p/DVgTIvkCogE/",
+    "type": "gato",
+    "tipo": "otro"
   }
 ]
