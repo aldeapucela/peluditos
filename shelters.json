@@ -166,5 +166,47 @@
     "whatsapp": "+34 625 73 45 71",
     "contactForm": "",
     "linktree": ""
+  },
+  {
+    "username": "defaniva",
+    "name": "Defaniva",
+    "zone": "Valladolid",
+    "instagramUrl": "https://www.instagram.com/defaniva/",
+    "web": "",
+    "facebook": "",
+    "logo": "",
+    "email": "defaniva@gmail.com",
+    "phone": "+34 633 834 348",
+    "whatsapp": "",
+    "contactForm": "",
+    "linktree": ""
+  },
+  {
+    "username": "113motivoanimales",
+    "name": "113 Motivo Animales",
+    "zone": "Valladolid",
+    "instagramUrl": "https://www.instagram.com/113motivoanimales/",
+    "web": "",
+    "facebook": "https://www.facebook.com/113motivoanimales/",
+    "logo": "",
+    "email": "",
+    "phone": "",
+    "whatsapp": "",
+    "contactForm": "",
+    "linktree": ""
+  },
+  {
+    "username": "asociacioncadenadesonrisas",
+    "name": "Cadena de Sonrisas",
+    "zone": "Valladolid",
+    "instagramUrl": "https://www.instagram.com/asociacioncadenadesonrisas/",
+    "web": "https://www.asociacioncadenadesonrisas.es/",
+    "facebook": "",
+    "logo": "",
+    "email": "asociacion.cadena.sonrisas@gmail.com",
+    "phone": "+34 636 154 140",
+    "whatsapp": "",
+    "contactForm": "",
+    "linktree": ""
   }
 ]

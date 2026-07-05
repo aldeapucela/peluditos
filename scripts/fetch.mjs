@@ -17,8 +17,13 @@ const ARCHIVE_DIR = path.join(ROOT, 'data', 'archive');
 const IMG_DIR = path.join(ROOT, 'img');
 
 const CURRENT_DAYS = 122;       // portada: ~4 meses; lo más antiguo va al archivo por años
-const INGEST_MAX_DAYS = 2;      // solo se ingieren posts de los últimos 2 días (no backfill de días anteriores)
-const POSTS_PER_ACCOUNT = 6;    // últimos posts a pedir por cuenta en cada ejecución
+// Normalmente 2 días / 6 posts (solo lo recién publicado). Para el backfill puntual de
+// una cuenta nueva se suben por env (p.ej. INGEST_MAX_DAYS=122 POSTS_PER_ACCOUNT=200).
+const INGEST_MAX_DAYS = Number(process.env.INGEST_MAX_DAYS) || 2;
+const POSTS_PER_ACCOUNT = Number(process.env.POSTS_PER_ACCOUNT) || 6;
+// ONLY_USERS acota el fetch a esas cuentas (coma-separadas); vacío = todas. Así el
+// backfill de una cuenta nueva no arrastra 4 meses de historia de las ya existentes.
+const ONLY_USERS = (process.env.ONLY_USERS || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
 const GEMINI_MODEL = 'gemini-2.5-flash-lite';  // multimodal, barato/rápido, cuota diaria propia
 const FAST = !!process.env.CLASSIFY_FAST;       // clave de pago sin límites → sin frenos (para backfill)
 const CLASSIFY_DELAY_MS = FAST ? 400 : 7000;    // pausa entre clasificaciones (gratuita: < 10 req/min)
@@ -226,9 +231,11 @@ async function main() {
   const existing = [...current, ...(await loadArchivePosts())];
   const seen = new Set(existing.map((p) => p.id));
 
+  const targetUsers = ONLY_USERS.length ? ONLY_USERS.filter((u) => byUser.has(u)) : [...byUser.keys()];
+
   let raw = [];
   try {
-    raw = await fetchFromProvider([...byUser.keys()], token);
+    raw = await fetchFromProvider(targetUsers, token);
   } catch (e) {
     console.error('Fetch falló, conservo los datos previos:', e.message);
   }

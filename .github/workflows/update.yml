@@ -3,7 +3,17 @@ name: Actualizar publicaciones
 on:
   schedule:
     - cron: '0 9 * * *'   # cada día a las 09:00 UTC (tras el reset de cuota de Gemini: 07:00-08:00 UTC / medianoche Pacífico)
-  workflow_dispatch:       # permite lanzarlo a mano
+  workflow_dispatch:       # permite lanzarlo a mano (vacío = comportamiento normal del cron)
+    inputs:
+      only_users:
+        description: 'Backfill solo estas cuentas (coma-separadas). Vacío = todas.'
+        default: ''
+      ingest_max_days:
+        description: 'Días hacia atrás a ingerir (normal: 2).'
+        default: ''
+      posts_per_account:
+        description: 'Posts a pedir por cuenta (normal: 6).'
+        default: ''
 
 permissions:
   contents: write
@@ -23,6 +33,9 @@ jobs:
           IG_API_TOKEN: ${{ secrets.IG_API_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}   # clave de pago (prepago, nivel 1)
           CLASSIFY_FAST: '1'                               # sin freno de 7s: la clave de pago admite alto ritmo
+          ONLY_USERS: ${{ github.event.inputs.only_users }}          # vacío en cron → todas
+          INGEST_MAX_DAYS: ${{ github.event.inputs.ingest_max_days }} # vacío en cron → 2
+          POSTS_PER_ACCOUNT: ${{ github.event.inputs.posts_per_account }} # vacío en cron → 6
         run: node scripts/fetch.mjs
       - name: Publicar cambios
         run: |
