@@ -234,10 +234,23 @@ async function main() {
   const targetUsers = ONLY_USERS.length ? ONLY_USERS.filter((u) => byUser.has(u)) : [...byUser.keys()];
 
   let raw = [];
-  try {
-    raw = await fetchFromProvider(targetUsers, token);
-  } catch (e) {
-    console.error('Fetch falló, conservo los datos previos:', e.message);
+  if (ONLY_USERS.length) {
+    // Backfill: una llamada por cuenta. El endpoint run-sync de Apify corta a los 300s;
+    // pedir muchos posts de varias cuentas a la vez lo supera (run-timeout-exceeded).
+    // ponytail: por-cuenta solo en backfill; el cron normal (pocos posts) sigue en una llamada.
+    for (const u of targetUsers) {
+      try {
+        raw.push(...(await fetchFromProvider([u], token)));
+      } catch (e) {
+        console.error(`Fetch falló para ${u} (se salta): ${e.message}`);
+      }
+    }
+  } else {
+    try {
+      raw = await fetchFromProvider(targetUsers, token);
+    } catch (e) {
+      console.error('Fetch falló, conservo los datos previos:', e.message);
+    }
   }
 
   const fresh = [];
