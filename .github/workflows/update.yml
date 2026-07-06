@@ -70,5 +70,20 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
+      # El backend de Pages falla a veces ("Deployment failed, try again later") pese a sus
+      # 10 reintentos internos. Reintentamos el deploy a nivel de workflow hasta 3 veces;
+      # solo la última llamada puede tumbar el job (si Pages está caído de verdad).
       - id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+      - if: steps.deployment.outcome == 'failure'
+        run: sleep 30
+      - id: deployment2
+        if: steps.deployment.outcome == 'failure'
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+      - if: steps.deployment.outcome == 'failure' && steps.deployment2.outcome == 'failure'
+        run: sleep 90
+      - id: deployment3
+        if: steps.deployment.outcome == 'failure' && steps.deployment2.outcome == 'failure'
         uses: actions/deploy-pages@v4
