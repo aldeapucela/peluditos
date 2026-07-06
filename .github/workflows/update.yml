@@ -2,7 +2,7 @@ name: Actualizar publicaciones
 
 on:
   schedule:
-    - cron: '0 9 * * *'   # cada día a las 09:00 UTC (tras el reset de cuota de Gemini: 07:00-08:00 UTC / medianoche Pacífico)
+    - cron: '0 5 * * *'   # 05:00 UTC = 07:00 Madrid; con el retraso típico de GitHub (2-3h) queda listo hacia las ~10:00 Madrid. Gemini es de pago → ya no aplica el reset de cuota gratuita que obligaba a las 09:00 UTC.
   workflow_dispatch:       # permite lanzarlo a mano (vacío = comportamiento normal del cron)
     inputs:
       only_users:
@@ -31,6 +31,7 @@ jobs:
       - name: Sincronizar publicaciones
         env:
           IG_API_TOKEN: ${{ secrets.IG_API_TOKEN }}
+          IG_API_TOKEN_2: ${{ secrets.IG_API_TOKEN_2 }}   # 2ª cuenta Apify (failover al agotarse el free de la 1ª)
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}   # clave de pago (prepago, nivel 1)
           CLASSIFY_FAST: '1'                               # sin freno de 7s: la clave de pago admite alto ritmo
           ONLY_USERS: ${{ github.event.inputs.only_users }}          # vacío en cron → todas

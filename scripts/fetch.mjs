@@ -17,10 +17,11 @@ const ARCHIVE_DIR = path.join(ROOT, 'data', 'archive');
 const IMG_DIR = path.join(ROOT, 'img');
 
 const CURRENT_DAYS = 122;       // portada: ~4 meses; lo más antiguo va al archivo por años
-// Normalmente 2 días / 6 posts (solo lo recién publicado). Para el backfill puntual de
-// una cuenta nueva se suben por env (p.ej. INGEST_MAX_DAYS=122 POSTS_PER_ACCOUNT=200).
+// Normalmente 2 días / 3 posts (solo lo recién publicado; 3 basta para el cron diario y
+// cabe en el crédito free de Apify). Para el backfill puntual de una cuenta nueva se suben
+// por env (p.ej. INGEST_MAX_DAYS=122 POSTS_PER_ACCOUNT=150, una llamada por cuenta).
 const INGEST_MAX_DAYS = Number(process.env.INGEST_MAX_DAYS) || 2;
-const POSTS_PER_ACCOUNT = Number(process.env.POSTS_PER_ACCOUNT) || 6;
+const POSTS_PER_ACCOUNT = Number(process.env.POSTS_PER_ACCOUNT) || 3;
 // ONLY_USERS acota el fetch a esas cuentas (coma-separadas); vacío = todas. Así el
 // backfill de una cuenta nueva no arrastra 4 meses de historia de las ya existentes.
 const ONLY_USERS = (process.env.ONLY_USERS || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
@@ -69,31 +70,39 @@ async function loadArchivePosts() {
 // Apify · actor "apify/instagram-scraper" · endpoint run-sync-get-dataset-items.
 // Cada item trae: shortCode, caption, url, displayUrl, timestamp, ownerUsername.
 // Nota: si tu plan trata resultsLimit como tope global (no por cuenta), súbelo.
-async function fetchFromProvider(usernames, token) {
+async function fetchFromProvider(usernames, tokens) {
   const input = {
     directUrls: usernames.map((u) => `https://www.instagram.com/${u}/`),
     resultsType: 'posts',
     resultsLimit: POSTS_PER_ACCOUNT,
     addParentData: false,
   };
-  const url = `https://api.apify.com/v2/acts/apify~instagram-scraper/run-sync-get-dataset-items?token=${encodeURIComponent(token)}&timeout=300`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(input),
-  });
-  if (!res.ok) throw new Error(`Apify ${res.status}: ${(await res.text()).slice(0, 300)}`);
-  const items = await res.json();
-  return items
-    .map((it) => ({
-      shortCode: it.shortCode,
-      caption: it.caption || '',
-      permalink: it.url || (it.shortCode ? `https://www.instagram.com/p/${it.shortCode}/` : null),
-      imageUrl: it.displayUrl || (Array.isArray(it.images) && it.images[0]) || null,
-      date: it.timestamp,
-      username: (it.ownerUsername || '').toLowerCase(),
-    }))
-    .filter((p) => p.shortCode && p.date);
+  const body = JSON.stringify(input);
+  // Failover entre tokens (cuentas Apify distintas = crédito free independiente). Se salta al
+  // siguiente en 401 (token inválido), 402 (pago) y 403 ("Monthly usage hard limit exceeded",
+  // crédito mensual agotado). Cualquier otro error aborta. El 403 no ejecuta run → no factura.
+  let lastErr = '';
+  for (let i = 0; i < tokens.length; i++) {
+    const url = `https://api.apify.com/v2/acts/apify~instagram-scraper/run-sync-get-dataset-items?token=${encodeURIComponent(tokens[i])}&timeout=300`;
+    const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body });
+    if (res.ok) {
+      const items = await res.json();
+      return items
+        .map((it) => ({
+          shortCode: it.shortCode,
+          caption: it.caption || '',
+          permalink: it.url || (it.shortCode ? `https://www.instagram.com/p/${it.shortCode}/` : null),
+          imageUrl: it.displayUrl || (Array.isArray(it.images) && it.images[0]) || null,
+          date: it.timestamp,
+          username: (it.ownerUsername || '').toLowerCase(),
+        }))
+        .filter((p) => p.shortCode && p.date);
+    }
+    lastErr = `Apify ${res.status}: ${(await res.text()).slice(0, 200)}`;
+    if (![401, 402, 403].includes(res.status)) throw new Error(lastErr);
+    console.warn(`Token Apify #${i + 1} agotado/inválido (${res.status})` + (i < tokens.length - 1 ? '; pruebo el siguiente' : ''));
+  }
+  throw new Error(`Todos los tokens Apify fallaron. Último: ${lastErr}`);
 }
 
 async function downloadImage(imageUrl, id) {
@@ -218,8 +227,8 @@ async function classifyMissing(posts, apiKey) {
 }
 
 async function main() {
-  const token = process.env.IG_API_TOKEN;
-  if (!token) throw new Error('Falta la variable IG_API_TOKEN');
+  const tokens = [process.env.IG_API_TOKEN, process.env.IG_API_TOKEN_2].filter(Boolean);
+  if (!tokens.length) throw new Error('Falta IG_API_TOKEN (y opcionalmente IG_API_TOKEN_2 para failover)');
 
   const shelters = JSON.parse(await readFile(SHELTERS, 'utf8'));
   const byUser = new Map(shelters.map((s) => [s.username.toLowerCase(), s]));
@@ -240,14 +249,14 @@ async function main() {
     // ponytail: por-cuenta solo en backfill; el cron normal (pocos posts) sigue en una llamada.
     for (const u of targetUsers) {
       try {
-        raw.push(...(await fetchFromProvider([u], token)));
+        raw.push(...(await fetchFromProvider([u], tokens)));
       } catch (e) {
         console.error(`Fetch falló para ${u} (se salta): ${e.message}`);
       }
     }
   } else {
     try {
-      raw = await fetchFromProvider(targetUsers, token);
+      raw = await fetchFromProvider(targetUsers, tokens);
     } catch (e) {
       console.error('Fetch falló, conservo los datos previos:', e.message);
     }
