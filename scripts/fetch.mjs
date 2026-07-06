@@ -17,11 +17,13 @@ const ARCHIVE_DIR = path.join(ROOT, 'data', 'archive');
 const IMG_DIR = path.join(ROOT, 'img');
 
 const CURRENT_DAYS = 122;       // portada: ~4 meses; lo más antiguo va al archivo por años
-// Normalmente 2 días / 3 posts (solo lo recién publicado; 3 basta para el cron diario y
-// cabe en el crédito free de Apify). Para el backfill puntual de una cuenta nueva se suben
-// por env (p.ej. INGEST_MAX_DAYS=122 POSTS_PER_ACCOUNT=150, una llamada por cuenta).
+// Ventana de ingesta: solo posts de los últimos INGEST_MAX_DAYS días. El fetch filtra por
+// FECHA (onlyPostsNewerThan en fetchFromProvider), NO por conteo, para que los posts fijados
+// (pinned, hasta 3 por cuenta) no ocupen los huecos y no perdamos publicaciones nuevas.
+// POSTS_PER_ACCOUNT es solo el TOPE de resultados por cuenta. Backfill: sube ambos por env
+// (p.ej. INGEST_MAX_DAYS=122 POSTS_PER_ACCOUNT=200, una llamada por cuenta).
 const INGEST_MAX_DAYS = Number(process.env.INGEST_MAX_DAYS) || 2;
-const POSTS_PER_ACCOUNT = Number(process.env.POSTS_PER_ACCOUNT) || 3;
+const POSTS_PER_ACCOUNT = Number(process.env.POSTS_PER_ACCOUNT) || 25;
 // ONLY_USERS acota el fetch a esas cuentas (coma-separadas); vacío = todas. Así el
 // backfill de una cuenta nueva no arrastra 4 meses de historia de las ya existentes.
 const ONLY_USERS = (process.env.ONLY_USERS || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
@@ -75,6 +77,7 @@ async function fetchFromProvider(usernames, tokens) {
     directUrls: usernames.map((u) => `https://www.instagram.com/${u}/`),
     resultsType: 'posts',
     resultsLimit: POSTS_PER_ACCOUNT,
+    onlyPostsNewerThan: `${INGEST_MAX_DAYS + 1} days`, // filtro por fecha: los pinned viejos no tapan lo nuevo
     addParentData: false,
   };
   const body = JSON.stringify(input);
@@ -315,7 +318,7 @@ async function main() {
   const keep = new Set(all.map((p) => p.image && path.basename(p.image)).filter(Boolean));
   for (const f of await readdir(IMG_DIR)) {
     if (!f.endsWith('.jpg')) continue;
-    if (f === 'hero.jpg' || f === 'og.jpg' || keep.has(f)) continue;
+    if (f === 'hero.jpg' || f === 'og.jpg' || f === 'logo-web.jpg' || keep.has(f)) continue;
     await unlink(path.join(IMG_DIR, f)).catch(() => {});
   }
 
