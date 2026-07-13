@@ -41,10 +41,10 @@ function card(p) {
     <div class="card__media">
       <div class="carousel"${multi ? ` role="group" aria-roledescription="carrusel" aria-label="Carrusel de ${imgs.length} imágenes"` : ''}>${slides}</div>
       ${multi ? `
-      <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Imagen anterior">‹</button>
+      <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Imagen anterior" hidden>‹</button>
       <button class="carousel__nav carousel__nav--next" type="button" aria-label="Imagen siguiente">›</button>
-      <div class="carousel__dots" aria-hidden="true">${imgs.map((_, i) => `<span class="carousel__dot${i === 0 ? ' is-active' : ''}"></span>`).join('')}</div>
-      <span class="carousel__sr sr-only" role="status" aria-live="polite">Foto 1 de ${imgs.length}</span>` : ''}
+      <span class="carousel__count" role="status" aria-live="polite">1/${imgs.length}</span>
+      <div class="carousel__dots" aria-hidden="true">${imgs.map((_, i) => `<span class="carousel__dot${i === 0 ? ' is-active' : ''}"></span>`).join('')}</div>` : ''}
     </div>
     <a class="card__body" href="${href}" target="_blank" rel="noopener">
       <span class="card__shelter">${escapeHtml(p.shelter)}</span>
@@ -61,6 +61,7 @@ function card(p) {
   if (multi) {
     const carousel = art.querySelector('.carousel');
     carousel.addEventListener('scroll', () => syncCarousel(carousel), { passive: true });
+    syncCarousel(carousel, 0); // estado inicial: sin flecha izquierda, contador 1/N, punto 1 activo
   }
   return art;
 }
@@ -76,8 +77,12 @@ function syncCarousel(carousel, idx) {
   if (idx == null) idx = Math.round(carousel.scrollLeft / (carousel.clientWidth || 1));
   idx = Math.max(0, Math.min(idx, n - 1));
   dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
-  const sr = media.querySelector('.carousel__sr');
-  if (sr) sr.textContent = `Foto ${idx + 1} de ${n}`;
+  const count = media.querySelector('.carousel__count');
+  if (count) count.textContent = `${idx + 1}/${n}`;
+  const prev = media.querySelector('.carousel__nav--prev');
+  const next = media.querySelector('.carousel__nav--next');
+  if (prev) prev.hidden = idx === 0;         // sin flecha izquierda en la 1ª foto
+  if (next) next.hidden = idx === n - 1;      // sin flecha derecha en la última
 }
 
 grid.addEventListener('click', (e) => {
