@@ -43,7 +43,8 @@ function card(p) {
       ${multi ? `
       <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Imagen anterior">‹</button>
       <button class="carousel__nav carousel__nav--next" type="button" aria-label="Imagen siguiente">›</button>
-      <span class="carousel__count" role="status" aria-live="polite">1/${imgs.length}</span>` : ''}
+      <div class="carousel__dots" aria-hidden="true">${imgs.map((_, i) => `<span class="carousel__dot${i === 0 ? ' is-active' : ''}"></span>`).join('')}</div>
+      <span class="carousel__sr sr-only" role="status" aria-live="polite">Foto 1 de ${imgs.length}</span>` : ''}
     </div>
     <a class="card__body" href="${href}" target="_blank" rel="noopener">
       <span class="card__shelter">${escapeHtml(p.shelter)}</span>
@@ -59,30 +60,37 @@ function card(p) {
 
   if (multi) {
     const carousel = art.querySelector('.carousel');
-    const count = art.querySelector('.carousel__count');
-    carousel.addEventListener('scroll', () => {
-      const i = Math.max(0, Math.min(Math.round(carousel.scrollLeft / carousel.clientWidth), imgs.length - 1));
-      count.textContent = `${i + 1}/${imgs.length}`;
-    }, { passive: true });
+    carousel.addEventListener('scroll', () => syncCarousel(carousel), { passive: true });
   }
   return art;
 }
 
 // Flechas del carrusel: delegación en #grid (persiste entre re-renders). Los botones son
 // hermanos del enlace, así que no navegan a Instagram; solo desplazan una imagen.
+// Sincroniza el punto activo y el anuncio para lector de pantalla con la imagen visible.
+function syncCarousel(carousel, idx) {
+  const media = carousel.closest('.card__media');
+  const dots = media.querySelectorAll('.carousel__dot');
+  const n = dots.length;
+  if (!n) return;
+  if (idx == null) idx = Math.round(carousel.scrollLeft / (carousel.clientWidth || 1));
+  idx = Math.max(0, Math.min(idx, n - 1));
+  dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+  const sr = media.querySelector('.carousel__sr');
+  if (sr) sr.textContent = `Foto ${idx + 1} de ${n}`;
+}
+
 grid.addEventListener('click', (e) => {
   const btn = e.target.closest('.carousel__nav');
   if (!btn) return;
   e.preventDefault();
-  const media = btn.closest('.card__media');
-  const carousel = media.querySelector('.carousel');
+  const carousel = btn.closest('.card__media').querySelector('.carousel');
   const w = carousel.clientWidth || 1;
   const n = carousel.querySelectorAll('.carousel__slide').length;
   const dir = btn.classList.contains('carousel__nav--next') ? 1 : -1;
   const idx = Math.max(0, Math.min(Math.round(carousel.scrollLeft / w) + dir, n - 1));
   carousel.scrollTo({ left: idx * w });
-  const count = media.querySelector('.carousel__count');
-  if (count) count.textContent = `${idx + 1}/${n}`;
+  syncCarousel(carousel, idx);
 });
 
 function render() {

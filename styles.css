@@ -305,12 +305,23 @@ main.container { padding-bottom: 3rem; }
 .card__media:hover .carousel__nav,
 .card__media:focus-within .carousel__nav { opacity: 1; }  /* visibles al pasar el ratón o con foco de teclado */
 @media (hover: none) { .carousel__nav { opacity: 1; } }  /* táctil: siempre visibles */
-.carousel__count {
-  position: absolute; top: .55rem; right: .55rem;
-  background: rgba(0, 0, 0, .6); color: #fff;
-  font-size: .7rem; font-weight: 600;
-  padding: .1rem .55rem; border-radius: 999px;
+/* Puntitos indicadores (estilo Instagram): de un vistazo se ve que hay varias fotos */
+.carousel__dots {
+  position: absolute; left: 0; right: 0; bottom: .6rem;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem;
   pointer-events: none;
+}
+.carousel__dot {
+  width: 6px; height: 6px; border-radius: 999px;
+  background: rgba(255, 255, 255, .55);
+  box-shadow: 0 0 2px rgba(0, 0, 0, .45);
+  transition: background .2s, transform .2s;
+}
+.carousel__dot.is-active { background: #fff; transform: scale(1.3); }
+/* Solo para lectores de pantalla (anuncia "Foto n de N") */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
 .card__body { padding: .9rem; display: flex; flex-direction: column; gap: .55rem; flex: 1; text-decoration: none; color: inherit; }
