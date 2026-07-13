@@ -67,10 +67,24 @@ async function loadArchivePosts() {
   return arrs.flat();
 }
 
+// Lista ORDENADA de URLs de imagen de una publicación: 1 si es imagen/vídeo, N si es
+// carrusel (type "Sidecar"). Los carruseles vienen en childPosts[].displayUrl (cubre
+// también miniaturas de vídeos); con fallback al array images y, por último, displayUrl.
+export function extractImages(item) {
+  const kids = Array.isArray(item.childPosts) ? item.childPosts : [];
+  if (kids.length) {
+    const urls = kids.map((c) => c.displayUrl).filter(Boolean);
+    if (urls.length) return urls;
+  }
+  if (Array.isArray(item.images) && item.images.length) return item.images.filter(Boolean);
+  return item.displayUrl ? [item.displayUrl] : [];
+}
+
 // ---------- proveedor de datos ----------
 // AISLADO A PROPÓSITO: cambiar de servicio = editar SOLO esta función.
 // Apify · actor "apify/instagram-scraper" · endpoint run-sync-get-dataset-items.
-// Cada item trae: shortCode, caption, url, displayUrl, timestamp, ownerUsername.
+// Cada item trae: shortCode, caption, url, displayUrl, timestamp, ownerUsername y, si es
+// carrusel, childPosts[]/images[] con todas las imágenes. Coste: por publicación, no por imagen.
 // Nota: si tu plan trata resultsLimit como tope global (no por cuenta), súbelo.
 async function fetchFromProvider(usernames, tokens) {
   const input = {
@@ -95,7 +109,7 @@ async function fetchFromProvider(usernames, tokens) {
           shortCode: it.shortCode,
           caption: it.caption || '',
           permalink: it.url || (it.shortCode ? `https://www.instagram.com/p/${it.shortCode}/` : null),
-          imageUrl: it.displayUrl || (Array.isArray(it.images) && it.images[0]) || null,
+          imageUrls: extractImages(it),
           date: it.timestamp,
           username: (it.ownerUsername || '').toLowerCase(),
         }))
@@ -108,16 +122,28 @@ async function fetchFromProvider(usernames, tokens) {
   throw new Error(`Todos los tokens Apify fallaron. Último: ${lastErr}`);
 }
 
-async function downloadImage(imageUrl, id) {
+async function downloadOne(imageUrl, filename) {
   if (!imageUrl) return null;
   try {
     const res = await fetch(imageUrl);
     if (!res.ok) return null;
-    await writeFile(path.join(IMG_DIR, `${id}.jpg`), Buffer.from(await res.arrayBuffer()));
-    return `img/${id}.jpg`;
+    await writeFile(path.join(IMG_DIR, filename), Buffer.from(await res.arrayBuffer()));
+    return `img/${filename}`;
   } catch {
     return null; // una imagen que falla no tumba el resto
   }
+}
+
+// Descarga todas las imágenes de una publicación. La 1ª es <id>.jpg (retrocompat con posts
+// antiguos y single-image); las siguientes <id>-2.jpg, <id>-3.jpg… Devuelve solo las rutas
+// realmente guardadas, en orden (una imagen suelta que falle no descarta el resto).
+async function downloadImages(urls, id) {
+  const out = [];
+  for (let i = 0; i < urls.length; i++) {
+    const saved = await downloadOne(urls[i], i === 0 ? `${id}.jpg` : `${id}-${i + 1}.jpg`);
+    if (saved) out.push(saved);
+  }
+  return out;
 }
 
 // ---------- clasificación por IA (animal + tipo de publicación) ----------
@@ -273,6 +299,7 @@ async function main() {
     const shelter = byUser.get(p.username);
     if (!shelter) continue; // item de una cuenta que no está en shelters.json
     seen.add(p.shortCode);
+    const images = await downloadImages(p.imageUrls, p.shortCode);
     fresh.push({
       id: p.shortCode,
       shelter: shelter.name,
@@ -281,7 +308,8 @@ async function main() {
       date: p.date,
       caption: p.caption,
       excerpt: excerpt(p.caption),
-      image: await downloadImage(p.imageUrl, p.shortCode),
+      image: images[0] || null, // 1ª imagen (retrocompat)
+      images,                    // todas las imágenes (carrusel)
       permalink: p.permalink,
     });
   }
@@ -315,7 +343,10 @@ async function main() {
   // ponytail: conservamos imágenes de portada Y archivo (crecen ~100MB/año; poner tope si molesta).
   // Solo podamos imágenes de posts (.jpg) ya caducadas. Todo lo demás (logo.svg,
   // placeholder.svg, la carpeta shelters/, hero.jpg, og.jpg) queda intacto.
-  const keep = new Set(all.map((p) => p.image && path.basename(p.image)).filter(Boolean));
+  const keep = new Set(
+    all.flatMap((p) => (p.images && p.images.length ? p.images : (p.image ? [p.image] : [])))
+       .map((x) => path.basename(x))
+  );
   for (const f of await readdir(IMG_DIR)) {
     if (!f.endsWith('.jpg')) continue;
     if (f === 'hero.jpg' || f === 'og.jpg' || f === 'logo-web.jpg' || keep.has(f)) continue;
@@ -333,6 +364,11 @@ function selfTest() {
   const part = partitionByAge([{ date: new Date().toISOString() }, { date: '2000-01-01' }], Date.now());
   assert(part.current.length === 1 && part.older.length === 1, 'partitionByAge separa por edad');
   assert(groupByYear([{ date: '2026-03-01T00:00:00Z' }, { date: '2025-12-01T00:00:00Z' }])['2026'].length === 1, 'groupByYear clave YYYY');
+  assert(extractImages({ displayUrl: 'a.jpg' }).length === 1, 'extractImages: 1 imagen suelta');
+  assert(extractImages({ childPosts: [{ displayUrl: 'a' }, { displayUrl: 'b' }, { displayUrl: 'c' }] }).length === 3, 'extractImages: carrusel 3');
+  assert(extractImages({ childPosts: [{ type: 'Video', displayUrl: 'v' }, { displayUrl: 'i' }] }).join() === 'v,i', 'extractImages: carrusel con vídeo (miniatura), en orden');
+  assert(extractImages({ images: ['x', 'y'] }).length === 2, 'extractImages: fallback a images[]');
+  assert(extractImages({}).length === 0, 'extractImages: sin imágenes → []');
   assert(parseClassification('{"animal":"perro","tipo":"adopcion"}').tipo === 'adopcion', 'parse ok');
   assert(parseClassification('{"animal":"Gato","tipo":"Adopción"}').tipo === 'adopcion', 'parse normaliza acentos/mayus');
   assert(parseClassification('```json {"animal":"otro","tipo":"evento"} ```').tipo === 'evento', 'parse tolera markdown');

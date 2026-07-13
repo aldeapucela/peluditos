@@ -23,7 +23,15 @@
     "image": "img/DauOHl0iCcO.jpg",
     "permalink": "https://www.instagram.com/p/DauOHl0iCcO/",
     "type": "gato",
-    "tipo": "adopcion"
+    "tipo": "adopcion",
+    "images": [
+      "img/DauOHl0iCcO.jpg",
+      "img/DauOHl0iCcO-2.jpg",
+      "img/DauOHl0iCcO-3.jpg",
+      "img/DauOHl0iCcO-4.jpg",
+      "img/DauOHl0iCcO-5.jpg",
+      "img/DauOHl0iCcO-6.jpg"
+    ]
   },
   {
     "id": "DatWm0iAX5a",
@@ -75,7 +83,12 @@
     "image": "img/Dasjk8jiNxi.jpg",
     "permalink": "https://www.instagram.com/p/Dasjk8jiNxi/",
     "type": "perro",
-    "tipo": "adopcion"
+    "tipo": "adopcion",
+    "images": [
+      "img/Dasjk8jiNxi.jpg",
+      "img/Dasjk8jiNxi-2.jpg",
+      "img/Dasjk8jiNxi-3.jpg"
+    ]
   },
   {
     "id": "DasNHxfIW26",
@@ -296,7 +309,11 @@
     "image": "img/Dalm72MCCmn.jpg",
     "permalink": "https://www.instagram.com/p/Dalm72MCCmn/",
     "type": "perro",
-    "tipo": "donacion"
+    "tipo": "donacion",
+    "images": [
+      "img/Dalm72MCCmn.jpg",
+      "img/Dalm72MCCmn-2.jpg"
+    ]
   },
   {
     "id": "DalQUPatmVw",

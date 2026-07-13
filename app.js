@@ -25,15 +25,27 @@ const fmtDay = (iso) => {
 };
 
 function card(p) {
-  const a = document.createElement('a');
-  a.className = 'card';
-  a.href = safeUrl(p.permalink);
-  a.target = '_blank';
-  a.rel = 'noopener';
-  a.innerHTML = `
-    <img class="card__img" loading="lazy" alt="Publicación de ${escapeHtml(p.shelter)}"
-         src="${p.image || PLACEHOLDER}" onerror="this.onerror=null;this.src='${PLACEHOLDER}'">
-    <div class="card__body">
+  // imágenes: array nuevo (carrusel) o, retrocompat, la única `image`; si no hay, placeholder
+  const imgs = (Array.isArray(p.images) && p.images.length) ? p.images : (p.image ? [p.image] : [PLACEHOLDER]);
+  const multi = imgs.length > 1;
+  const href = escapeHtml(safeUrl(p.permalink)); // escapado también para el contexto de atributo HTML
+  const alt = `Publicación de ${escapeHtml(p.shelter)}`;
+  const slides = imgs.map((s, i) => `
+        <a class="carousel__slide" href="${href}" target="_blank" rel="noopener" aria-label="${multi ? `Foto ${i + 1} de ${imgs.length} — ${alt}` : alt}">
+          <img class="card__img" loading="lazy" alt="${alt}" src="${escapeHtml(s)}" onerror="this.onerror=null;this.src='${PLACEHOLDER}'">
+        </a>`).join('');
+
+  const art = document.createElement('article');
+  art.className = 'card';
+  art.innerHTML = `
+    <div class="card__media">
+      <div class="carousel"${multi ? ` role="group" aria-roledescription="carrusel" aria-label="Carrusel de ${imgs.length} imágenes"` : ''}>${slides}</div>
+      ${multi ? `
+      <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Imagen anterior">‹</button>
+      <button class="carousel__nav carousel__nav--next" type="button" aria-label="Imagen siguiente">›</button>
+      <span class="carousel__count" role="status" aria-live="polite">1/${imgs.length}</span>` : ''}
+    </div>
+    <a class="card__body" href="${href}" target="_blank" rel="noopener">
       <span class="card__shelter">${escapeHtml(p.shelter)}</span>
       <div class="badges">
         <span class="badge">${TYPE_LABEL[p.type] || '🐾 Otro'}</span>
@@ -43,9 +55,35 @@ function card(p) {
       <div class="card__meta">
         <span class="card__cta">Ver en Instagram →</span>
       </div>
-    </div>`;
-  return a;
+    </a>`;
+
+  if (multi) {
+    const carousel = art.querySelector('.carousel');
+    const count = art.querySelector('.carousel__count');
+    carousel.addEventListener('scroll', () => {
+      const i = Math.max(0, Math.min(Math.round(carousel.scrollLeft / carousel.clientWidth), imgs.length - 1));
+      count.textContent = `${i + 1}/${imgs.length}`;
+    }, { passive: true });
+  }
+  return art;
 }
+
+// Flechas del carrusel: delegación en #grid (persiste entre re-renders). Los botones son
+// hermanos del enlace, así que no navegan a Instagram; solo desplazan una imagen.
+grid.addEventListener('click', (e) => {
+  const btn = e.target.closest('.carousel__nav');
+  if (!btn) return;
+  e.preventDefault();
+  const media = btn.closest('.card__media');
+  const carousel = media.querySelector('.carousel');
+  const w = carousel.clientWidth || 1;
+  const n = carousel.querySelectorAll('.carousel__slide').length;
+  const dir = btn.classList.contains('carousel__nav--next') ? 1 : -1;
+  const idx = Math.max(0, Math.min(Math.round(carousel.scrollLeft / w) + dir, n - 1));
+  carousel.scrollTo({ left: idx * w });
+  const count = media.querySelector('.carousel__count');
+  if (count) count.textContent = `${idx + 1}/${n}`;
+});
 
 function render() {
   const list = posts.filter(
