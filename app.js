@@ -30,9 +30,11 @@ function card(p) {
   const multi = imgs.length > 1;
   const href = escapeHtml(safeUrl(p.permalink)); // escapado también para el contexto de atributo HTML
   const alt = `Publicación de ${escapeHtml(p.shelter)}`;
+  const vids = new Set(Array.isArray(p.videos) ? p.videos : []); // índices de diapositivas que son vídeo
   const slides = imgs.map((s, i) => `
-        <a class="carousel__slide" href="${href}" target="_blank" rel="noopener" aria-label="${multi ? `Foto ${i + 1} de ${imgs.length} — ${alt}` : alt}">
+        <a class="carousel__slide" href="${href}" target="_blank" rel="noopener" aria-label="${(multi ? `Foto ${i + 1} de ${imgs.length} — ` : '') + alt + (vids.has(i) ? ' (vídeo)' : '')}">
           <img class="card__img" loading="lazy" alt="${alt}" src="${escapeHtml(s)}" onerror="this.onerror=null;this.src='${PLACEHOLDER}'">
+          ${vids.has(i) ? '<span class="carousel__play" aria-hidden="true"></span>' : ''}
         </a>`).join('');
 
   const art = document.createElement('article');

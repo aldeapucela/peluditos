@@ -67,17 +67,18 @@ async function loadArchivePosts() {
   return arrs.flat();
 }
 
-// Lista ORDENADA de URLs de imagen de una publicación: 1 si es imagen/vídeo, N si es
-// carrusel (type "Sidecar"). Los carruseles vienen en childPosts[].displayUrl (cubre
-// también miniaturas de vídeos); con fallback al array images y, por último, displayUrl.
-export function extractImages(item) {
+// Lista ORDENADA de medios de una publicación: `{ url, video }`. 1 elemento si es imagen/
+// vídeo suelto, N si es carrusel ("Sidecar"). SIEMPRE usamos la miniatura `displayUrl` (NO
+// descargamos vídeos); `video` marca qué diapositivas son vídeo (childPosts[].type "Video")
+// para poder pintar el icono ▶. Fallback: array `images` (sin info de vídeo) y luego displayUrl.
+export function extractMedia(item) {
   const kids = Array.isArray(item.childPosts) ? item.childPosts : [];
   if (kids.length) {
-    const urls = kids.map((c) => c.displayUrl).filter(Boolean);
-    if (urls.length) return urls;
+    const m = kids.filter((c) => c.displayUrl).map((c) => ({ url: c.displayUrl, video: c.type === 'Video' }));
+    if (m.length) return m;
   }
-  if (Array.isArray(item.images) && item.images.length) return item.images.filter(Boolean);
-  return item.displayUrl ? [item.displayUrl] : [];
+  if (Array.isArray(item.images) && item.images.length) return item.images.filter(Boolean).map((url) => ({ url, video: false }));
+  return item.displayUrl ? [{ url: item.displayUrl, video: item.type === 'Video' }] : [];
 }
 
 // ---------- proveedor de datos ----------
@@ -109,7 +110,7 @@ async function fetchFromProvider(usernames, tokens) {
           shortCode: it.shortCode,
           caption: it.caption || '',
           permalink: it.url || (it.shortCode ? `https://www.instagram.com/p/${it.shortCode}/` : null),
-          imageUrls: extractImages(it),
+          media: extractMedia(it),
           date: it.timestamp,
           username: (it.ownerUsername || '').toLowerCase(),
         }))
@@ -134,16 +135,17 @@ async function downloadOne(imageUrl, filename) {
   }
 }
 
-// Descarga todas las imágenes de una publicación. La 1ª es <id>.jpg (retrocompat con posts
-// antiguos y single-image); las siguientes <id>-2.jpg, <id>-3.jpg… Devuelve solo las rutas
-// realmente guardadas, en orden (una imagen suelta que falle no descarta el resto).
-async function downloadImages(urls, id) {
-  const out = [];
-  for (let i = 0; i < urls.length; i++) {
-    const saved = await downloadOne(urls[i], i === 0 ? `${id}.jpg` : `${id}-${i + 1}.jpg`);
-    if (saved) out.push(saved);
+// Descarga las miniaturas de una publicación (NUNCA los vídeos). La 1ª es <id>.jpg
+// (retrocompat con posts antiguos y single-image); las siguientes <id>-2.jpg, <id>-3.jpg…
+// Devuelve { images: rutas guardadas en orden; videos: índices de esas imágenes que en
+// realidad son vídeo }. Una miniatura que falle no descarta el resto (índices coherentes).
+async function downloadMedia(media, id) {
+  const images = [], videos = [];
+  for (const m of media) {
+    const saved = await downloadOne(m.url, images.length === 0 ? `${id}.jpg` : `${id}-${images.length + 1}.jpg`);
+    if (saved) { if (m.video) videos.push(images.length); images.push(saved); }
   }
-  return out;
+  return { images, videos };
 }
 
 // ---------- clasificación por IA (animal + tipo de publicación) ----------
@@ -299,7 +301,7 @@ async function main() {
     const shelter = byUser.get(p.username);
     if (!shelter) continue; // item de una cuenta que no está en shelters.json
     seen.add(p.shortCode);
-    const images = await downloadImages(p.imageUrls, p.shortCode);
+    const { images, videos } = await downloadMedia(p.media, p.shortCode);
     fresh.push({
       id: p.shortCode,
       shelter: shelter.name,
@@ -308,8 +310,9 @@ async function main() {
       date: p.date,
       caption: p.caption,
       excerpt: excerpt(p.caption),
-      image: images[0] || null, // 1ª imagen (retrocompat)
-      images,                    // todas las imágenes (carrusel)
+      image: images[0] || null,          // 1ª miniatura (retrocompat)
+      images,                            // todas las miniaturas (carrusel)
+      ...(videos.length ? { videos } : {}), // índices de las que son vídeo (para el icono ▶)
       permalink: p.permalink,
     });
   }
@@ -364,11 +367,13 @@ function selfTest() {
   const part = partitionByAge([{ date: new Date().toISOString() }, { date: '2000-01-01' }], Date.now());
   assert(part.current.length === 1 && part.older.length === 1, 'partitionByAge separa por edad');
   assert(groupByYear([{ date: '2026-03-01T00:00:00Z' }, { date: '2025-12-01T00:00:00Z' }])['2026'].length === 1, 'groupByYear clave YYYY');
-  assert(extractImages({ displayUrl: 'a.jpg' }).length === 1, 'extractImages: 1 imagen suelta');
-  assert(extractImages({ childPosts: [{ displayUrl: 'a' }, { displayUrl: 'b' }, { displayUrl: 'c' }] }).length === 3, 'extractImages: carrusel 3');
-  assert(extractImages({ childPosts: [{ type: 'Video', displayUrl: 'v' }, { displayUrl: 'i' }] }).join() === 'v,i', 'extractImages: carrusel con vídeo (miniatura), en orden');
-  assert(extractImages({ images: ['x', 'y'] }).length === 2, 'extractImages: fallback a images[]');
-  assert(extractImages({}).length === 0, 'extractImages: sin imágenes → []');
+  assert(extractMedia({ displayUrl: 'a.jpg' }).length === 1, 'extractMedia: 1 medio suelto');
+  assert(extractMedia({ type: 'Video', displayUrl: 'v.jpg' })[0].video === true, 'extractMedia: vídeo suelto marcado');
+  const _car = extractMedia({ childPosts: [{ type: 'Image', displayUrl: 'a' }, { type: 'Video', displayUrl: 'b' }, { type: 'Image', displayUrl: 'c' }] });
+  assert(_car.length === 3 && _car[1].video === true && _car[0].video === false && _car[2].video === false, 'extractMedia: carrusel marca vídeos por posición');
+  assert(_car.map((m) => m.url).join() === 'a,b,c', 'extractMedia: conserva orden y miniaturas');
+  assert(extractMedia({ images: ['x', 'y'] }).every((m) => m.video === false), 'extractMedia: fallback images[] sin vídeo');
+  assert(extractMedia({}).length === 0, 'extractMedia: sin medios → []');
   assert(parseClassification('{"animal":"perro","tipo":"adopcion"}').tipo === 'adopcion', 'parse ok');
   assert(parseClassification('{"animal":"Gato","tipo":"Adopción"}').tipo === 'adopcion', 'parse normaliza acentos/mayus');
   assert(parseClassification('```json {"animal":"otro","tipo":"evento"} ```').tipo === 'evento', 'parse tolera markdown');
