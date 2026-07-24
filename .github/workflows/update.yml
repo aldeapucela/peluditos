@@ -50,6 +50,14 @@ jobs:
             git pull --rebase origin main || true
             git push
           fi
+      # Resumen de las fichas nuevas en el tema de mascotas de Aldea Pucela. Solo en runs
+      # normales (cron o dispatch sin parámetros): un backfill anunciaría fichas antiguas.
+      # Sin fichas nuevas o sin el secret TELEGRAM_BOT_TOKEN, el script no envía nada.
+      - name: Avisar en Telegram
+        if: github.event.inputs.only_users == '' && github.event.inputs.ingest_max_days == ''
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: node scripts/notify-telegram.mjs
 
   # El push del job anterior usa GITHUB_TOKEN y NO dispara deploy-pages.yml (regla
   # anti-recursión de GitHub). Por eso desplegamos aquí mismo, en la misma tanda.

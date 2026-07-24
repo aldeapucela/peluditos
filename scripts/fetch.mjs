@@ -320,6 +320,10 @@ async function main() {
   const all = [...fresh, ...existing];
   const classified = await classifyMissing(all, process.env.GEMINI_API_KEY);
 
+  // Deja las fichas nuevas de este run (ya clasificadas) para el aviso de Telegram.
+  // No se commitea (está en .gitignore); lo consume scripts/notify-telegram.mjs.
+  await writeFile(path.join(ROOT, 'new-posts.json'), JSON.stringify(fresh, null, 2) + '\n');
+
   const byDateDesc = (a, b) => Date.parse(b.date) - Date.parse(a.date);
   const { current: portada, older } = partitionByAge(all, Date.now());
   portada.sort(byDateDesc);
