@@ -47,7 +47,7 @@ export function formatMessage(posts) {
     return `${tag} — <a href="${esc(p.permalink)}">${esc(text)}</a> (${esc(p.shelter)})`;
   });
   if (n > MAX_LINES) lines.push(`… y ${n - MAX_LINES} más`);
-  return `${header}\n\n${lines.join('\n')}\n\nTodas las fichas: ${WEB}`;
+  return `${header}\n\n${lines.join('\n\n')}\n\nTodas las fichas: ${WEB}`;
 }
 
 async function send(text, token) {
@@ -89,6 +89,7 @@ function selfTest() {
 
   const many = formatMessage(Array.from({ length: 15 }, () => post()));
   assert(many.includes('15 nuevas fichas'), 'plural en cabecera');
+  assert(many.includes(')\n\n🏠'), 'línea en blanco entre ficha y ficha');
   assert(many.includes(`… y ${15 - MAX_LINES} más`), 'tope de líneas con resumen del resto');
 
   assert(formatMessage([post({ tipo: 'inventado' })]).includes('🐾 —'), 'tipo desconocido → fallback');
