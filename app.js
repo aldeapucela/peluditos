@@ -11,6 +11,9 @@ let posts = [];
 let filterType = 'todos';
 let filterCat = 'todas';
 let filterShelter = 'todas';
+let currentPage = 1;
+const PER_PAGE = 24;                          // publicaciones por página
+const pager = document.getElementById('pager');
 
 const escapeHtml = (s) =>
   (s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -168,6 +171,12 @@ function scrollToHash() {
   const step = () => {
     const el = document.getElementById(id);
     if (el) {
+      // Resalta la ficha enlazada con una clase propia: :target no siempre aplica cuando el
+      // contenido se inserta de forma asíncrona (tras el fetch/render).
+      if (el.classList.contains('card')) {
+        document.querySelectorAll('.card.is-target').forEach((c) => c.classList.remove('is-target'));
+        el.classList.add('is-target');
+      }
       el.scrollIntoView({ block: 'start' });
       const y = Math.round(window.scrollY);
       if (y === lastY) return;   // posición ya estable → listo
@@ -178,22 +187,48 @@ function scrollToHash() {
   requestAnimationFrame(step);
 }
 // Reapertura desde Telegram reutilizando la pestaña: solo cambia el hash, sin recargar.
-window.addEventListener('hashchange', scrollToHash);
+// Si la ficha enlazada está en otra página, salta a ella antes de desplazarse.
+window.addEventListener('hashchange', () => {
+  const id = decodeURIComponent((location.hash || '').slice(1));
+  if (id) {
+    const pg = pageOfId(id);
+    if (pg && pg !== currentPage) { currentPage = pg; render(); }
+  }
+  scrollToHash();
+});
 
-function render() {
-  const list = posts.filter(
+function filteredPosts() {
+  return posts.filter(
     (p) =>
       (filterType === 'todos' || (p.type || 'otro') === filterType) &&
       (filterCat === 'todas' || (p.tipo || 'otro') === filterCat) &&
       (filterShelter === 'todas' || p.shelter === filterShelter)
   );
+}
+
+// Página (1..N) en la que cae un ancla (#post-<id> o #dia-<clave>) dentro del listado
+// filtrado actual, o null si no está. Permite que los enlaces (Telegram, compartir) abran
+// la página correcta antes de desplazarse a la ficha.
+function pageOfId(id) {
+  const list = filteredPosts();
+  let idx = -1;
+  if (id.startsWith('post-')) { const pid = id.slice(5); idx = list.findIndex((p) => p.id === pid); }
+  else if (id.startsWith('dia-')) { const key = id.slice(4); idx = list.findIndex((p) => dayKey(p.date) === key); }
+  return idx >= 0 ? Math.floor(idx / PER_PAGE) + 1 : null;
+}
+
+function render() {
+  const list = filteredPosts();
+  const totalPages = Math.max(1, Math.ceil(list.length / PER_PAGE));
+  currentPage = Math.min(Math.max(currentPage, 1), totalPages);
+  const pageItems = list.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
 
   grid.innerHTML = '';
   empty.hidden = list.length > 0;
 
   let cards = null;
   let lastDay = '';
-  for (const p of list) {
+  for (const p of pageItems) {
     const key = dayKey(p.date); // agrupar por jornada (AAAA-MM-DD, hora de Madrid)
     if (key !== lastDay) {
       lastDay = key;
@@ -208,6 +243,59 @@ function render() {
     }
     cards.appendChild(card(p));
   }
+  renderPager(totalPages);
+}
+
+// Números de página a mostrar: primera, última y ±1 alrededor de la actual, con elipsis.
+function pageWindow(cur, total, span = 1) {
+  const set = new Set([1, total]);
+  for (let i = cur - span; i <= cur + span; i++) if (i >= 1 && i <= total) set.add(i);
+  const arr = [...set].sort((a, b) => a - b);
+  const out = [];
+  let prev = 0;
+  for (const p of arr) { if (p - prev > 1) out.push('…'); out.push(p); prev = p; }
+  return out;
+}
+
+function renderPager(total) {
+  if (!pager) return;
+  pager.innerHTML = '';
+  if (total <= 1) { pager.hidden = true; return; }
+  pager.hidden = false;
+
+  const mkBtn = (label, page, opts = {}) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pager__btn' + (opts.current ? ' is-current' : '');
+    b.textContent = label;
+    if (opts.ariaLabel) b.setAttribute('aria-label', opts.ariaLabel);
+    if (opts.current) b.setAttribute('aria-current', 'page');
+    if (opts.disabled) b.disabled = true;
+    else b.addEventListener('click', () => gotoPage(page));
+    return b;
+  };
+
+  pager.appendChild(mkBtn('‹', currentPage - 1, { disabled: currentPage === 1, ariaLabel: 'Página anterior' }));
+  for (const p of pageWindow(currentPage, total)) {
+    if (p === '…') {
+      const gap = document.createElement('span');
+      gap.className = 'pager__gap';
+      gap.textContent = '…';
+      pager.appendChild(gap);
+    } else {
+      pager.appendChild(mkBtn(String(p), p, { current: p === currentPage, ariaLabel: `Página ${p}` }));
+    }
+  }
+  pager.appendChild(mkBtn('›', currentPage + 1, { disabled: currentPage === total, ariaLabel: 'Página siguiente' }));
+}
+
+function gotoPage(p) {
+  if (p === currentPage) return;
+  currentPage = p;
+  render();
+  // Sube al inicio del listado (bajo los filtros), no al hero.
+  const top = grid.getBoundingClientRect().top + window.scrollY - 80;
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
 }
 
 function initFilters() {
@@ -219,6 +307,7 @@ function initFilters() {
   }
   shelterSel.addEventListener('change', () => {
     filterShelter = shelterSel.value;
+    currentPage = 1; // al cambiar de filtro, vuelve a la primera página
     render();
   });
   typeBtns.forEach((b) =>
@@ -226,6 +315,7 @@ function initFilters() {
       typeBtns.forEach((x) => x.classList.remove('is-active'));
       b.classList.add('is-active');
       filterType = b.dataset.type;
+      currentPage = 1;
       render();
     })
   );
@@ -234,6 +324,7 @@ function initFilters() {
       catBtns.forEach((x) => x.classList.remove('is-active'));
       b.classList.add('is-active');
       filterCat = b.dataset.cat;
+      currentPage = 1;
       render();
     })
   );
@@ -257,6 +348,9 @@ source
   .then((data) => {
     posts = Array.isArray(data) ? data : [];
     initFilters();
+    // Si venimos con un ancla, abre directamente la página que contiene la ficha.
+    const initId = decodeURIComponent((location.hash || '').slice(1));
+    if (initId) { const pg = pageOfId(initId); if (pg) currentPage = pg; }
     render();
     scrollToHash();
   })
