@@ -257,7 +257,20 @@ main.container { padding-bottom: 3rem; }
   margin: 2.25rem 0 1rem;
   padding-bottom: .45rem;
   border-bottom: 1px solid var(--line);
+  scroll-margin-top: 5.5rem; /* que la barra superior fija no tape la jornada al saltar al ancla */
 }
+.day__anchor {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .4rem;
+  color: inherit;
+  text-decoration: none;
+}
+.day__anchor:hover .day__label,
+.day__anchor:focus-visible .day__label { text-decoration: underline; text-underline-offset: .2rem; }
+.day__link { font-size: .72em; opacity: .4; transition: opacity .2s; }
+.day__anchor:hover .day__link,
+.day__anchor:focus-visible .day__link { opacity: .85; }
 
 .cards {
   display: grid;
@@ -362,13 +375,41 @@ main.container { padding-bottom: 3rem; }
   font-size: .875rem;
   font-weight: 500;
   color: var(--ink);
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
-.card__meta { margin-top: auto; }
-.card__cta { font-size: .75rem; font-weight: 600; color: var(--brand-600); }
+.card__caption { white-space: pre-line; } /* conserva los saltos de línea del texto completo */
+.card__more {
+  border: 0;
+  padding: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--brand-600);
+  cursor: pointer;
+}
+.card__more:hover { text-decoration: underline; }
+.card__meta { margin-top: auto; padding-top: .15rem; }
+.card__cta { font-size: .75rem; font-weight: 600; color: var(--brand-600); text-decoration: none; }
+.card__cta:hover { text-decoration: underline; }
+
+/* Aviso efímero (copia del enlace del día, etc.) */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%) translateY(1rem);
+  background: var(--brand-700);
+  color: #fff;
+  font-size: .85rem;
+  font-weight: 600;
+  padding: .6rem 1rem;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(31, 36, 48, .25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+  z-index: 60;
+}
+.toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 .empty { text-align: center; color: var(--slate-500); padding: 3rem 1rem; }
 
