@@ -157,12 +157,28 @@ grid.addEventListener('click', (e) => {
   }
 });
 
-// Al abrir con un #dia-AAAA-MM-DD, desplaza hasta esa jornada (el contenido se carga async).
+// Al abrir con un #post-<id> (o #dia-AAAA-MM-DD), desplaza hasta esa ficha/jornada. El
+// contenido se pinta async y algunos navegadores (webview de Telegram, etc.) reinician el
+// scroll tras cargar, así que reafirmamos la posición durante ~1,5 s hasta que se estabilice.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function scrollToHash() {
-  if (!location.hash) return;
-  const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-  if (el) requestAnimationFrame(() => el.scrollIntoView({ block: 'start' }));
+  const id = decodeURIComponent((location.hash || '').slice(1));
+  if (!id) return;
+  let tries = 0, lastY = null;
+  const step = () => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ block: 'start' });
+      const y = Math.round(window.scrollY);
+      if (y === lastY) return;   // posición ya estable → listo
+      lastY = y;
+    }
+    if (++tries < 15) setTimeout(step, 100); // reintenta si la ficha aún no está o el layout se mueve
+  };
+  requestAnimationFrame(step);
 }
+// Reapertura desde Telegram reutilizando la pestaña: solo cambia el hash, sin recargar.
+window.addEventListener('hashchange', scrollToHash);
 
 function render() {
   const list = posts.filter(
