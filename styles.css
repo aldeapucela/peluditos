@@ -422,34 +422,27 @@ main.container { padding-bottom: 3rem; }
 
 .empty { text-align: center; color: var(--slate-500); padding: 3rem 1rem; }
 
-/* ===== Paginador (portada y archivo) ===== */
+/* ===== "Mostrar más" (portada y archivo) ===== */
 .pager {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: .4rem;
   margin: 2.5rem 0 1rem;
 }
 .pager[hidden] { display: none; }
-.pager__btn {
-  min-width: 2.6rem;
-  min-height: 2.6rem;
-  padding: .5rem .8rem;
-  border: 1px solid var(--line);
-  border-radius: .7rem;
+.show-more {
+  min-height: 2.9rem;
+  padding: .7rem 1.7rem;
+  border: 1px solid var(--brand-500);
+  border-radius: .8rem;
   background: #fff;
-  color: var(--slate-600);
+  color: var(--brand-700);
   font-family: var(--font-body);
-  font-size: .95rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background .2s, color .2s, border-color .2s;
+  transition: background .2s, color .2s;
 }
-.pager__btn:hover:not(:disabled):not(.is-current) { background: var(--brand-50); color: var(--brand-700); }
-.pager__btn.is-current { background: var(--brand-500); border-color: var(--brand-500); color: #fff; cursor: default; }
-.pager__btn:disabled { opacity: .4; cursor: default; }
-.pager__gap { padding: 0 .2rem; color: var(--slate-500); }
+.show-more:hover { background: var(--brand-500); color: #fff; }
 
 /* ===== Página de protectoras ===== */
 .page-title {
