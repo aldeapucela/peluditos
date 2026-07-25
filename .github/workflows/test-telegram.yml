@@ -1,0 +1,27 @@
+name: Probar aviso Telegram
+
+# Envía al grupo un aviso con las últimas N fichas de data/posts.json, como si fueran
+# nuevas. Solo manual — para probar el formato del mensaje sin esperar al cron diario.
+
+on:
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'Nº de fichas recientes a incluir'
+        default: '3'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enviar aviso con las últimas fichas
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          COUNT: ${{ github.event.inputs.count }}
+        run: |
+          node -e "const fs=require('fs');fs.writeFileSync('new-posts.json',JSON.stringify(JSON.parse(fs.readFileSync('data/posts.json','utf8')).slice(0,Number(process.env.COUNT)||3)))"
+          node scripts/notify-telegram.mjs
