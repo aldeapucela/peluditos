@@ -40,9 +40,10 @@ const brief = (s, n = 80) => {
   return c.length > n ? c.slice(0, n - 1) + '…' : c;
 };
 
-// Enlace a la ficha EN LA WEB, no a Instagram: la portada agrupa por jornada y cada día
-// tiene un ancla estable (#dia-AAAA-MM-DD, hora de Madrid). Sin fecha válida, cae a la home.
+// Enlace a la ficha EN LA WEB, no a Instagram: cada publicación tiene su ancla estable
+// (#post-<id>). Fallbacks: al ancla del día (#dia-AAAA-MM-DD, Madrid) y, sin fecha, a la home.
 const webHref = (p) => {
+  if (p.id) return `${WEB}/#post-${p.id}`;
   const t = Date.parse(p.date);
   if (Number.isNaN(t)) return WEB;
   const key = new Date(t).toLocaleDateString('en-CA', { timeZone: 'Europe/Madrid' });
@@ -142,15 +143,16 @@ async function main() {
 // ---------- self-test ----------
 function selfTest() {
   const assert = (c, m) => { if (!c) throw new Error('self-test FALLÓ: ' + m); };
-  const post = (extra = {}) => ({ tipo: 'adopcion', caption: 'Bobby busca casa', shelter: 'Protectora X', permalink: 'https://instagram.com/p/x/', date: '2026-07-15T10:00:00.000Z', ...extra });
+  const post = (extra = {}) => ({ tipo: 'adopcion', caption: 'Bobby busca casa', shelter: 'Protectora X', permalink: 'https://instagram.com/p/x/', id: 'ABC123', date: '2026-07-15T10:00:00.000Z', ...extra });
 
   const one = formatMessage([post()]);
   assert(one.includes('Nueva ficha'), 'singular en cabecera');
   assert(one.includes('🏠') && one.includes('Bobby busca casa') && one.includes('Protectora X'), 'línea con tipo, texto y protectora');
   assert(one.includes(WEB), 'incluye enlace a la web');
-  assert(one.includes(`${WEB}/#dia-2026-07-15`), 'cada ficha enlaza al día en la web (no a Instagram)');
+  assert(one.includes(`${WEB}/#post-ABC123`), 'cada ficha enlaza a su publicación en la web (no a Instagram)');
   assert(!one.includes('instagram.com/p/x/'), 'la ficha ya no enlaza a Instagram');
-  assert(formatMessage([post({ date: undefined })]).includes(`href="${WEB}"`), 'sin fecha válida cae a la home');
+  assert(formatMessage([post({ id: undefined })]).includes(`${WEB}/#dia-2026-07-15`), 'sin id cae al ancla del día');
+  assert(formatMessage([post({ id: undefined, date: undefined })]).includes(`href="${WEB}"`), 'sin id ni fecha cae a la home');
 
   const many = formatMessage(Array.from({ length: 15 }, () => post()));
   assert(many.includes('15 nuevas fichas'), 'plural en cabecera');

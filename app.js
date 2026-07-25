@@ -66,6 +66,7 @@ function card(p) {
 
   const art = document.createElement('article');
   art.className = 'card';
+  if (p.id) art.id = `post-${p.id}`; // ancla estable por publicación (para enlazar/compartir)
   art.innerHTML = `
     <div class="card__media">
       <div class="carousel"${multi ? ` role="group" aria-roledescription="carrusel" aria-label="Carrusel de ${imgs.length} imágenes"` : ''}>${slides}</div>
@@ -84,6 +85,7 @@ function card(p) {
       <p class="card__text"><span class="card__caption">${escapeHtml(short)}</span>${hasMore ? ` <button type="button" class="card__more" aria-expanded="false">más</button>` : ''}</p>
       <div class="card__meta">
         <a class="card__cta" href="${href}" target="_blank" rel="noopener">Ver en Instagram →</a>
+        <button type="button" class="card__share" aria-label="Copiar enlace a esta ficha" title="Copiar enlace a esta ficha">🔗</button>
       </div>
     </div>`;
 
@@ -141,17 +143,18 @@ grid.addEventListener('click', (e) => {
     more.setAttribute('aria-expanded', String(!expanded));
     return;
   }
-  const anchor = e.target.closest('.day__anchor');
-  if (anchor && navigator.clipboard && navigator.clipboard.writeText) {
-    e.preventDefault();
-    const id = anchor.getAttribute('href').slice(1);
-    history.replaceState(null, '', '#' + id);
-    navigator.clipboard
-      .writeText(location.origin + location.pathname + '#' + id)
-      .then(() => toast('Enlace del día copiado 🔗'))
-      .catch(() => {});
+  const share = e.target.closest('.card__share');
+  if (share) {
+    const art = share.closest('.card');
+    if (!art || !art.id) return;
+    history.replaceState(null, '', '#' + art.id); // deja la URL de la ficha lista para copiar
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(location.origin + location.pathname + '#' + art.id)
+        .then(() => toast('Enlace de la ficha copiado 🔗'))
+        .catch(() => {});
+    }
   }
-  // Sin API de portapapeles: se deja el comportamiento nativo del enlace (actualiza el hash).
 });
 
 // Al abrir con un #dia-AAAA-MM-DD, desplaza hasta esa jornada (el contenido se carga async).
@@ -180,11 +183,8 @@ function render() {
       lastDay = key;
       const h = document.createElement('h2');
       h.className = 'day';
-      h.id = `dia-${key}`; // ancla estable para enlazar/compartir la jornada
-      // El título es un enlace a su propia ancla (🔗); al pulsarlo se copia la URL del día.
-      h.innerHTML = `<a class="day__anchor" href="#dia-${key}">`
-        + `<span class="day__label">${escapeHtml(fmtDay(p.date))}</span>`
-        + `<span class="day__link" aria-hidden="true">🔗</span></a>`;
+      h.id = `dia-${key}`; // se conserva por compatibilidad con enlaces de día ya compartidos
+      h.textContent = fmtDay(p.date);
       grid.appendChild(h);
       cards = document.createElement('div');
       cards.className = 'cards';
