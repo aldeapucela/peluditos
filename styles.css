@@ -280,7 +280,8 @@ main.container { padding-bottom: 3rem; }
   scroll-margin-top: 5.5rem; /* que la barra fija no tape la ficha al saltar a su ancla #post-… */
 }
 .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-card-hover); }
-.card:target { outline: 2px solid var(--brand-400); outline-offset: 3px; } /* resalta la ficha enlazada */
+.card:target,
+.card.is-target { outline: 2px solid var(--brand-400); outline-offset: 3px; } /* resalta la ficha enlazada */
 .card__img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--brand-50); display: block; }
 
 /* Carrusel de imágenes (publicaciones con varias fotos). 1 sola imagen = sin controles. */
@@ -420,6 +421,35 @@ main.container { padding-bottom: 3rem; }
 .toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 .empty { text-align: center; color: var(--slate-500); padding: 3rem 1rem; }
+
+/* ===== Paginador (portada y archivo) ===== */
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: .4rem;
+  margin: 2.5rem 0 1rem;
+}
+.pager[hidden] { display: none; }
+.pager__btn {
+  min-width: 2.6rem;
+  min-height: 2.6rem;
+  padding: .5rem .8rem;
+  border: 1px solid var(--line);
+  border-radius: .7rem;
+  background: #fff;
+  color: var(--slate-600);
+  font-family: var(--font-body);
+  font-size: .95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.pager__btn:hover:not(:disabled):not(.is-current) { background: var(--brand-50); color: var(--brand-700); }
+.pager__btn.is-current { background: var(--brand-500); border-color: var(--brand-500); color: #fff; cursor: default; }
+.pager__btn:disabled { opacity: .4; cursor: default; }
+.pager__gap { padding: 0 .2rem; color: var(--slate-500); }
 
 /* ===== Página de protectoras ===== */
 .page-title {
