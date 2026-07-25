@@ -11,8 +11,9 @@ let posts = [];
 let filterType = 'todos';
 let filterCat = 'todas';
 let filterShelter = 'todas';
-let currentPage = 1;
-const PER_PAGE = 24;                          // publicaciones por página
+const INITIAL_WEEKS = 2;   // se muestran, de inicio, las publicaciones de las 2 últimas semanas
+const WEEKS_STEP = 2;      // "Mostrar más" revela 2 semanas más (más antiguas) en cada pulsación
+let shownWeeks = INITIAL_WEEKS;
 const pager = document.getElementById('pager');
 
 const escapeHtml = (s) =>
@@ -187,12 +188,13 @@ function scrollToHash() {
   requestAnimationFrame(step);
 }
 // Reapertura desde Telegram reutilizando la pestaña: solo cambia el hash, sin recargar.
-// Si la ficha enlazada está en otra página, salta a ella antes de desplazarse.
+// Si la ficha enlazada aún no está en la ventana visible, la amplía antes de desplazarse.
 window.addEventListener('hashchange', () => {
   const id = decodeURIComponent((location.hash || '').slice(1));
   if (id) {
-    const pg = pageOfId(id);
-    if (pg && pg !== currentPage) { currentPage = pg; render(); }
+    const before = shownWeeks;
+    ensureAnchorVisible(id);
+    if (shownWeeks !== before) render();
   }
   scrollToHash();
 });
@@ -206,29 +208,38 @@ function filteredPosts() {
   );
 }
 
-// Página (1..N) en la que cae un ancla (#post-<id> o #dia-<clave>) dentro del listado
-// filtrado actual, o null si no está. Permite que los enlaces (Telegram, compartir) abran
-// la página correcta antes de desplazarse a la ficha.
-function pageOfId(id) {
+// Publicaciones dentro de la ventana visible: las de las últimas `weeks` semanas contadas
+// desde la publicación más reciente del listado filtrado (así también funciona con filtros).
+function windowed(list, weeks) {
+  if (!list.length) return list;
+  const cutoff = Date.parse(list[0].date) - weeks * 7 * 864e5;
+  return list.filter((p) => Date.parse(p.date) >= cutoff);
+}
+
+// Amplía la ventana lo justo para que el ancla (#post-<id> o #dia-<clave>) quede visible,
+// de modo que los enlaces (Telegram, compartir) muestren la ficha aunque sea más antigua.
+function ensureAnchorVisible(id) {
   const list = filteredPosts();
-  let idx = -1;
-  if (id.startsWith('post-')) { const pid = id.slice(5); idx = list.findIndex((p) => p.id === pid); }
-  else if (id.startsWith('dia-')) { const key = id.slice(4); idx = list.findIndex((p) => dayKey(p.date) === key); }
-  return idx >= 0 ? Math.floor(idx / PER_PAGE) + 1 : null;
+  if (!list.length) return;
+  const anchor = Date.parse(list[0].date);
+  let target = null;
+  if (id.startsWith('post-')) { const pid = id.slice(5); const p = list.find((x) => x.id === pid); if (p) target = Date.parse(p.date); }
+  else if (id.startsWith('dia-')) { const key = id.slice(4); const p = list.find((x) => dayKey(x.date) === key); if (p) target = Date.parse(p.date); }
+  if (target == null) return;
+  const need = Math.ceil((anchor - target) / (7 * 864e5));
+  if (need > shownWeeks) shownWeeks = need;
 }
 
 function render() {
   const list = filteredPosts();
-  const totalPages = Math.max(1, Math.ceil(list.length / PER_PAGE));
-  currentPage = Math.min(Math.max(currentPage, 1), totalPages);
-  const pageItems = list.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+  const visible = windowed(list, shownWeeks);
 
   grid.innerHTML = '';
   empty.hidden = list.length > 0;
 
   let cards = null;
   let lastDay = '';
-  for (const p of pageItems) {
+  for (const p of visible) {
     const key = dayKey(p.date); // agrupar por jornada (AAAA-MM-DD, hora de Madrid)
     if (key !== lastDay) {
       lastDay = key;
@@ -243,59 +254,28 @@ function render() {
     }
     cards.appendChild(card(p));
   }
-  renderPager(totalPages);
+  renderMore(visible.length, list);
 }
 
-// Números de página a mostrar: primera, última y ±1 alrededor de la actual, con elipsis.
-function pageWindow(cur, total, span = 1) {
-  const set = new Set([1, total]);
-  for (let i = cur - span; i <= cur + span; i++) if (i >= 1 && i <= total) set.add(i);
-  const arr = [...set].sort((a, b) => a - b);
-  const out = [];
-  let prev = 0;
-  for (const p of arr) { if (p - prev > 1) out.push('…'); out.push(p); prev = p; }
-  return out;
-}
-
-function renderPager(total) {
+// Botón "Mostrar más": revela las 2 semanas siguientes (más antiguas). Si esa ventana no
+// añadiese ninguna publicación (un hueco sin posts), sigue ampliando hasta encontrar más.
+// Se oculta cuando ya se muestran todas.
+function renderMore(visibleCount, list) {
   if (!pager) return;
   pager.innerHTML = '';
-  if (total <= 1) { pager.hidden = true; return; }
+  if (visibleCount >= list.length) { pager.hidden = true; return; }
   pager.hidden = false;
-
-  const mkBtn = (label, page, opts = {}) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'pager__btn' + (opts.current ? ' is-current' : '');
-    b.textContent = label;
-    if (opts.ariaLabel) b.setAttribute('aria-label', opts.ariaLabel);
-    if (opts.current) b.setAttribute('aria-current', 'page');
-    if (opts.disabled) b.disabled = true;
-    else b.addEventListener('click', () => gotoPage(page));
-    return b;
-  };
-
-  pager.appendChild(mkBtn('‹', currentPage - 1, { disabled: currentPage === 1, ariaLabel: 'Página anterior' }));
-  for (const p of pageWindow(currentPage, total)) {
-    if (p === '…') {
-      const gap = document.createElement('span');
-      gap.className = 'pager__gap';
-      gap.textContent = '…';
-      pager.appendChild(gap);
-    } else {
-      pager.appendChild(mkBtn(String(p), p, { current: p === currentPage, ariaLabel: `Página ${p}` }));
-    }
-  }
-  pager.appendChild(mkBtn('›', currentPage + 1, { disabled: currentPage === total, ariaLabel: 'Página siguiente' }));
-}
-
-function gotoPage(p) {
-  if (p === currentPage) return;
-  currentPage = p;
-  render();
-  // Sube al inicio del listado (bajo los filtros), no al hero.
-  const top = grid.getBoundingClientRect().top + window.scrollY - 80;
-  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'show-more';
+  b.textContent = 'Mostrar más';
+  b.addEventListener('click', () => {
+    let w = shownWeeks;
+    do { w += WEEKS_STEP; } while (windowed(list, w).length === visibleCount && windowed(list, w).length < list.length);
+    shownWeeks = w;
+    render();
+  });
+  pager.appendChild(b);
 }
 
 function initFilters() {
@@ -307,7 +287,7 @@ function initFilters() {
   }
   shelterSel.addEventListener('change', () => {
     filterShelter = shelterSel.value;
-    currentPage = 1; // al cambiar de filtro, vuelve a la primera página
+    shownWeeks = INITIAL_WEEKS; // al cambiar de filtro, vuelve a las 2 últimas semanas
     render();
   });
   typeBtns.forEach((b) =>
@@ -315,7 +295,7 @@ function initFilters() {
       typeBtns.forEach((x) => x.classList.remove('is-active'));
       b.classList.add('is-active');
       filterType = b.dataset.type;
-      currentPage = 1;
+      shownWeeks = INITIAL_WEEKS;
       render();
     })
   );
@@ -324,7 +304,7 @@ function initFilters() {
       catBtns.forEach((x) => x.classList.remove('is-active'));
       b.classList.add('is-active');
       filterCat = b.dataset.cat;
-      currentPage = 1;
+      shownWeeks = INITIAL_WEEKS;
       render();
     })
   );
@@ -348,9 +328,9 @@ source
   .then((data) => {
     posts = Array.isArray(data) ? data : [];
     initFilters();
-    // Si venimos con un ancla, abre directamente la página que contiene la ficha.
+    // Si venimos con un ancla, amplía la ventana para incluir esa ficha antes de pintar.
     const initId = decodeURIComponent((location.hash || '').slice(1));
-    if (initId) { const pg = pageOfId(initId); if (pg) currentPage = pg; }
+    if (initId) ensureAnchorVisible(initId);
     render();
     scrollToHash();
   })
