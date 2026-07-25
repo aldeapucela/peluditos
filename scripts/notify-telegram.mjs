@@ -40,13 +40,22 @@ const brief = (s, n = 80) => {
   return c.length > n ? c.slice(0, n - 1) + '…' : c;
 };
 
+// Enlace a la ficha EN LA WEB, no a Instagram: la portada agrupa por jornada y cada día
+// tiene un ancla estable (#dia-AAAA-MM-DD, hora de Madrid). Sin fecha válida, cae a la home.
+const webHref = (p) => {
+  const t = Date.parse(p.date);
+  if (Number.isNaN(t)) return WEB;
+  const key = new Date(t).toLocaleDateString('en-CA', { timeZone: 'Europe/Madrid' });
+  return `${WEB}/#dia-${key}`;
+};
+
 export function formatMessage(posts) {
   const n = posts.length;
   const header = `🐾 <b>${n === 1 ? 'Nueva ficha' : `${n} nuevas fichas`} de peluditos hoy</b>`;
   const lines = posts.slice(0, MAX_LINES).map((p) => {
     const tag = TIPO[p.tipo] || TIPO.otro;
     const text = brief(p.excerpt || p.caption) || p.shelter;
-    return `${tag} — <a href="${esc(p.permalink)}">${esc(text)}</a> (${esc(p.shelter)})`;
+    return `${tag} — <a href="${esc(webHref(p))}">${esc(text)}</a> (${esc(p.shelter)})`;
   });
   if (n > MAX_LINES) lines.push(`… y ${n - MAX_LINES} más`);
   return `${header}\n\n${lines.join('\n\n')}\n\nTodas las fichas: ${WEB}`;
@@ -133,12 +142,15 @@ async function main() {
 // ---------- self-test ----------
 function selfTest() {
   const assert = (c, m) => { if (!c) throw new Error('self-test FALLÓ: ' + m); };
-  const post = (extra = {}) => ({ tipo: 'adopcion', caption: 'Bobby busca casa', shelter: 'Protectora X', permalink: 'https://instagram.com/p/x/', ...extra });
+  const post = (extra = {}) => ({ tipo: 'adopcion', caption: 'Bobby busca casa', shelter: 'Protectora X', permalink: 'https://instagram.com/p/x/', date: '2026-07-15T10:00:00.000Z', ...extra });
 
   const one = formatMessage([post()]);
   assert(one.includes('Nueva ficha'), 'singular en cabecera');
   assert(one.includes('🏠') && one.includes('Bobby busca casa') && one.includes('Protectora X'), 'línea con tipo, texto y protectora');
   assert(one.includes(WEB), 'incluye enlace a la web');
+  assert(one.includes(`${WEB}/#dia-2026-07-15`), 'cada ficha enlaza al día en la web (no a Instagram)');
+  assert(!one.includes('instagram.com/p/x/'), 'la ficha ya no enlaza a Instagram');
+  assert(formatMessage([post({ date: undefined })]).includes(`href="${WEB}"`), 'sin fecha válida cae a la home');
 
   const many = formatMessage(Array.from({ length: 15 }, () => post()));
   assert(many.includes('15 nuevas fichas'), 'plural en cabecera');
