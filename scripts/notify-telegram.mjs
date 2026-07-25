@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 // Peluditos — publica en Telegram un resumen de las fichas nuevas del último run.
-// Lee new-posts.json (lo deja scripts/fetch.mjs) y envía un mensaje al tema de
-// mascotas del grupo Aldea Pucela. Sin fichas nuevas o sin token no envía nada (exit 0).
+// Lee new-posts.json (lo deja scripts/fetch.mjs) y envía al tema de mascotas del grupo
+// Aldea Pucela un álbum con las fotos de las fichas y el resumen como pie. Las fotos se
+// suben desde img/ (en el workflow el aviso sale antes de que Pages despliegue, así que
+// las URLs de la web aún darían 404). Sin fichas nuevas o sin token no envía nada (exit 0).
 //
 // Uso:  TELEGRAM_BOT_TOKEN=xxx node scripts/notify-telegram.mjs
 //       node scripts/notify-telegram.mjs --dry-run     (imprime el mensaje, no envía)
@@ -50,15 +52,63 @@ export function formatMessage(posts) {
   return `${header}\n\n${lines.join('\n\n')}\n\nTodas las fichas: ${WEB}`;
 }
 
-async function send(text, token) {
-  const body = { chat_id: CHAT_ID, text, parse_mode: 'HTML', link_preview_options: { is_disabled: true } };
-  if (THREAD_ID) body.message_thread_id = Number(THREAD_ID);
-  const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`Telegram ${res.status}: ${(await res.text()).slice(0, 300)}`);
+const CAPTION_MAX = 1024; // límite de Telegram para pies de foto (los mensajes admiten 4096)
+const ALBUM_MAX = 10;     // máximo de fotos por álbum (sendMediaGroup)
+
+const API_BASE = process.env.TELEGRAM_API || 'https://api.telegram.org'; // override para pruebas
+
+async function tg(token, method, form) {
+  const res = await fetch(`${API_BASE}/bot${token}/${method}`, { method: 'POST', body: form });
+  if (!res.ok) throw new Error(`Telegram ${method} ${res.status}: ${(await res.text()).slice(0, 300)}`);
+}
+
+function baseForm() {
+  const form = new FormData();
+  form.append('chat_id', CHAT_ID);
+  if (THREAD_ID) form.append('message_thread_id', THREAD_ID);
+  return form;
+}
+
+// Primera miniatura de cada ficha (hasta ALBUM_MAX); una que falte no tumba el resto.
+async function loadPhotos(posts) {
+  const bufs = [];
+  for (const p of posts.slice(0, ALBUM_MAX)) {
+    if (!p.image) continue;
+    try { bufs.push(await readFile(path.join(ROOT, p.image))); } catch { /* miniatura ausente */ }
+  }
+  return bufs;
+}
+
+// Álbum con las fotos y el resumen como pie. Si el resumen no cabe en un pie (1024) o no
+// hay fotos, el resumen va como mensaje de texto normal (tras el álbum, si lo hay).
+async function send(posts, text, token) {
+  const photos = await loadPhotos(posts);
+  const caption = text.length <= CAPTION_MAX ? text : null;
+
+  if (photos.length >= 2) {
+    const form = baseForm();
+    const media = photos.map((buf, i) => {
+      form.append(`p${i}`, new Blob([buf], { type: 'image/jpeg' }), `p${i}.jpg`);
+      return { type: 'photo', media: `attach://p${i}` };
+    });
+    if (caption) Object.assign(media[0], { caption, parse_mode: 'HTML' });
+    form.append('media', JSON.stringify(media));
+    await tg(token, 'sendMediaGroup', form);
+  } else if (photos.length === 1) {
+    const form = baseForm();
+    form.append('photo', new Blob([photos[0]], { type: 'image/jpeg' }), 'p0.jpg');
+    if (caption) { form.append('caption', caption); form.append('parse_mode', 'HTML'); }
+    await tg(token, 'sendPhoto', form);
+  }
+
+  if (!photos.length || !caption) {
+    const form = baseForm();
+    form.append('text', text);
+    form.append('parse_mode', 'HTML');
+    form.append('link_preview_options', JSON.stringify({ is_disabled: true }));
+    await tg(token, 'sendMessage', form);
+  }
+  return photos.length;
 }
 
 async function main() {
@@ -67,14 +117,17 @@ async function main() {
   if (!posts.length) return console.log('0 fichas nuevas; nada que avisar');
 
   const text = formatMessage(posts);
-  if (process.argv.includes('--dry-run')) return console.log(text);
+  if (process.argv.includes('--dry-run')) {
+    const fotos = posts.slice(0, ALBUM_MAX).map((p) => p.image).filter(Boolean);
+    return console.log(`${text}\n\n[dry-run] fotos del álbum (${fotos.length}): ${fotos.join(', ') || 'ninguna'}`);
+  }
 
   const token = process.env.TELEGRAM_BOT_TOKEN;
   // Sin secret configurado no rompemos el workflow: se avisa y ya.
   if (!token) return console.warn(`Sin TELEGRAM_BOT_TOKEN: no se envía el aviso (${posts.length} fichas nuevas)`);
 
-  await send(text, token);
-  console.log(`Aviso enviado a ${CHAT_ID}${THREAD_ID ? ` (tema ${THREAD_ID})` : ''}: ${posts.length} fichas`);
+  const nPhotos = await send(posts, text, token);
+  console.log(`Aviso enviado a ${CHAT_ID}${THREAD_ID ? ` (tema ${THREAD_ID})` : ''}: ${posts.length} fichas, ${nPhotos} fotos`);
 }
 
 // ---------- self-test ----------
