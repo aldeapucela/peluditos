@@ -24,7 +24,34 @@ const fmtDay = (iso) => {
   return s.charAt(0).toUpperCase() + s.slice(1); // solo la primera letra en mayúscula
 };
 
+// Clave estable del día (AAAA-MM-DD en hora de Madrid) para el id del ancla de cada jornada.
+const dayKey = (iso) => new Date(iso).toLocaleDateString('en-CA', { timeZone: 'Europe/Madrid' });
+
+// Aviso efímero (p. ej. al copiar el enlace de un día).
+let toastTimer;
+function toast(msg) {
+  let el = document.getElementById('toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'toast';
+    el.className = 'toast';
+    el.setAttribute('role', 'status');
+    el.setAttribute('aria-live', 'polite');
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.add('is-visible');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('is-visible'), 2200);
+}
+
 function card(p) {
+  // Texto: teaser (excerpt, ≤180 car.) + descripción completa desplegable con "más" (estilo Instagram).
+  const full = (p.caption || '').trim();
+  const collapsed = full.replace(/\s+/g, ' ').trim();
+  const short = (p.excerpt && p.excerpt.length) ? p.excerpt : collapsed;
+  const hasMore = collapsed !== short; // hay más texto que el del teaser
+
   // imágenes: array nuevo (carrusel) o, retrocompat, la única `image`; si no hay, placeholder
   const imgs = (Array.isArray(p.images) && p.images.length) ? p.images : (p.image ? [p.image] : [PLACEHOLDER]);
   const multi = imgs.length > 1;
@@ -48,23 +75,25 @@ function card(p) {
       <span class="carousel__count" role="status" aria-live="polite">1/${imgs.length}</span>
       <div class="carousel__dots" aria-hidden="true">${imgs.map((_, i) => `<span class="carousel__dot${i === 0 ? ' is-active' : ''}"></span>`).join('')}</div>` : ''}
     </div>
-    <a class="card__body" href="${href}" target="_blank" rel="noopener">
+    <div class="card__body">
       <span class="card__shelter">${escapeHtml(p.shelter)}</span>
       <div class="badges">
         <span class="badge">${TYPE_LABEL[p.type] || '🐾 Otro'}</span>
         ${CAT_LABEL[p.tipo] ? `<span class="badge badge--cat">${CAT_LABEL[p.tipo]}</span>` : ''}
       </div>
-      <p class="card__text">${escapeHtml(p.excerpt)}</p>
+      <p class="card__text"><span class="card__caption">${escapeHtml(short)}</span>${hasMore ? ` <button type="button" class="card__more" aria-expanded="false">más</button>` : ''}</p>
       <div class="card__meta">
-        <span class="card__cta">Ver en Instagram →</span>
+        <a class="card__cta" href="${href}" target="_blank" rel="noopener">Ver en Instagram →</a>
       </div>
-    </a>`;
+    </div>`;
 
   if (multi) {
     const carousel = art.querySelector('.carousel');
     carousel.addEventListener('scroll', () => syncCarousel(carousel), { passive: true });
     syncCarousel(carousel, 0); // estado inicial: sin flecha izquierda, contador 1/N, punto 1 activo
   }
+  const moreBtn = art.querySelector('.card__more');
+  if (moreBtn) { moreBtn._full = full; moreBtn._short = short; } // textos para el toggle "más/menos"
   return art;
 }
 
@@ -100,6 +129,38 @@ grid.addEventListener('click', (e) => {
   syncCarousel(carousel, idx);
 });
 
+// "más/menos": despliega o repliega la descripción completa de la publicación.
+// Ancla del día: copia al portapapeles el enlace directo a esa jornada (para compartir/Telegram).
+grid.addEventListener('click', (e) => {
+  const more = e.target.closest('.card__more');
+  if (more) {
+    const expanded = more.getAttribute('aria-expanded') === 'true';
+    const cap = more.parentElement.querySelector('.card__caption');
+    cap.textContent = expanded ? more._short : more._full;
+    more.textContent = expanded ? 'más' : 'menos';
+    more.setAttribute('aria-expanded', String(!expanded));
+    return;
+  }
+  const anchor = e.target.closest('.day__anchor');
+  if (anchor && navigator.clipboard && navigator.clipboard.writeText) {
+    e.preventDefault();
+    const id = anchor.getAttribute('href').slice(1);
+    history.replaceState(null, '', '#' + id);
+    navigator.clipboard
+      .writeText(location.origin + location.pathname + '#' + id)
+      .then(() => toast('Enlace del día copiado 🔗'))
+      .catch(() => {});
+  }
+  // Sin API de portapapeles: se deja el comportamiento nativo del enlace (actualiza el hash).
+});
+
+// Al abrir con un #dia-AAAA-MM-DD, desplaza hasta esa jornada (el contenido se carga async).
+function scrollToHash() {
+  if (!location.hash) return;
+  const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (el) requestAnimationFrame(() => el.scrollIntoView({ block: 'start' }));
+}
+
 function render() {
   const list = posts.filter(
     (p) =>
@@ -114,12 +175,16 @@ function render() {
   let cards = null;
   let lastDay = '';
   for (const p of list) {
-    const day = fmtDay(p.date); // agrupar por la MISMA etiqueta que se muestra (hora de Madrid)
-    if (day !== lastDay) {
-      lastDay = day;
+    const key = dayKey(p.date); // agrupar por jornada (AAAA-MM-DD, hora de Madrid)
+    if (key !== lastDay) {
+      lastDay = key;
       const h = document.createElement('h2');
       h.className = 'day';
-      h.textContent = day;
+      h.id = `dia-${key}`; // ancla estable para enlazar/compartir la jornada
+      // El título es un enlace a su propia ancla (🔗); al pulsarlo se copia la URL del día.
+      h.innerHTML = `<a class="day__anchor" href="#dia-${key}">`
+        + `<span class="day__label">${escapeHtml(fmtDay(p.date))}</span>`
+        + `<span class="day__link" aria-hidden="true">🔗</span></a>`;
       grid.appendChild(h);
       cards = document.createElement('div');
       cards.className = 'cards';
@@ -177,6 +242,7 @@ source
     posts = Array.isArray(data) ? data : [];
     initFilters();
     render();
+    scrollToHash();
   })
   .catch(() => {
     empty.hidden = false;
