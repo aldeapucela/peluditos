@@ -52,14 +52,14 @@ const webHref = (p) => {
 
 export function formatMessage(posts) {
   const n = posts.length;
-  const header = `🐾 <b>${n === 1 ? 'Nueva ficha' : `${n} nuevas fichas`} de peluditos hoy</b>`;
+  const header = `🐾 <b>${n === 1 ? 'Nueva publicación' : `${n} nuevas publicaciones`} de peluditos hoy</b>`;
   const lines = posts.slice(0, MAX_LINES).map((p) => {
     const tag = TIPO[p.tipo] || TIPO.otro;
     const text = brief(p.excerpt || p.caption) || p.shelter;
     return `${tag} — <a href="${esc(webHref(p))}">${esc(text)}</a> (${esc(p.shelter)})`;
   });
   if (n > MAX_LINES) lines.push(`… y ${n - MAX_LINES} más`);
-  return `${header}\n\n${lines.join('\n\n')}\n\nTodas las fichas: ${WEB}`;
+  return `${header}\n\n${lines.join('\n\n')}\n\nTodas las publicaciones: ${WEB}`;
 }
 
 const CAPTION_MAX = 1024; // límite de Telegram para pies de foto (los mensajes admiten 4096)
@@ -146,7 +146,7 @@ function selfTest() {
   const post = (extra = {}) => ({ tipo: 'adopcion', caption: 'Bobby busca casa', shelter: 'Protectora X', permalink: 'https://instagram.com/p/x/', id: 'ABC123', date: '2026-07-15T10:00:00.000Z', ...extra });
 
   const one = formatMessage([post()]);
-  assert(one.includes('Nueva ficha'), 'singular en cabecera');
+  assert(one.includes('Nueva publicación'), 'singular en cabecera');
   assert(one.includes('🏠') && one.includes('Bobby busca casa') && one.includes('Protectora X'), 'línea con tipo, texto y protectora');
   assert(one.includes(WEB), 'incluye enlace a la web');
   assert(one.includes(`${WEB}/#post-ABC123`), 'cada ficha enlaza a su publicación en la web (no a Instagram)');
@@ -155,7 +155,7 @@ function selfTest() {
   assert(formatMessage([post({ id: undefined, date: undefined })]).includes(`href="${WEB}"`), 'sin id ni fecha cae a la home');
 
   const many = formatMessage(Array.from({ length: 15 }, () => post()));
-  assert(many.includes('15 nuevas fichas'), 'plural en cabecera');
+  assert(many.includes('15 nuevas publicaciones'), 'plural en cabecera');
   assert(many.includes(')\n\n🏠'), 'línea en blanco entre ficha y ficha');
   assert(many.includes(`… y ${15 - MAX_LINES} más`), 'tope de líneas con resumen del resto');
 
