@@ -4,8 +4,12 @@
 // foto con #webPeluditos. Escribe en data/posts.json + img/ (misma forma que fetch.mjs).
 // Node 20+, sin dependencias.
 //
+// Al publicar una foto, el bot RESPONDE a ese mensaje en Telegram con el enlace a su
+// publicación en la web (#post-tg-<id>).
+//
 // Uso:  TELEGRAM_INGEST_BOT_TOKEN=xxx GEMINI_API_KEY=yyy node scripts/ingest-telegram.mjs
-//       node scripts/ingest-telegram.mjs --dry-run     (muestra qué subiría, no escribe)
+//       node scripts/ingest-telegram.mjs --dry-run         (muestra qué subiría, no escribe)
+//       node scripts/ingest-telegram.mjs --reply-existing  (responde a las que YA están publicadas)
 //       node scripts/ingest-telegram.mjs --self-test
 //
 // Usa un bot DEDICADO (TELEGRAM_INGEST_BOT_TOKEN); si no está, cae al TELEGRAM_BOT_TOKEN.
@@ -26,14 +30,21 @@ const API_BASE = process.env.TELEGRAM_API || 'https://api.telegram.org'; // over
 const GROUP = process.env.TELEGRAM_GROUP || 'AldeaPucela';               // @usuario público del grupo
 const THREAD_ID = Number(process.env.TELEGRAM_THREAD_ID || 91148);       // subtema "Peluditos"
 const HASHTAG = '#webpeluditos';                                         // se compara en minúsculas
-const SHELTER = 'Subtema Peluditos en la comunidad de Aldea Pucela';     // etiqueta de fuente
+const SHELTER = 'Peluditos en Aldea Pucela';                             // etiqueta de fuente
 const ZONE = 'Valladolid';
 const GEMINI_MODEL = 'gemini-2.5-flash-lite';
+const WEB = 'https://peluditos.aldeapucela.org';
 
 // ---------- helpers puros (cubiertos por --self-test) ----------
 
 export const hasTag = (s) => (s || '').toLowerCase().includes(HASHTAG);
 export const stripTag = (s) => (s || '').replace(/#webpeluditos/gi, '').replace(/\s+/g, ' ').trim();
+
+// Enlace a la publicación en la web y texto del aviso que el bot responde en Telegram.
+export function publishedReply(messageId) {
+  const url = `${WEB}/#post-tg-${messageId}`;
+  return { url, text: `🐾 <b>¡Publicado en Peluditos!</b>\n<a href="${url}">Ver la publicación en la web</a>` };
+}
 
 // Selecciona qué fotos publicar a partir de los mensajes (ya filtrados por grupo/subtema).
 // Devuelve objetos { id, date, caption, photos } donde `photos` es un array de "arrays de
@@ -83,6 +94,30 @@ async function tg(token, method, params = {}) {
   return data.result;
 }
 
+// POST con cuerpo JSON (para sendMessage con HTML/enlaces).
+async function tgSend(token, method, params) {
+  const res = await fetch(`${API_BASE}/bot${token}/${method}`, {
+    method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(params),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!data.ok) throw new Error(`Telegram ${method}: ${JSON.stringify(data).slice(0, 200)}`);
+  return data.result;
+}
+
+// Responde en el subtema, a la foto publicada, con el enlace a su publicación en la web.
+async function sendPublishedReply(token, messageId) {
+  const { url, text } = publishedReply(messageId);
+  await tgSend(token, 'sendMessage', {
+    chat_id: `@${GROUP}`,
+    message_thread_id: THREAD_ID,
+    reply_to_message_id: messageId,
+    text,
+    parse_mode: 'HTML',
+    link_preview_options: { is_disabled: true },
+  });
+  return url;
+}
+
 async function adminIdSet(token) {
   try {
     const admins = await tg(token, 'getChatAdministrators', { chat_id: `@${GROUP}` });
@@ -130,6 +165,7 @@ async function main() {
   const token = process.env.TELEGRAM_INGEST_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
   if (!token) throw new Error('Falta TELEGRAM_INGEST_BOT_TOKEN (o TELEGRAM_BOT_TOKEN)');
   const dryRun = process.argv.includes('--dry-run');
+  const replyExisting = process.argv.includes('--reply-existing');
 
   const adminIds = await adminIdSet(token);
   // Sin offset: getUpdates devuelve lo no confirmado de las últimas 24 h; deduplicamos por id.
@@ -159,6 +195,18 @@ async function main() {
     }
     console.log(`[dry-run] en subtema=${messages.length} · con #webPeluditos=${targets.length} · nuevos=${pending.length}`);
     for (const t of pending) console.log(`   - tg-${t.id} · ${t.photos.length} foto(s) · ${t.date} · "${excerpt(t.caption, 60)}"`);
+    return;
+  }
+
+  if (replyExisting) {
+    // Uso puntual: responde el aviso "publicado" a las fotos que YA están en la web.
+    const done = targets.filter((t) => seen.has(`tg-${t.id}`));
+    let n = 0;
+    for (const t of done) {
+      try { console.log(`Respuesta enviada a ${t.id} → ${await sendPublishedReply(token, t.id)}`); n++; }
+      catch (e) { console.warn(`No pude responder a ${t.id}: ${e.message}`); }
+    }
+    console.log(`${n}/${done.length} respuestas enviadas (reply-existing)`);
     return;
   }
 
@@ -192,6 +240,13 @@ async function main() {
   const all = [...fresh, ...existing].sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
   await writeFile(DATA, JSON.stringify(all, null, 2) + '\n');
   console.log(`${fresh.length} publicaciones de Telegram añadidas a la portada`);
+
+  // Responde en Telegram a cada foto publicada con el enlace a su publicación en la web.
+  for (const p of fresh) {
+    const messageId = Number(p.id.slice(3)); // "tg-<id>" → <id>
+    try { console.log(`Respuesta 'publicado' enviada a ${messageId} → ${await sendPublishedReply(token, messageId)}`); }
+    catch (e) { console.warn(`No pude responder a ${messageId}: ${e.message}`); }
+  }
 }
 
 // ---------- self-test ----------
@@ -222,6 +277,9 @@ function selfTest() {
   const post = buildPost(t.find((x) => x.id === 10), ['img/tg-10.jpg']);
   assert(post.id === 'tg-10' && post.source === 'telegram' && post.shelter === SHELTER, 'buildPost: id/source/shelter');
   assert(post.permalink === `https://t.me/${GROUP}/${THREAD_ID}/10`, 'buildPost: permalink al mensaje');
+  const rp = publishedReply(196182);
+  assert(rp.url === `${WEB}/#post-tg-196182`, 'publishedReply: enlace a la publicación');
+  assert(rp.text.includes(rp.url) && /Peluditos/.test(rp.text), 'publishedReply: texto con hipervínculo');
   console.log('self-test OK');
 }
 

@@ -283,6 +283,9 @@ main.container { padding-bottom: 3rem; }
 .card:target,
 .card.is-target { outline: 2px solid var(--brand-400); outline-offset: 3px; } /* resalta la ficha enlazada */
 .card__img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--brand-50); display: block; }
+/* Fuentes cuyas imágenes son carteles cuadrados (p. ej. Telegram): mostrar la imagen COMPLETA,
+   sin recortar los bordes (se perdían teléfonos/textos), aunque queden franjas arriba/abajo. */
+.card__img--contain { object-fit: contain; }
 
 /* Carrusel de imágenes (publicaciones con varias fotos). 1 sola imagen = sin controles. */
 .card__media { position: relative; }
