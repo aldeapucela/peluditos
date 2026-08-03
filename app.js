@@ -6,6 +6,8 @@ const catBtns = document.querySelectorAll('[data-cat]');
 const PLACEHOLDER = 'img/placeholder.svg';
 const TYPE_LABEL = { perro: '🐶 Perro', gato: '🐱 Gato', otro: '🐾 Otro' };
 const CAT_LABEL = { adopcion: '🏠 Adopción', acogida: '🤝 Acogida', perdido: '🔍 Perdido', donacion: '💚 Donación', evento: '📅 Evento' };
+// Etiqueta corta para el desplegable de filtros (la tarjeta mantiene el nombre completo).
+const SHELTER_FILTER_LABEL = { 'Subtema Peluditos en la comunidad de Aldea Pucela': 'Comunidad Aldea Pucela' };
 
 let posts = [];
 let filterType = 'todos';
@@ -88,7 +90,7 @@ function card(p) {
       </div>
       <p class="card__text"><span class="card__caption">${escapeHtml(short)}</span>${hasMore ? ` <button type="button" class="card__more" aria-expanded="false">más</button>` : ''}</p>
       <div class="card__meta">
-        <a class="card__cta" href="${href}" target="_blank" rel="noopener">Ver en Instagram →</a>
+        <a class="card__cta" href="${href}" target="_blank" rel="noopener">${p.source === 'telegram' ? 'Ver en Telegram →' : 'Ver en Instagram →'}</a>
         <button type="button" class="card__share" aria-label="Copiar enlace a esta ficha" title="Copiar enlace a esta ficha">🔗</button>
       </div>
     </div>`;
@@ -282,7 +284,7 @@ function initFilters() {
   for (const n of [...new Set(posts.map((p) => p.shelter))].sort()) {
     const o = document.createElement('option');
     o.value = n;
-    o.textContent = n;
+    o.textContent = SHELTER_FILTER_LABEL[n] || n;
     shelterSel.appendChild(o);
   }
   shelterSel.addEventListener('change', () => {
