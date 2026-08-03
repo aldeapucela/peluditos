@@ -26,7 +26,7 @@ jobs:
           node-version: 20
       - name: Ingerir de Telegram
         env:
-          TELEGRAM_INGEST_BOT_TOKEN: ${{ secrets.TELEGRAM_INGEST_BOT_TOKEN }}  # bot dedicado @AldeaPucela_Bot
+          TELEGRAM_INGEST_BOT_TOKEN: ${{ secrets.ALDEAPUCELA_BOT_TOKEN }}      # bot dedicado @AldeaPucela_Bot
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}                # fallback (bot de avisos)
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}   # clasifica animal/tipo; si falta, lo hace el fetch diario
           CLASSIFY_FAST: '1'
