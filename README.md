@@ -24,24 +24,48 @@ shelters.json ─┐
                └─ commit + deploy (en la misma tanda) → GitHub Pages → navegador
 ```
 
-- **Portada** (`/`): tarjetas de los últimos ~4 meses, agrupadas por día (hora de Madrid),
-  con filtros por **animal** (perro/gato/otro) y **categoría** (adopción/acogida/perdido/
-  donación/evento/otro) y por protectora.
+- **Portada** (`/`): tarjetas de las **últimas 2 semanas** (con botón «Mostrar más» que revela
+  2 semanas más cada vez), agrupadas por día (hora de Madrid), con filtros por **animal**
+  (perro/gato/otro) y **categoría** (adopción/acogida/perdido/donación/evento/otro) y por
+  protectora. Cada publicación tiene su ancla `#post-<id>` (enlace directo compartible).
 - **Archivo** (`/archivo/`): lo que supera los ~4 meses, por años.
 - **Protectoras** (`/protectoras/`): ficha de cada entidad con logo y contacto público.
+
+### Comunidad → Telegram → web
+
+Además de Instagram, la comunidad puede aportar carteles (perdidos, adopciones…) desde el
+**subtema «Peluditos»** del grupo de Telegram [@AldeaPucela](https://t.me/AldeaPucela/91148):
+
+```
+Telegram (subtema Peluditos) ─┐
+  foto con #webPeluditos       ├─ scripts/ingest-telegram.mjs  (cron horario, GitHub Actions)
+  en el pie, o un ADMIN        │     1. getUpdates → lee el subtema con un bot DEDICADO (sin webhook)
+  responde #webPeluditos       │     2. filtra     → fotos con #webPeluditos (o aprobadas por admin)
+  a una foto                   │     3. imágenes   → descarga a img/tg-<id>.jpg
+                               │     4. Gemini     → clasifica {animal, categoría}
+                               │     5. publica    → data/posts.json (source: "telegram")
+                               │     6. responde   → avisa en Telegram con el enlace a la web
+                               └─ commit + deploy → GitHub Pages
+```
+
+Se muestran en la portada como una fuente más (**«Peluditos en Aldea Pucela»**), con la imagen
+completa (`object-fit: contain`, para no recortar carteles), enlace al mensaje de Telegram y
+ancla `#post-tg-<id>`. **No** entran en el aviso diario de Instagram.
 
 ## Estructura
 
 | Ruta | Qué es |
 |---|---|
 | `index.html`, `archivo/`, `protectoras/` | Las tres páginas (comparten `styles.css` y `app.js`). |
-| `app.js` | Render de tarjetas + filtros (portada y archivo). |
+| `app.js` | Render de tarjetas + filtros + «Mostrar más» + anclas (portada y archivo). |
 | `nav.js` | Menú hamburguesa en móvil. |
-| `scripts/fetch.mjs` | Todo el pipeline de datos (fetch + clasificación + partición + poda). |
+| `scripts/fetch.mjs` | Pipeline de Instagram (fetch + clasificación + partición + poda). |
+| `scripts/ingest-telegram.mjs` | Pipeline de Telegram (subtema Peluditos, `#webPeluditos`). |
+| `scripts/lib.mjs` | Utilidades compartidas por ambos pipelines (`excerpt`, clasificación Gemini). |
 | `shelters.json` | Lista de protectoras: `username`, `name`, `zone`, `instagramUrl` + contacto. |
 | `data/posts.json` · `data/archive/*.json` | Datos generados (portada / archivo). |
-| `img/` | Imágenes de posts (`<shortcode>.jpg`) + assets (`logo.svg`, `hero.jpg`, `og.jpg`, `placeholder.svg`, `shelters/`). |
-| `.github/workflows/` | `update.yml` (cron: sincroniza + despliega) y `deploy-pages.yml` (despliega en cada push). |
+| `img/` | Imágenes de posts (`<shortcode>.jpg`, Telegram `tg-<id>.jpg`) + assets (`logo.svg`, `hero.jpg`, `og.jpg`, `placeholder.svg`, `shelters/`). |
+| `.github/workflows/` | `update.yml` (cron Instagram), `ingest-telegram.yml` (cron Telegram) y `deploy-pages.yml` (despliega en cada push). |
 
 ## Puesta en marcha
 
@@ -58,16 +82,23 @@ shelters.json ─┐
    categorías. Cambiar de IA = editar solo `classifyWithAI`. Modelo en `GEMINI_MODEL`
    (`gemini-2.5-flash-lite`).
 4. **Secrets** (repo → *Settings → Secrets and variables → Actions*): `IG_API_TOKEN` y
-   `GEMINI_API_KEY`.
+   `GEMINI_API_KEY` (y, para Telegram, `ALDEAPUCELA_BOT_TOKEN`).
 5. **Pages** (*Settings → Pages*): **Source = GitHub Actions** (no "Deploy from a branch").
    El despliegue lo hacen los workflows. Dominio propio vía fichero [`CNAME`](CNAME).
 6. **Contacto:** cada protectora gestiona sus adopciones; el sitio enlaza a la publicación
    original y da los contactos públicos de cada una. Textos del pie en las páginas HTML.
+7. **Telegram** (opcional, fuente comunitaria). Un bot **dedicado** (BotFather) para no chocar
+   con el webhook del bot de avisos:
+   - *Group Privacy* **desactivado** (o el bot como **admin** del grupo) para que lea las fotos.
+   - **Sin webhook** (usa `getUpdates`; si hubiera webhook da 409 y el run hace *no-op*).
+   - Secret `ALDEAPUCELA_BOT_TOKEN`. Grupo/subtema/hashtag y etiqueta se configuran arriba de
+     `scripts/ingest-telegram.mjs` (`TELEGRAM_GROUP`, `TELEGRAM_THREAD_ID`, `HASHTAG`, `SHELTER`).
 
 ## Desarrollo local
 
 ```bash
-node scripts/fetch.mjs --self-test                            # comprueba la lógica pura
+node scripts/fetch.mjs --self-test                            # comprueba la lógica pura (Instagram)
+node scripts/ingest-telegram.mjs --self-test                  # comprueba la lógica pura (Telegram)
 IG_API_TOKEN=xxx GEMINI_API_KEY=yyy node scripts/fetch.mjs    # sincroniza y clasifica de verdad
 python3 -m http.server                                        # sirve el sitio en localhost:8000
 ```
@@ -83,6 +114,9 @@ python3 -m http.server                                        # sirve el sitio e
   later"), es transitorio: relanzar *Desplegar en GitHub Pages*.
 - **Añadir/quitar protectora o contactos/logos:** editar `shelters.json` (y opcionalmente subir
   `img/shelters/<username>.jpg`). Nada más.
+- **Ingesta de Telegram** (`ingest-telegram.yml`, cron horario). *Run workflow* con el input
+  `mode`: vacío = normal; `dry-run` = diagnóstico (vuelca lo que ve el bot, sin publicar);
+  `reply-existing` = reenvía el aviso «publicado» de las ya subidas. Sin novedades, no despliega.
 - **Verificar en vivo** saltando la caché del CDN: `curl "https://peluditos.aldeapucela.org/data/posts.json?cb=$RANDOM"`.
 
 ## Ajustes (en `scripts/fetch.mjs`)
