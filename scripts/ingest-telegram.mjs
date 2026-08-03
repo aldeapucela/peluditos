@@ -4,11 +4,12 @@
 // foto con #webPeluditos. Escribe en data/posts.json + img/ (misma forma que fetch.mjs).
 // Node 20+, sin dependencias.
 //
-// Uso:  TELEGRAM_BOT_TOKEN=xxx GEMINI_API_KEY=yyy node scripts/ingest-telegram.mjs
+// Uso:  TELEGRAM_INGEST_BOT_TOKEN=xxx GEMINI_API_KEY=yyy node scripts/ingest-telegram.mjs
 //       node scripts/ingest-telegram.mjs --dry-run     (muestra qué subiría, no escribe)
 //       node scripts/ingest-telegram.mjs --self-test
 //
-// El bot debe poder leer los mensajes del grupo (privacy mode desactivado o admin) y no debe
+// Usa un bot DEDICADO (TELEGRAM_INGEST_BOT_TOKEN); si no está, cae al TELEGRAM_BOT_TOKEN.
+// Ese bot debe poder leer los mensajes del grupo (privacy mode desactivado o admin) y no
 // tener un webhook puesto (getUpdates y webhook son excluyentes).
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
@@ -126,8 +127,8 @@ export function buildPost(t, images) {
 }
 
 async function main() {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  if (!token) throw new Error('Falta TELEGRAM_BOT_TOKEN');
+  const token = process.env.TELEGRAM_INGEST_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
+  if (!token) throw new Error('Falta TELEGRAM_INGEST_BOT_TOKEN (o TELEGRAM_BOT_TOKEN)');
   const dryRun = process.argv.includes('--dry-run');
 
   const adminIds = await adminIdSet(token);
