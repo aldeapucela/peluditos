@@ -10,7 +10,7 @@ on:
   workflow_dispatch:       # lanzable a mano para pruebas
     inputs:
       mode:
-        description: 'Vacío = normal (publica). "dry-run" = solo diagnóstico, no publica.'
+        description: 'Vacío = normal (publica). "dry-run" = solo diagnóstico. "reply-existing" = responde a las ya publicadas.'
         default: ''
 
 permissions:
@@ -34,7 +34,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}                # fallback (bot de avisos)
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}   # clasifica animal/tipo; si falta, lo hace el fetch diario
           CLASSIFY_FAST: '1'
-        run: node scripts/ingest-telegram.mjs ${{ github.event.inputs.mode == 'dry-run' && '--dry-run' || '' }}
+        run: node scripts/ingest-telegram.mjs ${{ github.event.inputs.mode == 'dry-run' && '--dry-run' || github.event.inputs.mode == 'reply-existing' && '--reply-existing' || '' }}
       - name: Publicar cambios
         id: commit
         run: |
