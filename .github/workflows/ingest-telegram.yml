@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: '0 * * * *'   # cada hora en punto
   workflow_dispatch:       # lanzable a mano para pruebas
+    inputs:
+      mode:
+        description: 'Vacío = normal (publica). "dry-run" = solo diagnóstico, no publica.'
+        default: ''
 
 permissions:
   contents: write
@@ -30,7 +34,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}                # fallback (bot de avisos)
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}   # clasifica animal/tipo; si falta, lo hace el fetch diario
           CLASSIFY_FAST: '1'
-        run: node scripts/ingest-telegram.mjs
+        run: node scripts/ingest-telegram.mjs ${{ github.event.inputs.mode == 'dry-run' && '--dry-run' || '' }}
       - name: Publicar cambios
         id: commit
         run: |
