@@ -141,9 +141,8 @@ async function main() {
     console.warn(`getUpdates falló (¿webhook puesto o privacy activado?): ${e.message}. Nada que ingerir.`);
     return;
   }
-  const messages = (updates || [])
-    .map((u) => u.message)
-    .filter((m) => m && m.chat && m.chat.username === GROUP && Number(m.message_thread_id) === THREAD_ID);
+  const allMessages = (updates || []).map((u) => u.message).filter(Boolean);
+  const messages = allMessages.filter((m) => m.chat && m.chat.username === GROUP && Number(m.message_thread_id) === THREAD_ID);
 
   const targets = pickTargets(messages, adminIds);
 
@@ -152,8 +151,14 @@ async function main() {
   const pending = targets.filter((t) => !seen.has(`tg-${t.id}`));
 
   if (dryRun) {
-    console.log(`[dry-run] ${messages.length} mensajes en el subtema · ${targets.length} con #webPeluditos · ${pending.length} nuevos`);
-    for (const t of pending) console.log(` - tg-${t.id} · ${t.photos.length} foto(s) · ${t.date} · "${excerpt(t.caption, 60)}"`);
+    // Diagnóstico estructural (sin contenido) de TODO lo que ve el bot, para depurar filtros.
+    console.log(`[dry-run] esperado: chat=@${GROUP} thread=${THREAD_ID} · updates=${(updates || []).length} · mensajes=${allMessages.length} · admins=[${[...adminIds].join(',') || 'ninguno'}]`);
+    for (const m of allMessages) {
+      const r = m.reply_to_message;
+      console.log(`  · chat=@${m.chat && m.chat.username} thread=${m.message_thread_id} topic=${m.is_topic_message} photo=${!!m.photo} reply=${!!r} replyPhoto=${!!(r && r.photo)} from=${m.from && m.from.id} admin=${adminIds.has(m.from && m.from.id)} tag=${hasTag(m.text || m.caption)}`);
+    }
+    console.log(`[dry-run] en subtema=${messages.length} · con #webPeluditos=${targets.length} · nuevos=${pending.length}`);
+    for (const t of pending) console.log(`   - tg-${t.id} · ${t.photos.length} foto(s) · ${t.date} · "${excerpt(t.caption, 60)}"`);
     return;
   }
 
