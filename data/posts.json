@@ -1,5 +1,39 @@
 [
   {
+    "id": "tg-196182",
+    "shelter": "Subtema Peluditos en la comunidad de Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-03T21:43:06.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-196182.jpg",
+    "images": [
+      "img/tg-196182.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/196182",
+    "source": "telegram",
+    "type": "gato",
+    "tipo": "perdido"
+  },
+  {
+    "id": "tg-196180",
+    "shelter": "Subtema Peluditos en la comunidad de Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-03T21:42:06.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-196180.jpg",
+    "images": [
+      "img/tg-196180.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/196180",
+    "source": "telegram",
+    "type": "gato",
+    "tipo": "adopcion"
+  },
+  {
     "id": "DbkZJNRjHJZ",
     "shelter": "Patitas Callejeras",
     "shelterUrl": "https://www.instagram.com/patitascallejerasvalladolid/",
