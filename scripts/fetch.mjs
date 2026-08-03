@@ -9,6 +9,7 @@ import { readFile, writeFile, mkdir, readdir, unlink } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { excerpt, parseClassification, classifyWithAI, sleep } from './lib.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SHELTERS = path.join(ROOT, 'shelters.json');
@@ -32,14 +33,9 @@ const FAST = !!process.env.CLASSIFY_FAST;       // clave de pago sin límites �
 const CLASSIFY_DELAY_MS = FAST ? 400 : 7000;    // pausa entre clasificaciones (gratuita: < 10 req/min)
 const MAX_CLASSIFY_PER_RUN = FAST ? 1000 : 60;  // techo por ejecución; el resto espera al siguiente run
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// excerpt, parseClassification, classifyWithAI y sleep viven en lib.mjs (compartidos con ingest-telegram.mjs).
 
 // ---------- helpers puros (cubiertos por --self-test) ----------
-
-export function excerpt(caption, n = 180) {
-  const c = (caption || '').trim().replace(/\s+/g, ' ');
-  return c.length > n ? c.slice(0, n - 1) + '…' : c;
-}
 
 // Separa en portada (últimos `days` días) y archivo (el resto).
 export function partitionByAge(posts, now, days = CURRENT_DAYS) {
@@ -149,85 +145,7 @@ async function downloadMedia(media, id) {
 }
 
 // ---------- clasificación por IA (animal + tipo de publicación) ----------
-const norm = (s) => (s || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
-const ANIMALS = ['perro', 'gato', 'otro'];
-const TIPOS = ['adopcion', 'acogida', 'perdido', 'donacion', 'evento', 'otro'];
-
-// Extrae { animal, tipo } de la respuesta del modelo (tolerante a markdown/texto alrededor).
-export function parseClassification(text) {
-  let animal = 'otro', tipo = 'otro';
-  const m = (text || '').match(/\{[\s\S]*?\}/);
-  if (m) {
-    try {
-      const j = JSON.parse(m[0]);
-      animal = norm(j.animal);
-      tipo = norm(j.tipo);
-    } catch { /* deja los valores por defecto */ }
-  }
-  if (!ANIMALS.includes(animal)) animal = 'otro';
-  if (!TIPOS.includes(tipo)) tipo = 'otro';
-  return { animal, tipo };
-}
-
-// AISLADO A PROPÓSITO: cambiar de proveedor de IA = editar SOLO esta función.
-// Gemini multimodal: mira la imagen Y el texto (incluido el de los carteles).
-// Devuelve { animal, tipo } en una sola llamada (no duplica consumo de cuota).
-async function classifyWithAI(caption, imageFile, apiKey) {
-  const prompt =
-    'Eres un clasificador para una web que agrega publicaciones de protectoras de animales de Valladolid. ' +
-    'Mira la imagen Y el texto y responde SOLO con un JSON compacto, sin markdown, con dos campos: ' +
-    '{"animal":"perro|gato|otro","tipo":"adopcion|acogida|perdido|donacion|evento|otro"}. ' +
-    'animal = el animal protagonista ("otro" si es otro animal o no hay animal claro). ' +
-    'tipo = el propósito de la publicación: ' +
-    'adopcion (se busca familia definitiva); ' +
-    'acogida (se busca hogar temporal o casa de acogida hasta que se adopte); ' +
-    'perdido (animal perdido, desaparecido, extraviado o encontrado; se pide ayuda para localizarlo); ' +
-    'donacion (se piden donaciones, ayudas, dinero, comida o recursos); ' +
-    'evento (mercadillo solidario, feria, exposición, mesa informativa u otro evento); ' +
-    'otro (no encaja en las anteriores). ' +
-    'Texto de la publicación: ' + (caption || '(sin texto)');
-
-  const parts = [{ text: prompt }];
-  if (imageFile) {
-    try {
-      const b64 = (await readFile(imageFile)).toString('base64');
-      parts.push({ inline_data: { mime_type: 'image/jpeg', data: b64 } });
-    } catch { /* sin imagen legible: se clasifica solo por texto */ }
-  }
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
-  const body = JSON.stringify({
-    contents: [{ parts }],
-    // thinkingBudget:0 es CLAVE: 2.5-flash "piensa" por defecto y ese pensamiento
-    // consume maxOutputTokens, devolviendo texto vacío (finishReason MAX_TOKENS).
-    generationConfig: { temperature: 0, maxOutputTokens: 64, thinkingConfig: { thinkingBudget: 0 } },
-  });
-
-  // 429 = cuota real → aborta el run. 5xx = sobrecarga transitoria del modelo
-  // ("high demand"): reintenta con backoff y, si insiste, salta este post (sigue el resto).
-  let lastErr = '';
-  for (let attempt = 0; attempt < 4; attempt++) {
-    const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body });
-    if (res.status === 429) {
-      const bodyText = await res.text();
-      const m = bodyText.match(/"retryDelay":\s*"(\d+(?:\.\d+)?)s"/);
-      const delaySec = m ? Math.ceil(parseFloat(m[1])) : null;
-      // retryDelay corto = límite por minuto → espera y reintenta; largo/ausente = límite diario → aborta.
-      if (delaySec !== null && delaySec <= 90) { await sleep((delaySec + 2) * 1000); continue; }
-      const e = new Error('429 ' + bodyText.replace(/\s+/g, ' ').slice(0, 300));
-      e.quotaExceeded = true;
-      throw e;
-    }
-    if (res.status >= 500) { lastErr = String(res.status); await sleep(5000 * (attempt + 1)); continue; }
-    if (!res.ok) throw new Error(`Gemini ${res.status}: ${(await res.text()).slice(0, 200)}`);
-    const data = await res.json();
-    const cand = data?.candidates?.[0];
-    const text = (cand?.content?.parts || []).map((x) => x.text || '').join(' ');
-    if (!text.trim()) console.warn(`Gemini: respuesta vacía (finishReason=${cand?.finishReason})`);
-    return parseClassification(text);
-  }
-  throw new Error(`Gemini ${lastErr} sobrecarga; se salta y se reintenta en el próximo run`);
-}
+// La llamada al modelo (classifyWithAI) y parseClassification están en lib.mjs.
 
 // Clasifica los posts a los que falta `type` o `tipo` (nuevos + backfill de los existentes).
 async function classifyMissing(posts, apiKey) {
@@ -241,7 +159,7 @@ async function classifyMissing(posts, apiKey) {
   for (const p of pending.slice(0, MAX_CLASSIFY_PER_RUN)) {
     const imageFile = p.image ? path.join(ROOT, p.image) : null;
     try {
-      const r = await classifyWithAI(p.caption, imageFile, apiKey);
+      const r = await classifyWithAI(p.caption, imageFile, apiKey, GEMINI_MODEL);
       p.type = r.animal;
       p.tipo = r.tipo;
       done++;
