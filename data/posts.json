@@ -56,6 +56,23 @@
     "tipo": "acogida"
   },
   {
+    "id": "tg-196443",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-04T15:02:41.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-196443.jpg",
+    "images": [
+      "img/tg-196443.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/196443",
+    "source": "telegram",
+    "type": "gato",
+    "tipo": "perdido"
+  },
+  {
     "id": "Dbnvx1bsOnH",
     "shelter": "CER Arroyo de la Encomienda",
     "shelterUrl": "https://www.instagram.com/voluntarios.arroyo/",
