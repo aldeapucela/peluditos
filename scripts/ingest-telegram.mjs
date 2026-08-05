@@ -168,39 +168,48 @@ async function main() {
   const replyExisting = process.argv.includes('--reply-existing');
 
   const adminIds = await adminIdSet(token);
-  // Sin offset: getUpdates devuelve lo no confirmado de las últimas 24 h; deduplicamos por id.
-  // Un fallo aquí (webhook puesto → 409, privacy activado, red…) no debe tumbar el cron: avisa y sale.
-  let updates;
-  try {
-    updates = await tg(token, 'getUpdates', { allowed_updates: '["message"]', timeout: '0', limit: '100' });
-  } catch (e) {
-    console.warn(`getUpdates falló (¿webhook puesto o privacy activado?): ${e.message}. Nada que ingerir.`);
-    return;
+  const inSubtema = (m) => m && m.chat && m.chat.username === GROUP && Number(m.message_thread_id) === THREAD_ID;
+
+  // getUpdates con guarda. offset=null → lo más antiguo no confirmado; offset=N → CONFIRMA (descarta
+  // en el servidor) todo lo anterior a N y devuelve desde N. Un fallo (webhook → 409, privacy, red)
+  // no debe tumbar el cron.
+  async function fetchUpdates(offset) {
+    try {
+      return await tg(token, 'getUpdates', {
+        ...(offset != null ? { offset: String(offset) } : {}),
+        allowed_updates: '["message"]', timeout: '0', limit: '100',
+      });
+    } catch (e) {
+      console.warn(`getUpdates falló (¿webhook o privacy?): ${e.message}.`);
+      return null;
+    }
   }
-  const allMessages = (updates || []).map((u) => u.message).filter(Boolean);
-  const messages = allMessages.filter((m) => m.chat && m.chat.username === GROUP && Number(m.message_thread_id) === THREAD_ID);
-
-  const targets = pickTargets(messages, adminIds);
-
-  const existing = existsSync(DATA) ? JSON.parse(await readFile(DATA, 'utf8')) : [];
-  const seen = new Set(existing.map((p) => p.id));
-  const pending = targets.filter((t) => !seen.has(`tg-${t.id}`));
 
   if (dryRun) {
-    // Diagnóstico estructural (sin contenido) de TODO lo que ve el bot, para depurar filtros.
-    console.log(`[dry-run] esperado: chat=@${GROUP} thread=${THREAD_ID} · updates=${(updates || []).length} · mensajes=${allMessages.length} · admins=[${[...adminIds].join(',') || 'ninguno'}]`);
+    // Diagnóstico: una sola lectura, SIN confirmar (no consume la cola). Solo ve el lote más antiguo.
+    const updates = await fetchUpdates();
+    if (!updates) return;
+    const allMessages = updates.map((u) => u.message).filter(Boolean);
+    const messages = allMessages.filter(inSubtema);
+    const targets = pickTargets(messages, adminIds);
+    console.log(`[dry-run] esperado: chat=@${GROUP} thread=${THREAD_ID} · updates=${updates.length} · mensajes=${allMessages.length} · admins=[${[...adminIds].join(',') || 'ninguno'}]`);
     for (const m of allMessages) {
       const r = m.reply_to_message;
       console.log(`  · chat=@${m.chat && m.chat.username} thread=${m.message_thread_id} topic=${m.is_topic_message} photo=${!!m.photo} reply=${!!r} replyPhoto=${!!(r && r.photo)} from=${m.from && m.from.id} admin=${adminIds.has(m.from && m.from.id)} tag=${hasTag(m.text || m.caption)}`);
     }
-    console.log(`[dry-run] en subtema=${messages.length} · con #webPeluditos=${targets.length} · nuevos=${pending.length}`);
-    for (const t of pending) console.log(`   - tg-${t.id} · ${t.photos.length} foto(s) · ${t.date} · "${excerpt(t.caption, 60)}"`);
+    console.log(`[dry-run] en subtema=${messages.length} · con #webPeluditos=${targets.length}`);
+    console.log('[dry-run] nota: solo se muestra el lote más antiguo (≤100); el run normal drena toda la cola.');
     return;
   }
 
+  const existing = existsSync(DATA) ? JSON.parse(await readFile(DATA, 'utf8')) : [];
+  const seen = new Set(existing.map((p) => p.id));
+
   if (replyExisting) {
-    // Uso puntual: responde el aviso "publicado" a las fotos que YA están en la web.
-    const done = targets.filter((t) => seen.has(`tg-${t.id}`));
+    // Uso puntual: responde el aviso "publicado" a las fotos que YA están en la web (sin confirmar).
+    const updates = await fetchUpdates();
+    if (!updates) return;
+    const done = pickTargets(updates.map((u) => u.message).filter(inSubtema), adminIds).filter((t) => seen.has(`tg-${t.id}`));
     let n = 0;
     for (const t of done) {
       try { console.log(`Respuesta enviada a ${t.id} → ${await sendPublishedReply(token, t.id)}`); n++; }
@@ -210,35 +219,51 @@ async function main() {
     return;
   }
 
+  // NORMAL: drena TODA la cola confirmando cada lote (avanza el offset en el servidor). Así el mucho
+  // tráfico de OTROS subtemas del grupo no deja fuera las fotos del subtema Peluditos.
   await mkdir(IMG_DIR, { recursive: true });
   await mkdir(path.dirname(DATA), { recursive: true });
 
   const fresh = [];
-  for (const t of pending) {
-    const images = [];
-    for (const sizes of t.photos) {
-      const saved = await downloadPhoto(token, sizes, images.length === 0 ? `tg-${t.id}.jpg` : `tg-${t.id}-${images.length + 1}.jpg`);
-      if (saved) images.push(saved);
-    }
-    if (!images.length) { console.warn(`tg-${t.id}: sin imagen descargable, se salta`); continue; }
-    const post = buildPost(t, images);
-    if (process.env.GEMINI_API_KEY) {
-      try {
-        const r = await classifyWithAI(post.caption, path.join(ROOT, images[0]), process.env.GEMINI_API_KEY, GEMINI_MODEL);
-        post.type = r.animal;
-        post.tipo = r.tipo;
-      } catch (e) {
-        // Sin clasificar: el fetch.mjs diario la completará (procesa también estos posts).
-        console.warn(`Clasificación falló para tg-${t.id} (se completará luego): ${e.message}`);
+  const flush = async () => writeFile(DATA, JSON.stringify([...fresh, ...existing].sort((a, b) => Date.parse(b.date) - Date.parse(a.date)), null, 2) + '\n');
+
+  let offset = null;
+  for (let guard = 0; guard < 300; guard++) {
+    const updates = await fetchUpdates(offset); // offset del lote previo → lo confirma y trae el siguiente
+    if (!updates) break;         // 409/error: no se confirma nada, se reintenta al próximo run
+    if (!updates.length) break;  // cola drenada
+
+    const before = fresh.length;
+    for (const t of pickTargets(updates.map((u) => u.message).filter(inSubtema), adminIds)) {
+      if (seen.has(`tg-${t.id}`)) continue;
+      seen.add(`tg-${t.id}`);
+      const images = [];
+      for (const sizes of t.photos) {
+        const saved = await downloadPhoto(token, sizes, images.length === 0 ? `tg-${t.id}.jpg` : `tg-${t.id}-${images.length + 1}.jpg`);
+        if (saved) images.push(saved);
       }
+      if (!images.length) { console.warn(`tg-${t.id}: sin imagen descargable, se salta`); continue; }
+      const post = buildPost(t, images);
+      if (process.env.GEMINI_API_KEY) {
+        try {
+          const r = await classifyWithAI(post.caption, path.join(ROOT, images[0]), process.env.GEMINI_API_KEY, GEMINI_MODEL);
+          post.type = r.animal;
+          post.tipo = r.tipo;
+        } catch (e) {
+          // Sin clasificar: el fetch.mjs diario la completará (procesa también estos posts).
+          console.warn(`Clasificación falló para tg-${t.id} (se completará luego): ${e.message}`);
+        }
+      }
+      fresh.push(post);
     }
-    fresh.push(post);
+    // Persistimos ANTES de confirmar el lote (el siguiente fetch lo confirma): a prueba de cortes.
+    if (fresh.length > before) await flush();
+
+    offset = updates[updates.length - 1].update_id + 1;
+    if (updates.length < 100) { await fetchUpdates(offset); break; } // confirma el último lote y termina
   }
 
   if (!fresh.length) { console.log('Sin publicaciones nuevas de Telegram'); return; }
-
-  const all = [...fresh, ...existing].sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-  await writeFile(DATA, JSON.stringify(all, null, 2) + '\n');
   console.log(`${fresh.length} publicaciones de Telegram añadidas a la portada`);
 
   // Responde en Telegram a cada foto publicada con el enlace a su publicación en la web.
