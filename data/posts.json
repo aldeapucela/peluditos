@@ -266,6 +266,21 @@
     "tipo": "adopcion"
   },
   {
+    "id": "tg-197339",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-06T10:38:00.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-197339.jpg",
+    "images": [
+      "img/tg-197339.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/197339",
+    "source": "telegram"
+  },
+  {
     "id": "DbsbIWmNrzr",
     "shelter": "Entre Huellas y Bigotes",
     "shelterUrl": "https://www.instagram.com/entrehuellasybigotes/",
