@@ -394,6 +394,21 @@
     "tipo": "acogida"
   },
   {
+    "id": "tg-197035",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-05T19:41:59.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-197035.jpg",
+    "images": [
+      "img/tg-197035.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/197035",
+    "source": "telegram"
+  },
+  {
     "id": "DbqpmbIoF_R",
     "shelter": "Colonia Felina 12 de Octubre",
     "shelterUrl": "https://www.instagram.com/colonia_felina_doce_de_octubre/",
