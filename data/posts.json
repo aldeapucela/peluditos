@@ -160,6 +160,21 @@
     "tipo": "acogida"
   },
   {
+    "id": "tg-197549",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-06T17:41:30.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-197549.jpg",
+    "images": [
+      "img/tg-197549.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/197549",
+    "source": "telegram"
+  },
+  {
     "id": "DbtPZXXq0cZ",
     "shelter": "Conexión Felina",
     "shelterUrl": "https://www.instagram.com/conexionfelinavalladolid/",
