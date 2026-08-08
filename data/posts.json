@@ -282,7 +282,9 @@
       "img/tg-197339.jpg"
     ],
     "permalink": "https://t.me/AldeaPucela/91148/197339",
-    "source": "telegram"
+    "source": "telegram",
+    "type": "gato",
+    "tipo": "perdido"
   },
   {
     "id": "DbsbIWmNrzr",
@@ -406,7 +408,9 @@
       "img/tg-197035.jpg"
     ],
     "permalink": "https://t.me/AldeaPucela/91148/197035",
-    "source": "telegram"
+    "source": "telegram",
+    "type": "perro",
+    "tipo": "adopcion"
   },
   {
     "id": "DbqpmbIoF_R",
