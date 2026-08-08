@@ -32,8 +32,10 @@ const GEMINI_MODEL = 'gemini-2.5-flash-lite';  // multimodal, barato/rápido, cu
 const FAST = !!process.env.CLASSIFY_FAST;       // clave de pago sin límites → sin frenos (para backfill)
 const CLASSIFY_DELAY_MS = FAST ? 400 : 7000;    // pausa entre clasificaciones (gratuita: < 10 req/min)
 const MAX_CLASSIFY_PER_RUN = FAST ? 1000 : 60;  // techo por ejecución; el resto espera al siguiente run
+// CLASSIFY_ONLY salta el fetch de Apify y solo clasifica lo pendiente (n8n lo dispara tras /webpeluditos).
+const CLASSIFY_ONLY = !!process.env.CLASSIFY_ONLY;
 
-// excerpt, parseClassification, classifyWithAI y sleep viven en lib.mjs (compartidos con ingest-telegram.mjs).
+// excerpt, parseClassification, classifyWithAI y sleep viven en lib.mjs.
 
 // ---------- helpers puros (cubiertos por --self-test) ----------
 
@@ -177,7 +179,7 @@ async function classifyMissing(posts, apiKey) {
 
 async function main() {
   const tokens = [process.env.IG_API_TOKEN, process.env.IG_API_TOKEN_2].filter(Boolean);
-  if (!tokens.length) throw new Error('Falta IG_API_TOKEN (y opcionalmente IG_API_TOKEN_2 para failover)');
+  if (!tokens.length && !CLASSIFY_ONLY) throw new Error('Falta IG_API_TOKEN (y opcionalmente IG_API_TOKEN_2 para failover)');
 
   const shelters = JSON.parse(await readFile(SHELTERS, 'utf8'));
   const byUser = new Map(shelters.map((s) => [s.username.toLowerCase(), s]));
@@ -192,7 +194,9 @@ async function main() {
   const targetUsers = ONLY_USERS.length ? ONLY_USERS.filter((u) => byUser.has(u)) : [...byUser.keys()];
 
   let raw = [];
-  if (ONLY_USERS.length) {
+  if (CLASSIFY_ONLY) {
+    console.log('CLASSIFY_ONLY: sin fetch de Apify, solo clasificación de pendientes');
+  } else if (ONLY_USERS.length) {
     // Backfill: una llamada por cuenta. El endpoint run-sync de Apify corta a los 300s;
     // pedir muchos posts de varias cuentas a la vez lo supera (run-timeout-exceeded).
     // ponytail: por-cuenta solo en backfill; el cron normal (pocos posts) sigue en una llamada.

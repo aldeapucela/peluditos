@@ -1,4 +1,4 @@
-// Peluditos — utilidades compartidas por fetch.mjs (Instagram) e ingest-telegram.mjs.
+// Peluditos — utilidades del pipeline (las usa fetch.mjs).
 // Sin efectos secundarios: solo funciones puras y la llamada a la IA. Node 20+, sin dependencias.
 
 import { readFile } from 'node:fs/promises';
