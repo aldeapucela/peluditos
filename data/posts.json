@@ -72,6 +72,21 @@
     "tipo": "adopcion"
   },
   {
+    "id": "tg-197984",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-07T13:06:43.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-197984.jpg",
+    "images": [
+      "img/tg-197984.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/197984",
+    "source": "telegram"
+  },
+  {
     "id": "DbvNESIDvix",
     "shelter": "Colonia Canelitos",
     "shelterUrl": "https://www.instagram.com/coloniacanelitos/",
