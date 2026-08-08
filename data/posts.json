@@ -172,9 +172,7 @@
       "img/tg-197549.jpg"
     ],
     "permalink": "https://t.me/AldeaPucela/91148/197549",
-    "source": "telegram",
-    "type": "gato",
-    "tipo": "acogida"
+    "source": "telegram"
   },
   {
     "id": "DbtPZXXq0cZ",
@@ -232,6 +230,21 @@
     "permalink": "https://www.instagram.com/p/DbtBT-bMgpX/",
     "type": "gato",
     "tipo": "adopcion"
+  },
+  {
+    "id": "tg-197471",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-06T15:12:52.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-197471.jpg",
+    "images": [
+      "img/tg-197471.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/197471",
+    "source": "telegram"
   },
   {
     "id": "Dbs7uXlAVj-",
