@@ -1266,6 +1266,21 @@
     "tipo": "otro"
   },
   {
+    "id": "tg-195446",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-01T18:46:24.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-195446.jpg",
+    "images": [
+      "img/tg-195446.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/195446",
+    "source": "telegram"
+  },
+  {
     "id": "DbgdfSEoqm5",
     "shelter": "Michis Pucela",
     "shelterUrl": "https://www.instagram.com/michispucela/",
