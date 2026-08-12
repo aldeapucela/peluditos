@@ -1,5 +1,20 @@
 [
   {
+    "id": "tg-200693",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-12T12:04:59.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-200693.jpg",
+    "images": [
+      "img/tg-200693.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/200693",
+    "source": "telegram"
+  },
+  {
     "id": "tg-200602",
     "shelter": "Peluditos en Aldea Pucela",
     "shelterUrl": "https://t.me/AldeaPucela/91148",
