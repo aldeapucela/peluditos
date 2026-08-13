@@ -95,6 +95,24 @@ Cómo se sitúa este proyecto frente a esa cláusula:
   agregados de demanda por promoción y (b) la publicación de la disponibilidad en formato
   reutilizable. Si sale bien, el proyecto deja de leer HTML y pasa a consumir un fichero.
 
+## Los plazos se leen del boletín
+
+Las fechas de los plazos no están en la ficha web: están dentro del anuncio oficial. Como esos
+anuncios (BOCYL, BOP y sus correcciones) están alojados en `tuyavivienda.es`, que permite el
+rastreo, el proyecto los descarga, les extrae el texto y busca la regla literal:
+
+> «Los interesados dispondrán de un plazo máximo para presentar sus solicitudes […] que concluirá a
+> los quince días naturales, contados desde el día siguiente a la publicación de este Acuerdo en el
+> Boletín Oficial de la Provincia de Valladolid.»
+
+La fecha de publicación del boletín va repetida en la cabecera de todas sus páginas («Número 2026/55
+BOLETÍN OFICIAL DE LA PROVINCIA DE VALLADOLID · Viernes, 20 de marzo de 2026»), así que la regla se
+convierte en una fecha exacta. Cuando el plazo se cuenta desde un hecho que todavía no ha ocurrido,
+se publica la regla sin fecha.
+
+Los PDF se leen en memoria y **no se guardan**. De cada uno queda su `sha256`, su fecha y las citas
+literales. **Los listados con nombres no se descargan nunca**, tampoco para esto.
+
 ## Cómo pedimos las páginas
 
 - Una petición cada **2 segundos**, una vez al día. Son 27 páginas: menos carga que un visitante
@@ -103,7 +121,8 @@ Cómo se sitúa este proyecto frente a esa cláusula:
   `AldeaPucelaVivienda/1.0 (+https://vivienda.aldeapucela.org; proyecto vecinal sin ánimo de lucro)`.
 - El script **lee `robots.txt` antes de cada tanda** y se detiene si alguna ruta deja de estar
   permitida. No es una promesa: está en el código (`scripts/sync.mjs`).
-- Nunca se descarga un PDF. Ni siquiera los que no llevan datos personales, porque no hacen falta.
+- De los PDF solo se descargan los boletines oficiales (una vez cada uno: ya leído, no se vuelve a
+  pedir). Los listados con nombres, jamás.
 
 ## Preguntas abiertas
 

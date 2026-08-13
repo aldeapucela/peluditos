@@ -1,0 +1,198 @@
+{
+  "actualizado": "2026-08-13",
+  "documentos": {
+    "https://tuyavivienda.es/wp-content/uploads/2026/05/BOCYL-D-04052026-82-22.pdf": {
+      "titulo": "BOCYL-D-04052026-82-22",
+      "tipo": "bocyl",
+      "sha256": "a5152cd75a2b01c989ba089be1de121950a9c3ba55297c15605a33a0c61f16b9",
+      "fecha_publicacion": "2026-05-04",
+      "leido": "2026-08-13",
+      "caracteres": 21647,
+      "reglas": [
+        {
+          "tipo": "solicitudes",
+          "titulo": "Presentación de solicitudes",
+          "cantidad": 15,
+          "unidad": "naturales",
+          "ancla": "bop",
+          "ancla_texto": "la publicación en el Boletín Oficial de la Provincia",
+          "cita": "Los interesados dispondrán de un plazo máximo para presentar sus solicitudes, y la documentación correspondiente, que concluirá a los quince días naturales, contados desde el día siguiente a la publicación de este Acuerdo en el Boletín Oficial de la Provincia correspondiente."
+        },
+        {
+          "tipo": "subsanacion",
+          "titulo": "Subsanar la documentación",
+          "cantidad": 3,
+          "unidad": "naturales",
+          "ancla": "notificacion",
+          "ancla_texto": "la notificación a cada persona",
+          "cita": "A la vista de la documentación recibida, Somacyl requerirá individualmente, mediante correo electrónico dirigido a la dirección señalada por el solicitante, las subsanaciones un plazo máximo de tres días naturales, contados desde el día siguiente a aquel en que Somacyl remita dicha comunicación, para atender el requerimiento."
+        },
+        {
+          "tipo": "alegaciones",
+          "titulo": "Alegaciones al listado",
+          "cantidad": 10,
+          "unidad": "naturales",
+          "ancla": "web",
+          "ancla_texto": "la publicación en la web oficial",
+          "cita": "En el plazo de diez días naturales siguientes a contar desde la anterior publicación en www.tuyavivienda.es , los demandantes que estén disconformes con la confección de dicha lista, podrán presentar las alegaciones y documentos que estimen convenientes en defensa de sus intereses en el registro electrónico de Somacyl: https://sede.Somacyl.es/ web/guest/tramitacion-y-registro , o en la dirección de correo electrónico tuyavivienda@ Somacyl.es."
+        },
+        {
+          "tipo": "firma",
+          "titulo": "Firma del contrato",
+          "cantidad": 14,
+          "unidad": "naturales",
+          "ancla": null,
+          "ancla_texto": null,
+          "cita": "Dicha firma deberá realizarse dentro del plazo máximo de 14 días naturales contados desde el siguiente al de la referida causas imputables al adjudicatario en los plazos señalados, perderá tal condición y le privará de la posibilidad de participar en nuevos procedimientos convocados por Somacyl en un plazo de dos años contados desde la publicación de la convocatoria de este Acuerdo en el B.O.P."
+        }
+      ]
+    },
+    "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-01557.pdf": {
+      "titulo": "BOPVA-A-2026-01557",
+      "tipo": "bop",
+      "sha256": "d797bf629ea2388c1037ea317c8384a3ada7d5fe8dfa3a3342b2bb30cef7b399",
+      "fecha_publicacion": "2026-05-28",
+      "leido": "2026-08-13",
+      "caracteres": 23940,
+      "reglas": [
+        {
+          "tipo": "solicitudes",
+          "titulo": "Presentación de solicitudes",
+          "cantidad": 15,
+          "unidad": "naturales",
+          "ancla": "bop",
+          "ancla_texto": "la publicación en el Boletín Oficial de la Provincia",
+          "cita": "1.-Los interesados dispondrán de un plazo máximo para presentar sus solicitudes, y la documentación correspondiente, que concluirá a los quince días naturales, contados desde el día siguiente a la publicación de este Acuerdo en el Boletín Oficial de la Provincia correspondiente."
+        },
+        {
+          "tipo": "subsanacion",
+          "titulo": "Subsanar la documentación",
+          "cantidad": 3,
+          "unidad": "naturales",
+          "ancla": "notificacion",
+          "ancla_texto": "la notificación a cada persona",
+          "cita": "Los requeridos dispondrán de un plazo máximo de tres días naturales, contados desde el día siguiente a aquel en que SOMACYL remita dicha comunicación, para atender el requerimiento."
+        },
+        {
+          "tipo": "firma",
+          "titulo": "Firma del contrato",
+          "cantidad": 14,
+          "unidad": "naturales",
+          "ancla": "notificacion",
+          "ancla_texto": "la notificación a cada persona",
+          "cita": "Dicha firma deberá realizarse dentro del plazo máximo de 14 días naturales contados desde el siguiente al de la referida notificación."
+        }
+      ]
+    },
+    "https://tuyavivienda.es/wp-content/uploads/2026/07/BOPVA-A-2026-01944.pdf": {
+      "titulo": "BOPVA-A-2026-01944",
+      "tipo": "bop",
+      "sha256": "73b4ca4fe82696802db37eaa1d38b118d698aced3f3909a4efa08624390f54a9",
+      "fecha_publicacion": "2026-07-01",
+      "leido": "2026-08-13",
+      "caracteres": 2711,
+      "reglas": []
+    },
+    "https://tuyavivienda.es/wp-content/uploads/2026/06/BOCYL-D-29062026-123-15.pdf": {
+      "titulo": "BOCYL-D-29062026-123-15",
+      "tipo": "bocyl",
+      "sha256": "2c10fa145f3813ce2fd0d0b9754118b26b4d8d7871d8c9a8e2179ce3e454fc7f",
+      "fecha_publicacion": "2026-06-29",
+      "leido": "2026-08-13",
+      "caracteres": 7404,
+      "reglas": []
+    },
+    "https://tuyavivienda.es/wp-content/uploads/2026/04/BOCYL-D-16032026-51-24.pdf": {
+      "titulo": "BOCYL-D-16032026-51-24",
+      "tipo": "bocyl",
+      "sha256": "1c54798976609ed80a6b37a4406284436fc66159af0689bd650b27619c0b3679",
+      "fecha_publicacion": "2026-03-16",
+      "leido": "2026-08-13",
+      "caracteres": 23423,
+      "reglas": [
+        {
+          "tipo": "solicitudes",
+          "titulo": "Presentación de solicitudes",
+          "cantidad": 15,
+          "unidad": "naturales",
+          "ancla": "bop",
+          "ancla_texto": "la publicación en el Boletín Oficial de la Provincia",
+          "cita": "Los interesados dispondrán de un plazo máximo para presentar sus solicitudes, y la documentación correspondiente, que concluirá a los quince días naturales, contados desde el día siguiente a la publicación de este Acuerdo en el Boletín Oficial de la Provincia de Valladolid."
+        },
+        {
+          "tipo": "alegaciones",
+          "titulo": "Alegaciones al listado",
+          "cantidad": 10,
+          "unidad": "naturales",
+          "ancla": "web",
+          "ancla_texto": "la publicación en la web oficial",
+          "cita": "En el plazo de diez días naturales siguientes a contar desde la anterior publicación en www.tuyavivienda.es , los demandantes que estén disconformes con la confección de dicha lista, podrán presentar las alegaciones y documentos que estimen convenientes en defensa de sus intereses en el registro electrónico de SOMACYL: https://sede."
+        },
+        {
+          "tipo": "firma",
+          "titulo": "Firma del contrato",
+          "cantidad": 14,
+          "unidad": "naturales",
+          "ancla": "notificacion",
+          "ancla_texto": "la notificación a cada persona",
+          "cita": "Dicha firma deberá realizarse dentro del plazo máximo de 14 días naturales contados desde el siguiente al de la referida notificación."
+        }
+      ]
+    },
+    "https://tuyavivienda.es/wp-content/uploads/2026/04/CORRECCION-ERRORES-BOCYL-1.pdf": {
+      "titulo": "CORRECCIÓN ERRORES BOCYL (1)",
+      "tipo": "bocyl",
+      "sha256": "b11a8d17271f130c5e87ae52e97c10cd3befbc17c70c054c9da0aae2c82846db",
+      "fecha_publicacion": "2026-03-16",
+      "leido": "2026-08-13",
+      "caracteres": 1739,
+      "reglas": []
+    },
+    "https://tuyavivienda.es/wp-content/uploads/2026/04/CORRECCION-ERRORES-BOCYL-2.pdf": {
+      "titulo": "CORRECCIÓN ERRORES BOCYL (2)",
+      "tipo": "bocyl",
+      "sha256": "ae97ccdf2a9d660fcf9785067e2de41664a98796966a7a741fa219bf13d71cab",
+      "fecha_publicacion": null,
+      "leido": "2026-08-13",
+      "caracteres": 0,
+      "reglas": []
+    },
+    "https://tuyavivienda.es/wp-content/uploads/2026/05/CORRECCION-de-errores-BOP-3.pdf": {
+      "titulo": "CORRECCIÓN ERRORES BOCYL (3)",
+      "tipo": "bocyl",
+      "sha256": "90a220343a87766c3826391b7b01b1f3935323ca60a96064096e1ec4fc667f81",
+      "fecha_publicacion": null,
+      "leido": "2026-08-13",
+      "caracteres": 0,
+      "reglas": []
+    },
+    "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-00824.pdf": {
+      "titulo": "BOPVA-A-2026-00824",
+      "tipo": "bop",
+      "sha256": "036dffe0be31ad79171700ceaac1da2b1aa0bf9d6bb1f2d10d83a5d87a61b416",
+      "fecha_publicacion": "2026-03-20",
+      "leido": "2026-08-13",
+      "caracteres": 26397,
+      "reglas": [
+        {
+          "tipo": "solicitudes",
+          "titulo": "Presentación de solicitudes",
+          "cantidad": 15,
+          "unidad": "naturales",
+          "ancla": "bop",
+          "ancla_texto": "la publicación en el Boletín Oficial de la Provincia",
+          "cita": "1.- Los interesados dispondrán de un plazo máximo para presentar sus solicitudes, y la documentación correspondiente, que concluirá a los quince días naturales, contados desde el día siguiente a la publicación de este Acuerdo en el Boletín Oficial de la Provincia de Valladolid."
+        },
+        {
+          "tipo": "firma",
+          "titulo": "Firma del contrato",
+          "cantidad": 14,
+          "unidad": "naturales",
+          "ancla": "notificacion",
+          "ancla_texto": "la notificación a cada persona",
+          "cita": "Dicha firma deberá realizarse dentro del plazo máximo de 14 días naturales contados desde el siguiente al de la referida notificación."
+        }
+      ]
+    }
+  }
+}

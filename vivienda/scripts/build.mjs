@@ -20,12 +20,19 @@ const indice = json('data/promociones.json');
 const NOMBRES_PROPIOS = json('config/estilo.json', { nombres_propios: [] }).nombres_propios ?? [];
 const historico = json('data/historico.json', { registros: [] });
 const avisos = json('data/avisos.json', { avisos: [] }).avisos ?? [];
-// PLAZOS_DEMO=1 carga el fichero de ejemplo (fechas inventadas) para poder
-// enseñar cómo queda la interfaz de plazos antes de que haya uno real. El
-// sitio publicado nunca se genera así: lo delata el aviso de la propia página.
-const DEMO = process.env.PLAZOS_DEMO === '1';
-const PLAZOS = (json(DEMO ? 'config/plazos.ejemplo.json' : 'config/plazos.json', { plazos: [] }).plazos ?? [])
-  .filter((z) => z.fuente_url);  // sin fuente, el plazo no se publica (invariante 2)
+// Los plazos salen de los boletines (data/plazos.json) y config/plazos.json
+// solo sirve para corregir a mano lo que la extracción haga mal.
+const PLAZOS = mezcla(
+  json('data/plazos.json', { plazos: [] }).plazos ?? [],
+  (json('config/plazos.json', { plazos: [] }).plazos ?? []).filter((z) => z.fuente_url));
+
+function mezcla(automaticos, manuales) {
+  const pisados = new Set(manuales.map((z) => `${z.promocion_id}:${z.tipo}`));
+  return [
+    ...manuales.map((z) => ({ ...z, origen: 'manual' })),
+    ...automaticos.filter((z) => !pisados.has(`${z.promocion_id}:${z.tipo}`)),
+  ];
+}
 const promociones = indice.promociones ?? [];
 const HOY = new Date().toISOString().slice(0, 10);
 
@@ -136,8 +143,18 @@ ${cuerpo}
 function plazosVivos(idPromocion = null) {
   return PLAZOS
     .filter((z) => (!idPromocion || z.promocion_id === idPromocion))
-    .filter((z) => !z.fin || dias(HOY, z.fin) >= 0)
-    .sort((a, b) => (a.fin ?? '9999').localeCompare(b.fin ?? '9999'));
+    .filter((z) => z.fin && dias(HOY, z.fin) >= 0)
+    .sort((a, b) => a.fin.localeCompare(b.fin));
+}
+
+/** Plazos que dependen de un hecho cuya fecha no consta: se enseña la regla. */
+function plazosSinFecha(idPromocion) {
+  return PLAZOS.filter((z) => z.promocion_id === idPromocion && !z.fin);
+}
+
+function plazosPasados(idPromocion) {
+  return PLAZOS.filter((z) => z.promocion_id === idPromocion && z.fin && dias(HOY, z.fin) < 0)
+    .sort((a, b) => b.fin.localeCompare(a.fin));
 }
 
 function dias(a, b) {
@@ -145,30 +162,41 @@ function dias(a, b) {
 }
 
 function cuentaAtras(z) {
-  if (!z.fin) return 'Sin fecha de cierre publicada';
+  if (!z.fin) return 'Depende de una fecha que aún no consta';
   const quedan = dias(HOY, z.fin);
+  if (quedan < 0) return `Cerrado el ${z.fin}`;
   if (quedan === 0) return 'Termina HOY';
   if (quedan === 1) return 'Queda 1 día';
   return `Quedan ${quedan} días`;
 }
 
-function bloquePlazos(lista, { titulo = 'Plazos abiertos', conPromocion = true } = {}) {
+function bloquePlazos(lista, { titulo = 'Plazos abiertos', conPromocion = true, cerrados = false } = {}) {
   if (!lista.length) return '';
-  const filas = lista.map((z) => `      <li class="plazo plazo--${dias(HOY, z.fin ?? '9999') <= 3 ? 'urge' : 'normal'}">
-        <p class="plazo__cuenta">${esc(cuentaAtras(z))}</p>
-        <p class="plazo__que">${esc(z.titulo ?? 'Plazo')}${conPromocion ? ` · ${esc(nombrePromocion(z.promocion_id))}` : ''}</p>
-        <p class="fino">Hasta el ${esc(z.fin ?? '—')}${z.hora_limite ? ` a las ${esc(z.hora_limite)}` : ''} ·
-          <a href="${esc(z.fuente_url)}" rel="noopener nofollow">documento oficial</a>${z.fuente_ref ? ` (${esc(z.fuente_ref)})` : ''}</p>
-      </li>`).join('\n');
   return `<section class="bloque bloque--plazos">
     <h2>${esc(titulo)}</h2>
-    ${DEMO ? '<p class="aviso">Fechas de ejemplo, inventadas para enseñar cómo queda esta parte. Todavía no hay ningún plazo real anotado.</p>' : ''}
     <ul class="plazos">
-${filas}
+${lista.map((z) => plazoHtml(z, conPromocion, cerrados)).join('\n')}
     </ul>
-    <p class="fino">Fechas anotadas a mano leyendo el documento oficial que se enlaza. Si hay discrepancia, manda el
-       documento. <a href="/avisos/">Que te avisemos con tiempo →</a></p>
+    <p class="fino">${cerrados ? 'Plazos ya cerrados, para poder reconstruir la cronología.'
+      : 'Fechas sacadas del propio boletín oficial: se cuenta el plazo que fija el documento desde el día en que se publicó. Si hay discrepancia, manda el documento.'}
+       <a href="/avisos/">Cómo te avisamos con tiempo →</a></p>
   </section>`;
+}
+
+function plazoHtml(z, conPromocion, cerrado) {
+  const quedan = z.fin ? dias(HOY, z.fin) : null;
+  const clase = cerrado ? 'pasado' : quedan != null && quedan <= 3 ? 'urge' : 'normal';
+  return `      <li class="plazo plazo--${clase}">
+        <p class="plazo__cuenta">${esc(cuentaAtras(z))}</p>
+        <p class="plazo__que">${esc(z.titulo ?? 'Plazo')}${conPromocion ? ` · ${esc(nombrePromocion(z.promocion_id))}` : ''}</p>
+        ${z.regla ? `<p class="fino">${esc(`${z.regla.cantidad} días ${z.regla.unidad}${
+          z.regla.ancla_texto ? ` desde el día siguiente a ${z.regla.ancla_texto}` : ''}${
+          z.regla.desde ? `, que fue el ${z.regla.desde}` : ''}.`)}${
+          z.regla.unidad === 'habiles' ? ' <strong>Ojo:</strong> al contar días hábiles no sabemos los festivos locales; comprueba el documento.' : ''}</p>` : ''}
+        ${z.cita ? `<details class="cita"><summary>Lo que dice el documento</summary><blockquote>${esc(z.cita)}</blockquote></details>` : ''}
+        <p class="fino"><a href="${esc(z.fuente_url)}" rel="noopener nofollow">${esc(z.fuente_ref ?? 'Documento oficial')}</a>
+          · ${z.origen === 'manual' ? 'corregido a mano por la comunidad' : `leído automáticamente del documento el ${esc(z.extraido ?? '')}`}</p>
+      </li>`;
 }
 
 function nombrePromocion(id) {
@@ -299,7 +327,9 @@ function paginaPromocion(p) {
        podemos decir cuántas quedan libres. En cuanto la publique, aparecerá aquí sola.</p>`}
   </section>
 
-  ${bloquePlazos(plazosVivos(p.id), { titulo: 'Plazos de esta promoción', conPromocion: false })}
+  ${bloquePlazos(plazosVivos(p.id), { titulo: 'Plazos abiertos', conPromocion: false })}
+  ${bloquePlazos(plazosSinFecha(p.id), { titulo: 'Plazos que dependen de lo que pase antes', conPromocion: false })}
+  ${bloquePlazos(plazosPasados(p.id), { titulo: 'Plazos ya cerrados', conPromocion: false, cerrados: true })}
 
   <section class="bloque bloque--seguir">
     <h2>Que no se te pase</h2>
@@ -309,7 +339,7 @@ function paginaPromocion(p) {
         <p class="fino">Para leerlo con tu lector de siempre o enchufarlo a Telegram.</p></li>
       ${plazosVivos(p.id).length ? `<li><a href="/promocion/${esc(p.id)}/plazos.ics">Plazos en tu calendario (.ics)</a>
         <p class="fino">Tu móvil te avisa 14, 7, 3 y 1 días antes del cierre.</p></li>` : ''}
-      <li><a href="/avisos/">Avisos por correo y cómo funcionan</a></li>
+      <li><a href="/avisos/">Cómo funcionan los avisos</a></li>
     </ul>
   </section>
 
@@ -435,10 +465,11 @@ function botonSeguir(id, tamano = '') {
 function ultimosAvisos() {
   const ultimos = avisos.filter((a) => a.tipo !== 'plazo_sin_registrar').slice(0, 6);
   if (!ultimos.length) return '';
-  return `<section class="bloque">
+  return `<section class="bloque" id="novedades">
   <h2>Últimos movimientos</h2>
+  <p class="novedades__resumen" data-resumen hidden></p>
   <ul class="docs">
-    ${ultimos.map((a) => `<li>
+    ${ultimos.map((a) => `<li data-fecha="${esc(a.fecha)}">
       <a href="${esc(rutaDe(a))}">${esc(a.titulo)}</a> <span class="pastilla pastilla--doc">${esc(a.fecha)}</span>
       <p class="fino">${esc(a.detalle ?? '')}</p>
     </li>`).join('\n    ')}
@@ -465,52 +496,62 @@ function rutaDe(a) {
 
 function paginaAvisos() {
   const vivos = plazosVivos();
+  const sinFecha = PLAZOS.filter((z) => !z.fin);
   const cuerpo = `
 <article class="prosa">
 <h1>Que no se te pase el plazo</h1>
-<p>El problema de esto no es entenderlo: es enterarte a tiempo. Las convocatorias salen en un boletín,
-   los listados aparecen un martes cualquiera en una web y el plazo para alegar dura unos días. Por eso
-   el proyecto vigila las fichas oficiales <strong>todos los días</strong> y avisa cuando algo se mueve.</p>
+<p>El problema de esto no es entenderlo: es enterarte a tiempo. Las convocatorias salen en un boletín, los
+   listados aparecen un martes cualquiera en una web y el plazo para alegar dura unos días. Por eso el proyecto
+   mira las fichas oficiales <strong>todos los días</strong> y avisa cuando algo se mueve.</p>
 
-<h2>Cuatro maneras de enterarte</h2>
-<h3>1. Marcar lo que te interesa en este navegador</h3>
-<p>Dale a <em>Me interesa</em> en las promociones que sigues. La portada te pone arriba lo tuyo, con sus plazos
-   y sus últimos movimientos. Se guarda solo en tu navegador: no hay cuenta, ni correo, ni nada que viaje a
-   ningún servidor. Si cambias de móvil, se queda atrás; es el precio de no pedirte datos.</p>
+<h2>Tres maneras de enterarte, ninguna te pide nada</h2>
+<p>No hay registro, ni correo, ni cuenta. Aquí no sabemos quién eres y no queremos saberlo.</p>
+
+<h3>1. Marcar lo que te interesa</h3>
+<p>Dale a <em>Me interesa</em> en las promociones que sigues. La portada te abre con «Lo que sigues» y te marca
+   las <strong>novedades desde la última vez que entraste</strong>. Se guarda en el almacenamiento de tu
+   navegador, como una cookie: no viaja a ningún servidor y nadie —nosotros tampoco— puede saber qué sigues.
+   Si cambias de móvil o borras los datos del navegador, se queda atrás. Es el precio de no pedirte datos, y nos
+   parece que sale a cuenta.</p>
 
 <h3>2. Calendario (lo más eficaz para los plazos)</h3>
 <p>Suscribe tu calendario a <a href="/plazos.ics">plazos.ics</a> y cada plazo entra con avisos automáticos
-   <strong>21, 14, 7, 3 y 1 días antes</strong>, más el propio día del cierre. Te avisa tu móvil, sin depender
-   de que nosotros te mandemos nada. Cada promoción tiene además el suyo en su ficha.</p>
+   <strong>21, 14, 7, 3 y 1 días antes</strong>, más el propio día del cierre. Te avisa tu móvil, sin depender de
+   que nosotros te mandemos nada. Cada promoción tiene el suyo en su ficha.</p>
 
 <h3>3. RSS</h3>
 <p><a href="/avisos.xml">Todos los avisos</a>, o el de una promoción concreta desde su ficha. Va bien para
    engancharlo a Telegram, a un lector o a lo que use la comunidad.</p>
 
-<h3>4. Correo</h3>
-<p>Los mismos avisos se envían a la lista de correo de la comunidad. Nosotros no guardamos direcciones:
-   el envío va a la lista y las altas y bajas las gestiona ella. Pregunta en
-   <a href="https://aldeapucela.org" rel="noopener">Aldea Pucela</a> para apuntarte.</p>
-
 <h2>De qué se avisa</h2>
 <ul>
   <li><strong>Plazos que se acercan</strong>: recordatorios a 21, 14, 7, 3 y 1 días, y el día del cierre.</li>
   <li><strong>Convocatoria nueva</strong>: aparece un anuncio de BOCYL o del boletín provincial en la ficha.</li>
-  <li><strong>Listado publicado</strong>: sale la lista de admitidos, la definitiva o la de adjudicatarios.
-      Te decimos que existe y te llevamos a la web oficial; el listado no lo copiamos.</li>
+  <li><strong>Listado publicado</strong>: sale la lista de admitidos, la definitiva o la de adjudicatarios. Te
+      decimos que existe y te llevamos a la web oficial; el listado no lo copiamos.</li>
   <li><strong>Se abre o se cierra el procedimiento</strong>.</li>
   <li><strong>Viviendas libres</strong>: cuando aparecen viviendas sin adjudicar (se alquilan por orden de
       solicitud) o cuando la lista se mueve porque se ocupan.</li>
 </ul>
 
-<h2>Los plazos los pone una persona</h2>
-<p>Las fechas exactas viven dentro de los PDF del boletín, que este proyecto no descarga. Así que alguien de la
-   comunidad las lee y las anota <strong>siempre con el enlace al documento</strong>. Si detectamos una
-   convocatoria abierta sin plazo anotado, el sistema lo reclama en su ejecución diaria para que no se quede
-   sin poner. Si ves una fecha mal, dilo: manda el documento oficial, no nosotros.</p>
+<h2>Los plazos salen del propio boletín</h2>
+<p>Nadie los teclea. El sistema descarga los anuncios oficiales que enlaza cada promoción, les lee el texto y
+   busca la regla tal cual está escrita —«un plazo máximo que concluirá a los quince días naturales contados
+   desde el día siguiente a la publicación de este Acuerdo en el Boletín Oficial de la Provincia»— y la combina
+   con la fecha en que se publicó ese boletín, que va en la cabecera de todas sus páginas. De ahí sale la fecha
+   exacta.</p>
+<p>En cada plazo puedes desplegar <em>«Lo que dice el documento»</em> y leer la frase literal de la que sale, con
+   enlace al PDF oficial. Si el plazo cuelga de algo que aún no ha pasado —«diez días desde que se publique la
+   lista provisional»— <strong>no nos inventamos una fecha</strong>: enseñamos la regla y ya está.</p>
+<p>De los listados con nombres no se descarga nada, ni para esto: se enlazan y punto.</p>
 
 ${vivos.length ? `<h2>Plazos abiertos ahora</h2>${bloquePlazos(vivos)}` :
-  '<h2>Ahora mismo no hay plazos abiertos anotados</h2><p>Cuando se abra una convocatoria aparecerá aquí, en la portada y en los cuatro canales.</p>'}
+  '<h2>Ahora mismo no hay ningún plazo abierto</h2><p>Los que hay extraídos ya se han cerrado. Cuando salga una convocatoria nueva aparecerá aquí, en la portada y en los tres canales.</p>'}
+
+${sinFecha.length ? `<h2>Plazos que dependen de lo que pase antes</h2>
+<p>Están escritos en el boletín pero se cuentan desde un hecho que todavía no ha ocurrido, así que no tienen
+   fecha. En cuanto ese hecho ocurra y quede publicado, el plazo aparecerá con su día.</p>
+${bloquePlazos(sinFecha)}` : ''}
 
 <h2>Cada cuánto</h2>
 <p>La comprobación es diaria. Un cambio puede tardar hasta 24 horas en detectarse, así que para un plazo que
@@ -518,7 +559,7 @@ ${vivos.length ? `<h2>Plazos abiertos ahora</h2>${bloquePlazos(vivos)}` :
 </article>`;
   return layout({
     titulo: 'Avisos',
-    descripcion: 'Avisos de convocatorias, listados y plazos de la vivienda pública en Valladolid: calendario, RSS, correo y seguimiento en tu navegador.',
+    descripcion: 'Avisos de convocatorias, listados y plazos de la vivienda pública en Valladolid: calendario, RSS y seguimiento en tu propio navegador.',
     ruta: '/avisos/', cuerpo, activo: 'avisos',
   });
 }

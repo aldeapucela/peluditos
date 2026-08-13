@@ -253,3 +253,18 @@ main { padding-block: 2rem 3rem; }
 .seguir:hover { border-color: var(--brand-600); }
 .seguir.activo { background: var(--brand-100); border-color: var(--brand-600); font-weight: 600; }
 .seguir--grande { font-size: .95rem; padding: .4rem 1rem; }
+
+.plazo--pasado { opacity: .75; }
+.plazo--pasado .plazo__cuenta { color: var(--tinta-suave); font-weight: 600; }
+.cita { margin: .35rem 0; font-size: .85rem; }
+.cita summary { cursor: pointer; color: var(--brand-600); }
+.cita blockquote {
+  margin: .4rem 0 0; padding: .5rem .8rem; border-left: 3px solid var(--brand-200);
+  background: var(--brand-50); border-radius: .3rem; font-style: italic;
+}
+.novedades__resumen { font-weight: 600; color: var(--brand-600); }
+.docs li.es-nuevo { border-left: 3px solid var(--libre); padding-left: .7rem; }
+.docs li.es-nuevo > a::after {
+  content: 'nuevo'; margin-left: .4rem; font-size: .7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em; color: var(--libre);
+}

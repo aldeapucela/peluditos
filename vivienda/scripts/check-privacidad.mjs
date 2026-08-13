@@ -35,9 +35,11 @@ for (const f of fuentes?.fuentes ?? []) {
 
 // 3. Ningún plazo sin fuente ni con fecha rara (invariante 2: cero contenido
 //    inventado). Un plazo mal puesto hace que alguien pierda una convocatoria.
-const plazos = leeSiExiste(path.join(RAIZ, 'config/plazos.json'))?.plazos ?? [];
-for (const [i, z] of plazos.entries()) {
-  const donde = `config/plazos.json → plazos[${i}]`;
+const plazos = [
+  ...(leeSiExiste(path.join(RAIZ, 'config/plazos.json'))?.plazos ?? []).map((z, i) => [`config/plazos.json → plazos[${i}]`, z]),
+  ...(leeSiExiste(path.join(RAIZ, 'data/plazos.json'))?.plazos ?? []).map((z, i) => [`data/plazos.json → plazos[${i}]`, z]),
+];
+for (const [donde, z] of plazos) {
   if (!z.fuente_url) problemas.push(`${donde}: plazo sin 'fuente_url' (¿de dónde sale la fecha?)`);
   if (!z.promocion_id) problemas.push(`${donde}: plazo sin 'promocion_id'`);
   for (const campo of ['inicio', 'fin']) {
@@ -48,6 +50,9 @@ for (const [i, z] of plazos.entries()) {
     }
   }
   if (z.inicio && z.fin && z.inicio > z.fin) problemas.push(`${donde}: el plazo termina antes de empezar`);
+  if (z.cita && indiciosPersonales(z.cita).length) problemas.push(`${donde}: la cita del documento parece llevar datos personales`);
+  // Un plazo automático sin la frase que lo respalda no es verificable.
+  if (z.origen === 'automatico' && !z.cita) problemas.push(`${donde}: plazo extraído sin la cita literal del documento`);
 }
 
 // 4. No puede haber PDF guardados en el repo: no descargamos documentos.

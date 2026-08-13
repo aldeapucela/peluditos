@@ -17,8 +17,11 @@ se pregunta, no se busca la manera de saltarla.
    rastreo de sus páginas; `bocyl.jcyl.es` **prohíbe `/boletines/`**, así que de BOCYL solo se
    vigila el RSS y se enlaza. Ver `docs/fuentes.md`.
 
-4. **NO SE DESCARGA NINGÚN PDF.** Ni los que no llevan datos personales. Si algún día hiciera
-   falta, se discute antes y se documenta por qué.
+4. **SOLO SE DESCARGAN BOLETINES.** Se bajan los anuncios oficiales (`bocyl`, `bop`,
+   `correccion`) alojados en `tuyavivienda.es` para leerles los plazos, y nada más. Los
+   `listado_nominal` no se descargan jamás, ni «solo para mirar»: llevan nombres. El PDF se lee en
+   memoria y no se guarda en el repositorio; de él solo queda la fecha, la regla del plazo, la cita
+   literal y el `sha256`. Cualquier cita que dispare el detector de datos personales se descarta.
 
 5. **PRENSA ≠ FUENTE.** Un dato de prensa no se publica hasta confirmarlo en la ficha oficial, en
    BOCYL o en el boletín provincial.
@@ -34,16 +37,15 @@ se pregunta, no se busca la manera de saltarla.
    SOMACYL y al boletín para cualquier trámite. Nunca se sugiere que aquí se pueda consultar un
    expediente.
 
-9. **NINGUNA DIRECCIÓN DE CORREO EN EL REPOSITORIO.** El proyecto no guarda
-   suscriptores. Quien quiere avisos marca lo suyo en su navegador (localStorage),
-   se suscribe al calendario o al RSS, o se apunta a la lista de correo de la
-   comunidad, que es quien gestiona altas y bajas. El notificador recibe el destino
-   por variable de entorno, lo usa y lo olvida: no lo escribe en disco ni en los logs.
+9. **NO HAY SUSCRIPTORES.** El proyecto no pide ni guarda correos, ni tiene cuentas, ni lista de
+   distribución. Quien quiere avisos marca lo suyo en su navegador (queda en su equipo), se
+   suscribe al calendario o al RSS. No se añade ningún canal que obligue a custodiar datos de
+   nadie.
 
-10. **NINGÚN PLAZO SIN FUENTE.** Las fechas de convocatorias y alegaciones las
-    anota una persona leyendo el documento oficial, y `config/plazos.json` exige
-    `fuente_url`. Un plazo mal puesto hace que alguien pierda una convocatoria:
-    aquí no se estima, no se deduce y no se copia de la prensa.
+10. **NINGÚN PLAZO SIN CITA.** Toda fecha de plazo sale de la frase literal del boletín, que se
+    guarda junto al plazo con el enlace al documento y su `sha256`. Si el plazo depende de un hecho
+    sin fecha conocida, se publica la regla y el plazo se queda sin fecha: no se estima. Un plazo
+    mal puesto hace que alguien pierda una convocatoria.
 
 11. **0 € DE INFRAESTRUCTURA.** GitHub Actions + GitHub Pages y nada más. Sin base de datos, sin
    servidor, sin servicios que puedan generar factura. Cualquier dependencia nueva se discute

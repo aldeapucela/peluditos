@@ -97,12 +97,19 @@ anunciadas y las filas de su tabla (anotado como pregunta abierta, no «corregid
 
 ## 3. Fases siguientes
 
-### F3 · Avisos ✔ hecho
-Detección diaria de cambios (`scripts/avisos.mjs`) y cuatro canales sin servidor: seguimiento local
-en el navegador, calendario `.ics` con alarmas a 21/14/7/3/1 días, RSS general y por promoción, y
-correo por SMTP a la lista de la comunidad (cliente propio, sin dependencias). Los plazos se anotan
-a mano en `config/plazos.json` con enlace al documento, y CI rechaza cualquiera sin fuente.
-*Pendiente:* que la comunidad decida la dirección de la lista y cargue los secrets SMTP.
+### F3 · Avisos y plazos ✔ hecho
+Detección diaria de cambios (`scripts/avisos.mjs`) y tres canales que no obligan a custodiar datos
+de nadie: seguimiento en el navegador con novedades desde la última visita, calendario `.ics` con
+alarmas a 21/14/7/3/1 días y RSS general y por promoción.
+
+Los plazos se **extraen del propio boletín** (`scripts/plazos.mjs` + `scripts/pdf.mjs`, lector de
+PDF sin dependencias): se lee la regla literal —«quince días naturales desde el día siguiente a la
+publicación en el BOP»— y se combina con la fecha de publicación del documento. Cada plazo se
+publica con su cita y su `sha256`. Los listados con nombres no se descargan ni para esto.
+
+*Descartado por el camino:* el correo. Obligaba a tener lista o suscriptores, y con calendario y RSS
+se cubre lo mismo sin custodiar datos. El cliente SMTP escrito para esto queda en el historial de
+Git por si algún día se retoma.
 
 ### F3b · Cronología por promoción
 Hoy la ficha enlaza los documentos oficiales pero no los sitúa en el tiempo. Falta convertir cada
@@ -144,10 +151,8 @@ además publica **el dato que hoy no existe en ninguna parte**: cuánta gente pi
    respeta su `robots.txt`, que no se tocan los listados con nombres, y de paso registrar la
    solicitud de transparencia de F6. Es más barato que enterarse por un burofax.
 5. **BOP Radar:** ¿extender o replicar? (recomendación: extender).
-6. **Lista de correo.** ¿Qué dirección usamos para `AVISOS_PARA` y quién la administra? Mientras no
-   la haya, el sistema avisa igual por calendario, RSS y web.
-7. **Quién anota los plazos.** Basta con que alguien lea el anuncio del boletín cuando salga y
-   añada cuatro líneas a `config/plazos.json`; el sistema reclama los que falten. ¿Lo asume alguien
-   en concreto o lo abrimos a la comunidad?
-8. **Cadencia del cron.** Ahora, una vez al día. Si la fuente actualiza sus tablas más a menudo de
+6. **Días hábiles.** Los plazos en días hábiles se calculan descontando sábados y domingos, pero no
+   los festivos locales, y la web lo advierte. ¿Merece la pena meter el calendario laboral de
+   Valladolid o basta con el aviso?
+7. **Cadencia del cron.** Ahora, una vez al día. Si la fuente actualiza sus tablas más a menudo de
    lo que parece, subirlo a dos veces cuesta lo mismo.

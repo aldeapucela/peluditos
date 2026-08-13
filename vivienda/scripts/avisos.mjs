@@ -39,7 +39,9 @@ function principal() {
   const indice = leeJson('data/promociones.json', { promociones: [] });
   const detalles = indice.promociones.map((p) => leeJson(`data/promociones/${p.id}.json`, null)).filter(Boolean);
   const estadoPrevio = leeJson('data/estado.json', { promociones: {} });
-  const plazos = leeJson('config/plazos.json', { plazos: [] }).plazos ?? [];
+  const plazos = mezclaPlazos(
+    leeJson('data/plazos.json', { plazos: [] }).plazos ?? [],
+    leeJson('config/plazos.json', { plazos: [] }).plazos ?? []);
   const previos = leeJson('data/avisos.json', { avisos: [] }).avisos ?? [];
   const propios = leeJson('config/estilo.json', { nombres_propios: [] }).nombres_propios ?? [];
   for (const p of detalles) p.nombre = minusculiza(p.nombre, [...propios, p.localidad, p.provincia]);
@@ -64,9 +66,23 @@ function principal() {
   for (const a of nuevos) console.log(`  · [${a.urgencia}] ${a.titulo}`);
   const sinPlazo = nuevos.filter((a) => a.tipo === 'plazo_sin_registrar');
   if (sinPlazo.length) {
-    console.log('\n⚠ Hay convocatorias sin plazo en config/plazos.json. Sin esa fecha no se puede avisar');
-    console.log('  con antelación: alguien tiene que leer el documento oficial y anotarla.');
+    console.log('\n⚠ Hay convocatorias abiertas de las que no se ha podido sacar la fecha de cierre del');
+    console.log('  boletín. Revisa scripts/plazos.mjs o anótalas a mano en config/plazos.json.');
   }
+}
+
+/**
+ * Los plazos salen del propio boletín (`data/plazos.json`). `config/plazos.json`
+ * existe para corregir a mano lo que la extracción haga mal: una corrección
+ * manual gana siempre sobre el mismo tipo de plazo de la misma promoción.
+ */
+export function mezclaPlazos(automaticos, manuales) {
+  const validos = manuales.filter((z) => z.fuente_url && z.promocion_id);
+  const pisados = new Set(validos.map((z) => `${z.promocion_id}:${z.tipo}`));
+  return [
+    ...validos.map((z) => ({ ...z, origen: 'manual' })),
+    ...automaticos.filter((z) => !pisados.has(`${z.promocion_id}:${z.tipo}`)),
+  ];
 }
 
 // ------------------------------------------------------------- detección ----
@@ -212,7 +228,7 @@ export function avisosDePlazos({ plazos, detalles, hoy }) {
       url: `${SITIO}/promocion/${p.id}/`, url_oficial: p.url_oficial,
       fecha: hoy, tipo: 'plazo_sin_registrar', urgencia: 'media',
       titulo: `Falta anotar el plazo de ${p.localidad ?? p.nombre}`,
-      detalle: 'El procedimiento está abierto y no hay fecha de cierre en config/plazos.json. Sin ella no se puede avisar con antelación.',
+      detalle: 'El procedimiento está abierto y no se ha podido extraer la fecha de cierre de ningún boletín. Hay que revisarlo a mano.',
       clave: 'pendiente' }));
   }
 
@@ -318,6 +334,15 @@ export function selfTest() {
   const a2 = avisosDePlazos({ plazos, detalles: [base], hoy: '2026-08-13' })[0];
   ok(a1.id === a2.id, 'id estable');
   ok(a1.id !== avisosDePlazos({ plazos, detalles: [base], hoy: '2026-08-19' })[0].id, 'id distinto por día');
+
+  const mezcla = mezclaPlazos(
+    [{ promocion_id: 'x', tipo: 'solicitudes', fin: '2026-09-01', origen: 'automatico' },
+     { promocion_id: 'x', tipo: 'alegaciones', fin: null, origen: 'automatico' }],
+    [{ promocion_id: 'x', tipo: 'solicitudes', fin: '2026-09-02', fuente_url: 'https://x/doc.pdf' },
+     { promocion_id: 'x', tipo: 'sorteo', fin: '2026-10-01' }]);
+  ok(mezcla.length === 2, 'el plazo manual pisa al automático del mismo tipo; el manual sin fuente se descarta');
+  ok(mezcla.find((z) => z.tipo === 'solicitudes').fin === '2026-09-02', 'gana la corrección manual');
+  ok(mezcla.some((z) => z.tipo === 'alegaciones' && z.origen === 'automatico'), 'lo automático se conserva si nadie lo corrige');
 
   return fallos;
 }

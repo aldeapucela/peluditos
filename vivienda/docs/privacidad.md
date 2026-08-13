@@ -33,7 +33,8 @@ Hechos sobre edificios, no sobre personas:
 
 - **Los PDF con listados de admitidos, excluidos o adjudicatarios.** El programa los reconoce por
   su título, los marca como `listado_nominal` y se limita a enlazarlos. No los descarga, no los
-  guarda y no los lee. Si alguna vez alguien intentara añadir ese código, el test de privacidad
+  guarda y no los lee. De los boletines oficiales (BOCYL, BOP) sí se lee el texto —para sacar los
+  plazos—, y aun así toda frase que se guarda pasa antes por el detector de datos personales. Si alguna vez alguien intentara añadir ese código, el test de privacidad
   haría fallar el despliegue.
 - **Tu expediente.** No podemos consultarlo. Si quieres saber tu situación, el canal es SOMACYL.
 - **Formularios de reporte con datos identificativos.** Si algún día la comunidad aporta
@@ -50,10 +51,9 @@ no:
   nosotros incluidos— puede saber qué sigues. Si borras los datos del navegador, se va.
 - **Calendario y RSS** son ficheros estáticos que descarga tu programa: quien pide el fichero es tu
   móvil o tu lector, y nosotros no llevamos registro de quién lo hace.
-- **Correo:** el envío va a la lista de la comunidad. **El proyecto no almacena direcciones**: el
-  notificador recibe el destino en una variable de entorno del despliegue, lo usa y lo olvida. Ni
-  siquiera los mensajes de error registran a quién se estaba escribiendo. Las altas y bajas las
-  gestiona la lista, no este repositorio.
+- **No hay correo.** Se estudió mandar avisos por email y se descartó: obligaba a guardar
+  direcciones o a mantener una lista, y con el calendario y el RSS se consigue lo mismo sin que
+  nadie tenga que dejarnos ningún dato.
 
 ## Y de quien visita esta web
 

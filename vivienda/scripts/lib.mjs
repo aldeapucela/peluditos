@@ -341,6 +341,108 @@ export function minusculiza(s, propios = []) {
   return t;
 }
 
+// ----------------------------------------------------------- plazos ----
+
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+  'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+const PALABRAS = {
+  un: 1, uno: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8,
+  nueve: 9, diez: 10, once: 11, doce: 12, trece: 13, catorce: 14, quince: 15,
+  dieciseis: 16, diecisiete: 17, dieciocho: 18, diecinueve: 19, veinte: 20,
+  veintiuno: 21, veinticinco: 25, treinta: 30,
+};
+
+/** "quince" → 15 · "14" → 14 · lo que no reconoce → null */
+export function cantidadDePlazo(s) {
+  if (s == null) return null;
+  const limpio = norm(String(s)).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (/^\d+$/.test(limpio)) return Number(limpio);
+  return PALABRAS[limpio] ?? null;
+}
+
+/**
+ * Fecha de publicación del boletín, que va repetida en la cabecera de cada
+ * página: «Lunes, 16 de marzo de 2026» o «…VALLADOLID Viernes, 20 de marzo de 2026».
+ * Se queda con la que más veces aparece: la de la cabecera, no la de la firma.
+ */
+export function fechaDePublicacion(texto) {
+  const cuenta = new Map();
+  for (const m of texto.matchAll(/(\d{1,2}) de ([a-záéíóú]+) de (\d{4})/gi)) {
+    const mes = MESES.indexOf(m[2].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+    if (mes === -1) continue;
+    const iso = `${m[3]}-${String(mes + 1).padStart(2, '0')}-${String(Number(m[1])).padStart(2, '0')}`;
+    cuenta.set(iso, (cuenta.get(iso) ?? 0) + 1);
+  }
+  if (!cuenta.size) return null;
+  return [...cuenta.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0][0];
+}
+
+const TIPOS_PLAZO = [
+  { tipo: 'solicitudes', titulo: 'Presentación de solicitudes', re: /presentar\s+(sus\s+)?solicitud|presentaci[óo]n de solicitudes/i },
+  { tipo: 'alegaciones', titulo: 'Alegaciones al listado', re: /alegaci/i },
+  { tipo: 'subsanacion', titulo: 'Subsanar la documentación', re: /subsana|requerimiento/i },
+  { tipo: 'firma', titulo: 'Firma del contrato', re: /firma/i },
+];
+
+const ANCLAS = [
+  { ancla: 'bop', re: /Bolet[íi]n Oficial de la Provincia|BOP\b/i, texto: 'la publicación en el Boletín Oficial de la Provincia' },
+  { ancla: 'bocyl', re: /Bolet[íi]n Oficial de Castilla y Le[óo]n|B\.?O\.?C\.? ?y ?L\.?|BOCYL/i, texto: 'la publicación en el BOCYL' },
+  { ancla: 'web', re: /tuyavivienda\.es|p[áa]gina web/i, texto: 'la publicación en la web oficial' },
+  { ancla: 'notificacion', re: /notificaci[óo]n|comunicaci[óo]n|remita/i, texto: 'la notificación a cada persona' },
+];
+
+/**
+ * Saca del texto de un boletín las reglas de plazo tal y como están escritas:
+ * cuántos días, de qué clase y desde qué hecho se cuentan. No inventa fechas;
+ * eso lo hace `calculaFin` y solo cuando se conoce la fecha del hecho.
+ */
+export function extraeReglasDePlazo(texto) {
+  const reglas = [];
+  const frases = norm(texto).split(/(?<=\.)\s+/);
+  for (const frase of frases) {
+    if (!/plazo|dispondr[áa]n|concluir[áa]/i.test(frase)) continue;
+    const m = frase.match(/(\d{1,2}|[a-záéíóúü]+)\s+d[íi]as\s+(naturales|h[áa]biles)/i);
+    if (!m) continue;
+    const cantidad = cantidadDePlazo(m[1]);
+    if (!cantidad) continue;
+
+    const clase = TIPOS_PLAZO.find((t) => t.re.test(frase));
+    if (!clase) continue;
+    const anclaje = ANCLAS.find((a) => a.re.test(frase));
+
+    reglas.push({
+      tipo: clase.tipo,
+      titulo: clase.titulo,
+      cantidad,
+      unidad: m[2].toLowerCase().startsWith('natural') ? 'naturales' : 'habiles',
+      ancla: anclaje?.ancla ?? null,
+      ancla_texto: anclaje?.texto ?? null,
+      cita: norm(frase),
+    });
+  }
+  return reglas;
+}
+
+/**
+ * Fecha final de un plazo que se cuenta «desde el día siguiente» a un hecho.
+ * En días hábiles se descuentan sábados y domingos; los festivos locales no se
+ * conocen, y por eso quien llama marca el resultado como aproximado.
+ */
+export function calculaFin(desde, cantidad, unidad = 'naturales') {
+  if (!desde || !cantidad) return null;
+  const dia = new Date(`${desde}T00:00:00Z`);
+  if (Number.isNaN(dia.getTime())) return null;
+  let restantes = cantidad;
+  while (restantes > 0) {
+    dia.setUTCDate(dia.getUTCDate() + 1);
+    const finde = dia.getUTCDay() === 0 || dia.getUTCDay() === 6;
+    if (unidad === 'habiles' && finde) continue;
+    restantes--;
+  }
+  return dia.toISOString().slice(0, 10);
+}
+
 // ------------------------------------------------------------ privacidad ----
 
 // Patrones que jamás deben aparecer en data/. Si el día de mañana alguien
@@ -410,6 +512,28 @@ export function selfTest() {
   ok(loc1.localidad === 'Medina del Campo' && loc1.provincia === 'Valladolid', 'localidad con provincia');
   ok(partirLocalidad('Valladolid').provincia === 'Valladolid', 'localidad capital');
   ok(partirLocalidad('Ponferrada').provincia === null, 'localidad sin provincia deducible');
+
+  ok(cantidadDePlazo('quince') === 15 && cantidadDePlazo('14') === 14, 'cantidad en palabras y en cifras');
+  ok(cantidadDePlazo('pocos') === null, 'cantidad que no se entiende → null');
+  ok(fechaDePublicacion('Lunes, 16 de marzo de 2026 … Núm 51 … Lunes, 16 de marzo de 2026 … Valladolid, 9 de marzo de 2026') === '2026-03-16',
+    'fecha de publicación: gana la de la cabecera, no la de la firma');
+  ok(fechaDePublicacion('sin fechas') === null, 'sin fechas → null');
+
+  const reglasPlazo = extraeReglasDePlazo(
+    'Los interesados dispondrán de un plazo máximo para presentar sus solicitudes, y la documentación correspondiente, ' +
+    'que concluirá a los quince días naturales, contados desde el día siguiente a la publicación de este Acuerdo en el ' +
+    'Boletín Oficial de la Provincia de Valladolid. En el plazo de diez días naturales siguientes a contar desde la ' +
+    'anterior publicación en www.tuyavivienda.es, los demandantes disconformes podrán presentar las alegaciones. ' +
+    'La duración del contrato de arrendamiento será de un año.');
+  ok(reglasPlazo.length === 2, 'saca las dos reglas y descarta la frase de la duración del contrato');
+  ok(reglasPlazo[0].tipo === 'solicitudes' && reglasPlazo[0].cantidad === 15 && reglasPlazo[0].unidad === 'naturales' && reglasPlazo[0].ancla === 'bop',
+    'regla de solicitudes completa');
+  ok(reglasPlazo[1].tipo === 'alegaciones' && reglasPlazo[1].cantidad === 10 && reglasPlazo[1].ancla === 'web', 'regla de alegaciones');
+  ok(reglasPlazo[0].cita.includes('quince días naturales'), 'guarda la cita literal');
+
+  ok(calculaFin('2026-03-20', 15) === '2026-04-04', 'quince días naturales desde el día siguiente');
+  ok(calculaFin('2026-03-20', 3, 'habiles') === '2026-03-25', 'tres días hábiles se saltan el fin de semana');
+  ok(calculaFin(null, 15) === null && calculaFin('2026-03-20', null) === null, 'sin datos no hay fecha');
 
   ok(minusculiza('59 VIVIENDAS EN LOS VIVEROS', ['Los Viveros']) === '59 viviendas en Los Viveros', 'minusculiza respeta nombres propios');
   ok(minusculiza('Texto ya normal', []) === 'Texto ya normal', 'minusculiza no toca lo que no grita');

@@ -1,0 +1,173 @@
+{
+  "actualizado": "2026-08-13",
+  "plazos": [
+    {
+      "id": "59-viviendas-alquiler-los-viveros-valladolid:solicitudes:15n",
+      "promocion_id": "59-viviendas-alquiler-los-viveros-valladolid",
+      "tipo": "solicitudes",
+      "titulo": "Presentación de solicitudes",
+      "inicio": "2026-03-21",
+      "fin": "2026-04-04",
+      "hora_limite": null,
+      "regla": {
+        "cantidad": 15,
+        "unidad": "naturales",
+        "ancla": "bop",
+        "ancla_texto": "la publicación en el Boletín Oficial de la Provincia",
+        "desde": "2026-03-20"
+      },
+      "cita": "1.- Los interesados dispondrán de un plazo máximo para presentar sus solicitudes, y la documentación correspondiente, que concluirá a los quince días naturales, contados desde el día siguiente a la publicación de este Acuerdo en el Boletín Oficial de la Provincia de Valladolid.",
+      "confianza": "alta",
+      "fuente_url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-00824.pdf",
+      "fuente_ref": "BOPVA-A-2026-00824",
+      "fuente_sha256": "036dffe0be31ad79171700ceaac1da2b1aa0bf9d6bb1f2d10d83a5d87a61b416",
+      "fuente_publicado": "2026-03-20",
+      "extraido": "2026-08-13",
+      "origen": "automatico"
+    },
+    {
+      "id": "27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid:solicitudes:15n",
+      "promocion_id": "27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid",
+      "tipo": "solicitudes",
+      "titulo": "Presentación de solicitudes",
+      "inicio": "2026-05-29",
+      "fin": "2026-06-12",
+      "hora_limite": null,
+      "regla": {
+        "cantidad": 15,
+        "unidad": "naturales",
+        "ancla": "bop",
+        "ancla_texto": "la publicación en el Boletín Oficial de la Provincia",
+        "desde": "2026-05-28"
+      },
+      "cita": "1.-Los interesados dispondrán de un plazo máximo para presentar sus solicitudes, y la documentación correspondiente, que concluirá a los quince días naturales, contados desde el día siguiente a la publicación de este Acuerdo en el Boletín Oficial de la Provincia correspondiente.",
+      "confianza": "alta",
+      "fuente_url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-01557.pdf",
+      "fuente_ref": "BOPVA-A-2026-01557",
+      "fuente_sha256": "d797bf629ea2388c1037ea317c8384a3ada7d5fe8dfa3a3342b2bb30cef7b399",
+      "fuente_publicado": "2026-05-28",
+      "extraido": "2026-08-13",
+      "origen": "automatico"
+    },
+    {
+      "id": "27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid:alegaciones:10n",
+      "promocion_id": "27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid",
+      "tipo": "alegaciones",
+      "titulo": "Alegaciones al listado",
+      "inicio": null,
+      "fin": null,
+      "hora_limite": null,
+      "regla": {
+        "cantidad": 10,
+        "unidad": "naturales",
+        "ancla": "web",
+        "ancla_texto": "la publicación en la web oficial",
+        "desde": null
+      },
+      "cita": "En el plazo de diez días naturales siguientes a contar desde la anterior publicación en www.tuyavivienda.es , los demandantes que estén disconformes con la confección de dicha lista, podrán presentar las alegaciones y documentos que estimen convenientes en defensa de sus intereses en el registro electrónico de Somacyl: https://sede.Somacyl.es/ web/guest/tramitacion-y-registro , o en la dirección de correo electrónico tuyavivienda@ Somacyl.es.",
+      "confianza": "sin_fecha",
+      "fuente_url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOCYL-D-04052026-82-22.pdf",
+      "fuente_ref": "BOCYL-D-04052026-82-22",
+      "fuente_sha256": "a5152cd75a2b01c989ba089be1de121950a9c3ba55297c15605a33a0c61f16b9",
+      "fuente_publicado": "2026-05-04",
+      "extraido": "2026-08-13",
+      "origen": "automatico"
+    },
+    {
+      "id": "27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid:firma:14n",
+      "promocion_id": "27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid",
+      "tipo": "firma",
+      "titulo": "Firma del contrato",
+      "inicio": null,
+      "fin": null,
+      "hora_limite": null,
+      "regla": {
+        "cantidad": 14,
+        "unidad": "naturales",
+        "ancla": "notificacion",
+        "ancla_texto": "la notificación a cada persona",
+        "desde": null
+      },
+      "cita": "Dicha firma deberá realizarse dentro del plazo máximo de 14 días naturales contados desde el siguiente al de la referida notificación.",
+      "confianza": "sin_fecha",
+      "fuente_url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-01557.pdf",
+      "fuente_ref": "BOPVA-A-2026-01557",
+      "fuente_sha256": "d797bf629ea2388c1037ea317c8384a3ada7d5fe8dfa3a3342b2bb30cef7b399",
+      "fuente_publicado": "2026-05-28",
+      "extraido": "2026-08-13",
+      "origen": "automatico"
+    },
+    {
+      "id": "27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid:subsanacion:3n",
+      "promocion_id": "27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid",
+      "tipo": "subsanacion",
+      "titulo": "Subsanar la documentación",
+      "inicio": null,
+      "fin": null,
+      "hora_limite": null,
+      "regla": {
+        "cantidad": 3,
+        "unidad": "naturales",
+        "ancla": "notificacion",
+        "ancla_texto": "la notificación a cada persona",
+        "desde": null
+      },
+      "cita": "Los requeridos dispondrán de un plazo máximo de tres días naturales, contados desde el día siguiente a aquel en que SOMACYL remita dicha comunicación, para atender el requerimiento.",
+      "confianza": "sin_fecha",
+      "fuente_url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-01557.pdf",
+      "fuente_ref": "BOPVA-A-2026-01557",
+      "fuente_sha256": "d797bf629ea2388c1037ea317c8384a3ada7d5fe8dfa3a3342b2bb30cef7b399",
+      "fuente_publicado": "2026-05-28",
+      "extraido": "2026-08-13",
+      "origen": "automatico"
+    },
+    {
+      "id": "59-viviendas-alquiler-los-viveros-valladolid:alegaciones:10n",
+      "promocion_id": "59-viviendas-alquiler-los-viveros-valladolid",
+      "tipo": "alegaciones",
+      "titulo": "Alegaciones al listado",
+      "inicio": null,
+      "fin": null,
+      "hora_limite": null,
+      "regla": {
+        "cantidad": 10,
+        "unidad": "naturales",
+        "ancla": "web",
+        "ancla_texto": "la publicación en la web oficial",
+        "desde": null
+      },
+      "cita": "En el plazo de diez días naturales siguientes a contar desde la anterior publicación en www.tuyavivienda.es , los demandantes que estén disconformes con la confección de dicha lista, podrán presentar las alegaciones y documentos que estimen convenientes en defensa de sus intereses en el registro electrónico de SOMACYL: https://sede.",
+      "confianza": "sin_fecha",
+      "fuente_url": "https://tuyavivienda.es/wp-content/uploads/2026/04/BOCYL-D-16032026-51-24.pdf",
+      "fuente_ref": "BOCYL-D-16032026-51-24",
+      "fuente_sha256": "1c54798976609ed80a6b37a4406284436fc66159af0689bd650b27619c0b3679",
+      "fuente_publicado": "2026-03-16",
+      "extraido": "2026-08-13",
+      "origen": "automatico"
+    },
+    {
+      "id": "59-viviendas-alquiler-los-viveros-valladolid:firma:14n",
+      "promocion_id": "59-viviendas-alquiler-los-viveros-valladolid",
+      "tipo": "firma",
+      "titulo": "Firma del contrato",
+      "inicio": null,
+      "fin": null,
+      "hora_limite": null,
+      "regla": {
+        "cantidad": 14,
+        "unidad": "naturales",
+        "ancla": "notificacion",
+        "ancla_texto": "la notificación a cada persona",
+        "desde": null
+      },
+      "cita": "Dicha firma deberá realizarse dentro del plazo máximo de 14 días naturales contados desde el siguiente al de la referida notificación.",
+      "confianza": "sin_fecha",
+      "fuente_url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-00824.pdf",
+      "fuente_ref": "BOPVA-A-2026-00824",
+      "fuente_sha256": "036dffe0be31ad79171700ceaac1da2b1aa0bf9d6bb1f2d10d83a5d87a61b416",
+      "fuente_publicado": "2026-03-20",
+      "extraido": "2026-08-13",
+      "origen": "automatico"
+    }
+  ]
+}

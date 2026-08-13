@@ -7,6 +7,7 @@
 
 (function () {
   var CLAVE = 'vivienda:seguidas';
+  var CLAVE_VISITA = 'vivienda:ultima-visita';
 
   function seguidas() {
     try { return JSON.parse(localStorage.getItem(CLAVE)) || []; } catch (e) { return []; }
@@ -64,6 +65,29 @@
     bloqueTuyo.hidden = encontradas === 0;
   }
   pintaTuyo();
+
+  // ---------- novedades desde tu última visita ----------
+  // La fecha de la última visita también vive solo aquí. Se compara con la
+  // fecha de cada aviso ya renderizado en el HTML: no se pide nada al servidor.
+  var bloqueNovedades = document.getElementById('novedades');
+  if (bloqueNovedades) {
+    var anterior = null;
+    try { anterior = localStorage.getItem(CLAVE_VISITA); } catch (e) { /* modo privado */ }
+    var avisos = [].slice.call(bloqueNovedades.querySelectorAll('[data-fecha]'));
+    var nuevos = anterior ? avisos.filter(function (a) { return a.dataset.fecha > anterior; }) : [];
+
+    if (anterior && nuevos.length) {
+      avisos.forEach(function (a) { a.classList.toggle('es-nuevo', nuevos.indexOf(a) !== -1); });
+      var resumen = bloqueNovedades.querySelector('[data-resumen]');
+      if (resumen) {
+        resumen.textContent = nuevos.length === 1
+          ? 'Hay 1 novedad desde la última vez que entraste (' + anterior + ').'
+          : 'Hay ' + nuevos.length + ' novedades desde la última vez que entraste (' + anterior + ').';
+        resumen.hidden = false;
+      }
+    }
+    try { localStorage.setItem(CLAVE_VISITA, new Date().toISOString().slice(0, 10)); } catch (e) { /* modo privado */ }
+  }
 
   // ---------- filtros de la portada ----------
   if (!listado) return;

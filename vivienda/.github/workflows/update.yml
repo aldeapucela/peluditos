@@ -1,8 +1,8 @@
-name: Actualizar datos y avisar
+name: Actualizar datos
 
-# Una vez al día: lee las fichas oficiales, detecta lo que ha cambiado, avisa
-# por correo de lo que corresponda y publica. Si algo falla antes del envío, no
-# se manda nada: es preferible un aviso tarde que un aviso falso.
+# Una vez al día: lee las fichas oficiales, saca los plazos de los boletines
+# que enlazan, detecta lo que ha cambiado y publica. Los avisos salen por la
+# propia web, por RSS y por calendario: no hay correo ni suscriptores.
 
 on:
   schedule:
@@ -31,31 +31,20 @@ jobs:
         with:
           node-version: 20
 
-      - name: Pruebas (parser, avisos, correo, privacidad)
+      - name: Pruebas (parser, plazos, avisos, privacidad)
         run: npm test
 
       - name: Leer las fichas oficiales
         run: node scripts/sync.mjs
+
+      - name: Extraer los plazos de los boletines oficiales
+        run: node scripts/plazos.mjs
 
       - name: Detectar novedades y plazos que se acercan
         run: node scripts/avisos.mjs
 
       - name: Test de privacidad
         run: node scripts/check-privacidad.mjs
-
-      - name: Avisar por correo
-        # Sin secretos configurados no envía nada y no falla: el resto del
-        # sistema (web, RSS y calendario) sigue funcionando igual.
-        env:
-          SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
-          SMTP_SEGURO: ${{ secrets.SMTP_SEGURO }}
-          AVISOS_DE: ${{ secrets.AVISOS_DE }}
-          AVISOS_PARA: ${{ secrets.AVISOS_PARA }}
-          AVISOS_URGENCIA: ${{ vars.AVISOS_URGENCIA }}
-        run: node scripts/notificar.mjs
 
       - name: Commitear si hay cambios
         run: |
