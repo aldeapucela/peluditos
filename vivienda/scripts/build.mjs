@@ -20,6 +20,11 @@ const NOMBRES_PROPIOS = json('config/estilo.json', { nombres_propios: [] }).nomb
 const historico = json('data/historico.json', { registros: [] });
 const promociones = indice.promociones ?? [];
 
+// En modo `--single` se genera además un único HTML autocontenido con todas las
+// páginas dentro (vista previa compartible mientras no hay dominio).
+const SOLO_UNA = process.argv.includes('--single');
+const paginas = [];
+
 fs.rmSync(DIST, { recursive: true, force: true });
 fs.mkdirSync(DIST, { recursive: true });
 
@@ -42,9 +47,15 @@ for (const f of ['CNAME', '.nojekyll']) if (existe(f)) copia(f, f);
 
 console.log(`✔ dist/ generado: ${promociones.length} fichas de promoción + 6 páginas`);
 
+if (SOLO_UNA) {
+  escribe('vista-previa.html', unaSolaPagina());
+  console.log('✔ dist/vista-previa.html: todo el sitio en un único fichero');
+}
+
 // ------------------------------------------------------------- plantillas ----
 
 function layout({ titulo, descripcion, ruta, cuerpo, activo = '' }) {
+  if (SOLO_UNA) paginas.push({ titulo, ruta, cuerpo });
   const t = `${titulo} · Vivienda pública en Valladolid`;
   return `<!doctype html>
 <html lang="es">
@@ -392,6 +403,93 @@ function matomo() {
     g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s); })();
 </script>
 `;
+}
+
+// ------------------------------------------------- vista previa de 1 fichero ----
+
+/**
+ * Reúne todas las páginas en un único HTML autocontenido: los enlaces internos
+ * pasan a `#/ruta/` y un router mínimo enseña la sección que toque. Sirve para
+ * enseñar el sitio antes de tener dominio; el sitio de verdad son las páginas
+ * separadas de dist/.
+ */
+function unaSolaPagina() {
+  const css = fs.readFileSync(path.join(RAIZ, 'src/styles.css'), 'utf8');
+  const filtros = fs.readFileSync(path.join(RAIZ, 'src/app.js'), 'utf8');
+  const utiles = paginas.filter((p) => p.ruta !== '/404.html');
+
+  const secciones = utiles.map((p) => `<section class="pagina" data-ruta="${esc(p.ruta)}" hidden>
+${enlacesInternos(p.cuerpo)}
+</section>`).join('\n');
+
+  return `<title>Vivienda Pucela</title>
+<style>
+${css}
+.pagina[hidden] { display: none; }
+.previo {
+  background: var(--brand-100); color: var(--brand-700);
+  padding: .6rem 0; font-size: .85rem; border-bottom: 1px solid var(--linea);
+}
+.previo p { margin: 0; }
+</style>
+<div class="previo"><div class="container"><p><strong>Vista previa.</strong> Todo el sitio en un solo fichero,
+  con los datos leídos el ${esc(indice.actualizado)}. La web definitiva se publicará en
+  <code>vivienda.aldeapucela.org</code>.</p></div></div>
+<header class="topbar">
+  <div class="container topbar__inner">
+    <a class="marca" href="#/">
+      <span class="marca__kicker">Aldea Pucela</span>
+      <span class="marca__titulo">Vivienda</span>
+    </a>
+    <nav class="menu" aria-label="Menú principal">
+      <a href="#/">Promociones</a>
+      <a href="#/como-funciona/">Cómo funciona</a>
+      <a href="#/datos/">Datos</a>
+      <a href="#/fuentes/">Fuentes</a>
+      <a href="#/privacidad/">Privacidad</a>
+    </nav>
+  </div>
+</header>
+<main id="contenido" class="container">
+${secciones}
+</main>
+<footer class="pie">
+  <div class="container">
+    <p><strong>Esta web no es oficial.</strong> Es un proyecto vecinal de la comunidad de
+      <a href="https://aldeapucela.org" rel="noopener">Aldea Pucela</a> que ordena información ya publicada por
+      tuyavivienda.es (SOMACYL, Junta de Castilla y León). Para cualquier trámite, la fuente válida es la
+      oficial y el BOCYL.</p>
+    <p class="fino">No publicamos datos personales de solicitantes ni adjudicatarios.
+      Código AGPL-3.0 · Datos CC BY-SA 4.0 · Hecho por vecinas y vecinos voluntarios</p>
+  </div>
+</footer>
+<script>
+(function () {
+  var secciones = [].slice.call(document.querySelectorAll('.pagina'));
+  function pinta() {
+    var ruta = location.hash.replace(/^#/, '') || '/';
+    var elegida = secciones.filter(function (s) { return s.dataset.ruta === ruta; })[0] || secciones[0];
+    secciones.forEach(function (s) { s.hidden = s !== elegida; });
+    document.title = 'Vivienda Pucela';
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', pinta);
+  pinta();
+})();
+${filtros}
+</script>
+`;
+}
+
+/**
+ * `href="/x/"` → `href="#/x/"` (los externos se quedan igual). Los enlaces a
+ * los JSON se quedan sin destino: en un fichero suelto no hay `data/`, así que
+ * se muestran como nombres de fichero en vez de como enlaces rotos.
+ */
+function enlacesInternos(html) {
+  return html
+    .replace(/<a href="\/data\/[^"]*"[^>]*>([\s\S]*?)<\/a>/g, '<code>$1</code>')
+    .replace(/href="\/(?!\/)([^"]*)"/g, (_, resto) => `href="#/${resto}"`);
 }
 
 // -------------------------------------------------------------- markdown ----

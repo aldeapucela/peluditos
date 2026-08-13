@@ -27,8 +27,11 @@
   --ancho: 68rem;
 }
 
+/* Modo oscuro. Se declara dos veces a propósito: por preferencia del sistema y
+   por atributo, para que también funcione dentro de visores que fijan el tema
+   con data-theme (la vista previa de una sola página, por ejemplo). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --papel: #14121a;
     --tarjeta: #1d1a26;
     --tinta: #f1eef7;
@@ -47,6 +50,26 @@
     --proxima-fondo: #33280f;
     --sombra: none;
   }
+}
+
+:root[data-theme="dark"] {
+  --papel: #14121a;
+  --tarjeta: #1d1a26;
+  --tinta: #f1eef7;
+  --tinta-suave: #b3abc4;
+  --linea: #322c40;
+  --brand-50: #241f30;
+  --brand-100: #2c2540;
+  --brand-200: #3d3357;
+  --brand-600: #c2aee4;
+  --brand-700: #d8c9ee;
+  --libre: #6ddba0;
+  --libre-fondo: #12301f;
+  --ocupada: #e2a3a9;
+  --ocupada-fondo: #33191c;
+  --proxima: #e8c579;
+  --proxima-fondo: #33280f;
+  --sombra: none;
 }
 
 * { box-sizing: border-box; }
@@ -116,8 +139,7 @@ main { padding-block: 2rem 3rem; }
   border: 1px solid var(--linea); border-radius: 999px; padding: .35rem .9rem;
 }
 .filtros button:hover { border-color: var(--brand-600); }
-.filtros button.activo { background: var(--brand-600); border-color: var(--brand-600); color: #fff; }
-@media (prefers-color-scheme: dark) { .filtros button.activo { color: #1a1622; } }
+.filtros button.activo { background: var(--brand-600); border-color: var(--brand-600); color: var(--papel); }
 
 /* ---------- tarjetas ---------- */
 .tarjetas {
@@ -159,7 +181,6 @@ main { padding-block: 2rem 3rem; }
   border-left: 4px solid currentColor; border-radius: .4rem;
   padding: .75rem 1rem; font-size: .92rem;
 }
-@media (prefers-color-scheme: dark) { .aviso { color: var(--proxima); } }
 
 /* ---------- tablas ---------- */
 .tabla-scroll { overflow-x: auto; margin: 1rem 0; }
