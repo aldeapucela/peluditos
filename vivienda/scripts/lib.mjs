@@ -323,6 +323,24 @@ export function rutaDeUrl(url) {
   try { return new URL(url).pathname; } catch { return url; }
 }
 
+/**
+ * Los títulos oficiales vienen en MAYÚSCULAS y gritan. Los pasamos a minúscula
+ * y devolvemos sus mayúsculas a los nombres propios que se le indiquen
+ * (config/estilo.json, la localidad, la provincia…).
+ */
+export function minusculiza(s, propios = []) {
+  if (!s) return '';
+  let t = s;
+  if (s === s.toUpperCase()) {
+    const minus = s.toLowerCase().replace(/\s+/g, ' ').trim();
+    t = minus.charAt(0).toUpperCase() + minus.slice(1);
+  }
+  for (const propio of propios.filter(Boolean)) {
+    t = t.replace(new RegExp(`\\b${propio.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi'), propio);
+  }
+  return t;
+}
+
 // ------------------------------------------------------------ privacidad ----
 
 // Patrones que jamás deben aparecer en data/. Si el día de mañana alguien
@@ -392,6 +410,9 @@ export function selfTest() {
   ok(loc1.localidad === 'Medina del Campo' && loc1.provincia === 'Valladolid', 'localidad con provincia');
   ok(partirLocalidad('Valladolid').provincia === 'Valladolid', 'localidad capital');
   ok(partirLocalidad('Ponferrada').provincia === null, 'localidad sin provincia deducible');
+
+  ok(minusculiza('59 VIVIENDAS EN LOS VIVEROS', ['Los Viveros']) === '59 viviendas en Los Viveros', 'minusculiza respeta nombres propios');
+  ok(minusculiza('Texto ya normal', []) === 'Texto ya normal', 'minusculiza no toca lo que no grita');
 
   ok(indiciosPersonales('12345678Z').includes('DNI/NIE'), 'PII: DNI');
   ok(indiciosPersonales('vecina@example.org').includes('email'), 'PII: email');

@@ -97,7 +97,14 @@ anunciadas y las filas de su tabla (anotado como pregunta abierta, no «corregid
 
 ## 3. Fases siguientes
 
-### F3 · Cronología por promoción
+### F3 · Avisos ✔ hecho
+Detección diaria de cambios (`scripts/avisos.mjs`) y cuatro canales sin servidor: seguimiento local
+en el navegador, calendario `.ics` con alarmas a 21/14/7/3/1 días, RSS general y por promoción, y
+correo por SMTP a la lista de la comunidad (cliente propio, sin dependencias). Los plazos se anotan
+a mano en `config/plazos.json` con enlace al documento, y CI rechaza cualquiera sin fuente.
+*Pendiente:* que la comunidad decida la dirección de la lista y cargue los secrets SMTP.
+
+### F3b · Cronología por promoción
 Hoy la ficha enlaza los documentos oficiales pero no los sitúa en el tiempo. Falta convertir cada
 documento en un hito fechado (convocatoria, listado provisional, alegaciones, listado definitivo,
 sorteo, adjudicación) para dibujar la línea temporal del plan original.
@@ -137,5 +144,10 @@ además publica **el dato que hoy no existe en ninguna parte**: cuánta gente pi
    respeta su `robots.txt`, que no se tocan los listados con nombres, y de paso registrar la
    solicitud de transparencia de F6. Es más barato que enterarse por un burofax.
 5. **BOP Radar:** ¿extender o replicar? (recomendación: extender).
-6. **Cadencia del cron.** Ahora, una vez al día. Si la fuente actualiza sus tablas más a menudo de
+6. **Lista de correo.** ¿Qué dirección usamos para `AVISOS_PARA` y quién la administra? Mientras no
+   la haya, el sistema avisa igual por calendario, RSS y web.
+7. **Quién anota los plazos.** Basta con que alguien lea el anuncio del boletín cuando salga y
+   añada cuatro líneas a `config/plazos.json`; el sistema reclama los que falten. ¿Lo asume alguien
+   en concreto o lo abrimos a la comunidad?
+8. **Cadencia del cron.** Ahora, una vez al día. Si la fuente actualiza sus tablas más a menudo de
    lo que parece, subirlo a dos veces cuesta lo mismo.

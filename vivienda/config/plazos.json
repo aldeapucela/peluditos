@@ -1,0 +1,15 @@
+{
+  "_nota": "Plazos oficiales, anotados a mano. Los publica el BOCYL o el Boletín de la Provincia dentro de un PDF que este proyecto no descarga, así que los pone una persona leyendo el documento. REGLA: ninguna fecha entra aquí sin 'fuente_url' apuntando al documento que la dice. El sync avisa cuando detecta una convocatoria sin plazo registrado.",
+  "_campos": {
+    "promocion_id": "id de la promoción, tal y como aparece en data/promociones.json",
+    "tipo": "solicitudes | alegaciones | sorteo | eleccion | otro",
+    "inicio": "AAAA-MM-DD o null si el documento no lo fija",
+    "fin": "AAAA-MM-DD o null si es un plazo abierto",
+    "hora_limite": "HH:MM opcional, si el documento la fija",
+    "titulo": "cómo se llama el plazo en lenguaje claro",
+    "fuente_url": "enlace al documento oficial que fija la fecha (obligatorio)",
+    "fuente_ref": "referencia del documento, p. ej. BOCYL-D-16032026-51-24",
+    "anotado_por": "quién lo anotó y cuándo, para poder preguntarle"
+  },
+  "plazos": []
+}

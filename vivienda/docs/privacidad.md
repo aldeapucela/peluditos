@@ -40,6 +40,21 @@ Hechos sobre edificios, no sobre personas:
   información sobre cómo avanza una lista, será de forma anónima y agregada, y nunca con nombres,
   correos o números de expediente.
 
+## Los avisos no crean una base de datos
+
+Para que no se te pase un plazo hay que avisarte, y avisar suele significar guardar tu correo. Aquí
+no:
+
+- **«Me interesa»** guarda los identificadores de las promociones que sigues en el
+  almacenamiento local de **tu navegador**. No viaja a ningún servidor, no hay cuenta y nadie —
+  nosotros incluidos— puede saber qué sigues. Si borras los datos del navegador, se va.
+- **Calendario y RSS** son ficheros estáticos que descarga tu programa: quien pide el fichero es tu
+  móvil o tu lector, y nosotros no llevamos registro de quién lo hace.
+- **Correo:** el envío va a la lista de la comunidad. **El proyecto no almacena direcciones**: el
+  notificador recibe el destino en una variable de entorno del despliegue, lo usa y lo olvida. Ni
+  siquiera los mensajes de error registran a quién se estaba escribiendo. Las altas y bajas las
+  gestiona la lista, no este repositorio.
+
 ## Y de quien visita esta web
 
 - No hay cuentas, ni registro, ni formularios, ni cookies de sesión.

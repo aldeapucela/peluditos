@@ -34,11 +34,22 @@ se pregunta, no se busca la manera de saltarla.
    SOMACYL y al boletín para cualquier trámite. Nunca se sugiere que aquí se pueda consultar un
    expediente.
 
-9. **0 € DE INFRAESTRUCTURA.** GitHub Actions + GitHub Pages y nada más. Sin base de datos, sin
+9. **NINGUNA DIRECCIÓN DE CORREO EN EL REPOSITORIO.** El proyecto no guarda
+   suscriptores. Quien quiere avisos marca lo suyo en su navegador (localStorage),
+   se suscribe al calendario o al RSS, o se apunta a la lista de correo de la
+   comunidad, que es quien gestiona altas y bajas. El notificador recibe el destino
+   por variable de entorno, lo usa y lo olvida: no lo escribe en disco ni en los logs.
+
+10. **NINGÚN PLAZO SIN FUENTE.** Las fechas de convocatorias y alegaciones las
+    anota una persona leyendo el documento oficial, y `config/plazos.json` exige
+    `fuente_url`. Un plazo mal puesto hace que alguien pierda una convocatoria:
+    aquí no se estima, no se deduce y no se copia de la prensa.
+
+11. **0 € DE INFRAESTRUCTURA.** GitHub Actions + GitHub Pages y nada más. Sin base de datos, sin
    servidor, sin servicios que puedan generar factura. Cualquier dependencia nueva se discute
    antes: hoy el proyecto no tiene ninguna.
 
-10. **AMABLE CON LA FUENTE.** Una petición cada 2 segundos, una vez al día, con user-agent
+12. **AMABLE CON LA FUENTE.** Una petición cada 2 segundos, una vez al día, con user-agent
     identificable y contacto. Si SOMACYL pide algo, se atiende primero y se discute después.
 
 ## Cómo trabajar aquí

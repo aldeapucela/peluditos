@@ -33,7 +33,24 @@ for (const f of fuentes?.fuentes ?? []) {
   }
 }
 
-// 3. No puede haber PDF guardados en el repo: no descargamos documentos.
+// 3. Ningún plazo sin fuente ni con fecha rara (invariante 2: cero contenido
+//    inventado). Un plazo mal puesto hace que alguien pierda una convocatoria.
+const plazos = leeSiExiste(path.join(RAIZ, 'config/plazos.json'))?.plazos ?? [];
+for (const [i, z] of plazos.entries()) {
+  const donde = `config/plazos.json → plazos[${i}]`;
+  if (!z.fuente_url) problemas.push(`${donde}: plazo sin 'fuente_url' (¿de dónde sale la fecha?)`);
+  if (!z.promocion_id) problemas.push(`${donde}: plazo sin 'promocion_id'`);
+  for (const campo of ['inicio', 'fin']) {
+    const v = z[campo];
+    if (v == null) continue;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(v) || Number.isNaN(Date.parse(`${v}T00:00:00Z`))) {
+      problemas.push(`${donde}: '${campo}' no es una fecha AAAA-MM-DD válida («${v}»)`);
+    }
+  }
+  if (z.inicio && z.fin && z.inicio > z.fin) problemas.push(`${donde}: el plazo termina antes de empezar`);
+}
+
+// 4. No puede haber PDF guardados en el repo: no descargamos documentos.
 for (const dir of ['data', 'fixtures', 'ingest']) {
   const base = path.join(RAIZ, dir);
   if (!fs.existsSync(base)) continue;

@@ -1,0 +1,322 @@
+{
+  "actualizado": "2026-08-13",
+  "promociones": {
+    "10-viviendas-de-proteccion-publica-en-alquiler-en-astorga-leon": {
+      "estado_procedimiento": "cerrado",
+      "estado_obra": "Finalizada",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2025/06/747327-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-ASTORGA-signed.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2024/07/MC-Astorga_memoria-de-calidades.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": true,
+        "libres": 0,
+        "total": 10
+      }
+    },
+    "10-viviendas-de-proteccion-publica-en-alquiler-en-el-barco-de-avila-avila": {
+      "estado_procedimiento": "cerrado",
+      "estado_obra": "Finalizada",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2025/06/747329-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-EL-BARCO-DE-AVILA-signed.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2024/07/MC-El-Barco-de-Avila_memoria-de-calidades.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": true,
+        "libres": 0,
+        "total": 10
+      }
+    },
+    "10-viviendas-de-proteccion-publica-en-alquiler-en-paredes-de-nava-palencia": {
+      "estado_procedimiento": "cerrado",
+      "estado_obra": "Finalizadas",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2025/01/ACUERDO-ADJUDICACION.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2024/12/MC-PAREDES-DE-NAVA.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2025/11/935878-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-PAREDES-DE-NAVA-signed.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": true,
+        "libres": 0,
+        "total": 10
+      }
+    },
+    "10-viviendas-promocion-publica-alquiler-puebla-de-sanabria-zamora": {
+      "estado_procedimiento": "cerrado",
+      "estado_obra": "Finalizada",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-PUEBLA-DE-SANABRIA.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": true,
+        "libres": 0,
+        "total": 10
+      }
+    },
+    "100-viviendas-promocion-publica-alquiler-leon": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "114-viviendas-de-promocion-publica-en-alquiler-en-parquesol-valladolid": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "12-viviendas-de-proteccion-publica-en-alquiler-en-penaranda-de-bracamonte-salama": {
+      "estado_procedimiento": "cerrado",
+      "estado_obra": "Finalizadas",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2025/04/SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-PENARANDA-definitivo.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-PENARANDA-DE-BRACAMONTE.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "144-viviendas-de-promocion-publica-en-alquiler-en-burgos": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "15-viviendas-santa-cristina-de-la-polvorosa": {
+      "estado_procedimiento": null,
+      "estado_obra": "Entregada",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "152-viviendas-de-promocion-publica-en-alquiler-en-parque-alameda-valladolid": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "17-viviendas-de-proteccion-publica-en-alquiler-en-soria": {
+      "estado_procedimiento": "cerrado",
+      "estado_obra": "Finalizada",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-SORIA-1.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": true,
+        "libres": 0,
+        "total": 17
+      }
+    },
+    "19-viviendas-de-protec-publica-en-venta-en-villalon-de-campos-valladolid": {
+      "estado_procedimiento": "cerrado",
+      "estado_obra": "Finalizada",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2025/05/SEGUNDA-CONVOCATORIA-ADJUDICACION-VIVIENDAS-CAMINEROS-VILLALON-DE-CAMPOS.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2024/05/MC-Villalon-de-Campos.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": true,
+        "libres": 0,
+        "total": 15
+      }
+    },
+    "20-viviendas-de-promocion-publica-en-alquiler-en-ponferrada": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2026/05/BOCYL-D-04052026-82-22.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-01557.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/07/LISTADO-PROVISIONAL-VIVIENDAS-MEDINA-DEL-CAMPO.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/04/MEMORIA-DE-CALIDADES_MEDINA.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/04/FICHAS-COLIVING_MEDINA.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": true,
+        "libres": 27,
+        "total": 27
+      }
+    },
+    "28-viviendas-de-promocion-publica-en-alquiler-en-miranda-de-ebro-burgos": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "28-viviendas-de-proteccion-publica-en-alquiler-en-valencia-de-don-juan-leon": {
+      "estado_procedimiento": "cerrado",
+      "estado_obra": "Finalizadas",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2025/04/SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-VALENCIA-DE-DON-JUAN.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-Valencia-de-Don-Juan-DEF.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": true,
+        "libres": 0,
+        "total": 17
+      }
+    },
+    "38-viviendas-de-promocion-publica-en-aranda-de-duero-burgos": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "38-viviendas-promocion-publica-colaborativa-soria": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "40-viviendas-promocion-publica-colaborativa-alquiler-avila": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "42-viviendas-de-promocion-publica-en-alquiler-en-zamora": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "50-viviendas-de-promocion-publica-en-alquiler-en-mieses-valladolid": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "50-viviendas-promocion-publica-alquiler-colaborativa-palencia": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "59-viviendas-alquiler-los-viveros-valladolid": {
+      "estado_procedimiento": "cerrado",
+      "estado_obra": "En ejecución",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2026/07/BOPVA-A-2026-01944.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/06/BOCYL-D-29062026-123-15.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/04/BOCYL-D-16032026-51-24.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/04/CORRECCION-ERRORES-BOCYL-1.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/04/CORRECCION-ERRORES-BOCYL-2.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/05/CORRECCION-de-errores-BOP-3.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-00824.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/03/FAQs-procedimiento-alquiler-vivienda-joven-004.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/06/PUBLICACION-LISTA-DEFINITIVA-Y-FIRMA-CONTRATOS-VIVIENDAS-COLABORATIVAS.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/03/MC-ALQUILER-JOVEN_SABATINI-A4_memoria-de-calidades.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2026/03/FICHA-COLIVING_r6.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": true,
+        "libres": 59,
+        "total": 59
+      }
+    },
+    "7-viviendas-promocion-publica-viana-de-cega-valladolid": {
+      "estado_procedimiento": null,
+      "estado_obra": "Entregada",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "8-viviendas-de-promocion-publica-ciudad-rodrigo": {
+      "estado_procedimiento": "cerrado",
+      "estado_obra": "Finalizada",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2025/06/747328-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-CIUDAD-RODRIGO-signed.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2024/09/MC-CIUDAD-RODRIGO.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    },
+    "9-viviendas-alquiler-zamora": {
+      "estado_procedimiento": "cerrado",
+      "estado_obra": "Finalizada",
+      "documentos": [
+        "https://tuyavivienda.es/wp-content/uploads/2025/04/SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-ZAMORA-signed.pdf",
+        "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-ZAMORA.pdf"
+      ],
+      "disponibilidad": {
+        "publicada": true,
+        "libres": 0,
+        "total": 9
+      }
+    },
+    "93-viviendas-promocion-publica-colaborativa-alquier-segovia": {
+      "estado_procedimiento": null,
+      "estado_obra": "En ejecución",
+      "documentos": [],
+      "disponibilidad": {
+        "publicada": false,
+        "libres": null,
+        "total": null
+      }
+    }
+  }
+}

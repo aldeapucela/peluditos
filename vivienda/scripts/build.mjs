@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { minusculiza } from './lib.mjs';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(RAIZ, 'dist');
@@ -18,7 +19,15 @@ const PROVINCIA_POR_DEFECTO = 'Valladolid';
 const indice = json('data/promociones.json');
 const NOMBRES_PROPIOS = json('config/estilo.json', { nombres_propios: [] }).nombres_propios ?? [];
 const historico = json('data/historico.json', { registros: [] });
+const avisos = json('data/avisos.json', { avisos: [] }).avisos ?? [];
+// PLAZOS_DEMO=1 carga el fichero de ejemplo (fechas inventadas) para poder
+// enseñar cómo queda la interfaz de plazos antes de que haya uno real. El
+// sitio publicado nunca se genera así: lo delata el aviso de la propia página.
+const DEMO = process.env.PLAZOS_DEMO === '1';
+const PLAZOS = (json(DEMO ? 'config/plazos.ejemplo.json' : 'config/plazos.json', { plazos: [] }).plazos ?? [])
+  .filter((z) => z.fuente_url);  // sin fuente, el plazo no se publica (invariante 2)
 const promociones = indice.promociones ?? [];
+const HOY = new Date().toISOString().slice(0, 10);
 
 // En modo `--single` se genera además un único HTML autocontenido con todas las
 // páginas dentro (vista previa compartible mientras no hay dominio).
@@ -36,6 +45,15 @@ escribe('como-funciona/index.html', paginaDoc('docs/proceso.md', 'Cómo funciona
 escribe('privacidad/index.html', paginaDoc('docs/privacidad.md', 'Privacidad', '/privacidad/'));
 escribe('fuentes/index.html', paginaDoc('docs/fuentes.md', 'De dónde salen los datos', '/fuentes/'));
 escribe('datos/index.html', paginaDatos());
+escribe('avisos/index.html', paginaAvisos());
+escribe('avisos.xml', feedRss(avisos.slice(0, 50), 'Avisos de vivienda pública en Valladolid', '/avisos.xml'));
+escribe('plazos.ics', calendario(PLAZOS));
+for (const p of promociones) {
+  const suyos = avisos.filter((a) => a.promocion_id === p.id).slice(0, 30);
+  escribe(`promocion/${p.id}/avisos.xml`, feedRss(suyos, `Avisos · ${p.nombre}`, `/promocion/${p.id}/avisos.xml`));
+  const plazos = PLAZOS.filter((z) => z.promocion_id === p.id);
+  if (plazos.length) escribe(`promocion/${p.id}/plazos.ics`, calendario(plazos));
+}
 escribe('404.html', pagina404());
 escribe('sitemap.xml', sitemap());
 escribe('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITIO}/sitemap.xml\n`);
@@ -45,7 +63,7 @@ copia('src/app.js', 'app.js');
 copiaDir('data', 'data');
 for (const f of ['CNAME', '.nojekyll']) if (existe(f)) copia(f, f);
 
-console.log(`✔ dist/ generado: ${promociones.length} fichas de promoción + 6 páginas`);
+console.log(`✔ dist/ generado: ${promociones.length} fichas · ${PLAZOS.length} plazos · ${avisos.length} avisos`);
 
 if (SOLO_UNA) {
   escribe('vista-previa.html', unaSolaPagina());
@@ -84,6 +102,7 @@ ${matomo()}</head>
     <nav class="menu" aria-label="Menú principal">
       <a href="/"${activo === 'inicio' ? ' aria-current="page"' : ''}>Promociones</a>
       <a href="/como-funciona/"${activo === 'como' ? ' aria-current="page"' : ''}>Cómo funciona</a>
+      <a href="/avisos/"${activo === 'avisos' ? ' aria-current="page"' : ''}>Avisos</a>
       <a href="/datos/"${activo === 'datos' ? ' aria-current="page"' : ''}>Datos</a>
       <a href="https://aldeapucela.org" rel="noopener">Comunidad</a>
     </nav>
@@ -113,6 +132,50 @@ ${cuerpo}
 `;
 }
 
+/** Plazos que aún no han terminado, del más urgente al más lejano. */
+function plazosVivos(idPromocion = null) {
+  return PLAZOS
+    .filter((z) => (!idPromocion || z.promocion_id === idPromocion))
+    .filter((z) => !z.fin || dias(HOY, z.fin) >= 0)
+    .sort((a, b) => (a.fin ?? '9999').localeCompare(b.fin ?? '9999'));
+}
+
+function dias(a, b) {
+  return Math.round((Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / 86400000);
+}
+
+function cuentaAtras(z) {
+  if (!z.fin) return 'Sin fecha de cierre publicada';
+  const quedan = dias(HOY, z.fin);
+  if (quedan === 0) return 'Termina HOY';
+  if (quedan === 1) return 'Queda 1 día';
+  return `Quedan ${quedan} días`;
+}
+
+function bloquePlazos(lista, { titulo = 'Plazos abiertos', conPromocion = true } = {}) {
+  if (!lista.length) return '';
+  const filas = lista.map((z) => `      <li class="plazo plazo--${dias(HOY, z.fin ?? '9999') <= 3 ? 'urge' : 'normal'}">
+        <p class="plazo__cuenta">${esc(cuentaAtras(z))}</p>
+        <p class="plazo__que">${esc(z.titulo ?? 'Plazo')}${conPromocion ? ` · ${esc(nombrePromocion(z.promocion_id))}` : ''}</p>
+        <p class="fino">Hasta el ${esc(z.fin ?? '—')}${z.hora_limite ? ` a las ${esc(z.hora_limite)}` : ''} ·
+          <a href="${esc(z.fuente_url)}" rel="noopener nofollow">documento oficial</a>${z.fuente_ref ? ` (${esc(z.fuente_ref)})` : ''}</p>
+      </li>`).join('\n');
+  return `<section class="bloque bloque--plazos">
+    <h2>${esc(titulo)}</h2>
+    ${DEMO ? '<p class="aviso">Fechas de ejemplo, inventadas para enseñar cómo queda esta parte. Todavía no hay ningún plazo real anotado.</p>' : ''}
+    <ul class="plazos">
+${filas}
+    </ul>
+    <p class="fino">Fechas anotadas a mano leyendo el documento oficial que se enlaza. Si hay discrepancia, manda el
+       documento. <a href="/avisos/">Que te avisemos con tiempo →</a></p>
+  </section>`;
+}
+
+function nombrePromocion(id) {
+  const p = promociones.find((x) => x.id === id);
+  return p ? minusculiza(p.nombre, [...NOMBRES_PROPIOS, p.localidad, p.provincia]) : id;
+}
+
 function paginaPortada() {
   const deValladolid = promociones.filter((p) => p.provincia === PROVINCIA_POR_DEFECTO);
   const conTabla = deValladolid.filter((p) => p.disponibilidad?.publicada);
@@ -135,6 +198,14 @@ function paginaPortada() {
      la publican todavía.</p>
 </section>
 
+${bloquePlazos(plazosVivos())}
+
+<section class="bloque bloque--tuyo" id="lo-tuyo" hidden>
+  <h2>Lo que sigues</h2>
+  <p class="fino">Marcado en este navegador. No sale de aquí: ni cuentas, ni correo, ni servidor.</p>
+  <ul class="tarjetas" id="tuyo-listado"></ul>
+</section>
+
 <section class="filtros" aria-label="Filtros">
   <div class="filtros__grupo" role="group" aria-label="Provincia">
     <button type="button" data-provincia="Valladolid" class="activo">Valladolid</button>
@@ -151,6 +222,8 @@ function paginaPortada() {
 ${ordenadas(promociones).map(tarjeta).join('\n')}
 </ul>
 <p class="vacio" id="vacio" hidden>No hay promociones con ese filtro.</p>
+
+${ultimosAvisos()}
 `;
   return layout({
     titulo: 'Promociones',
@@ -182,8 +255,9 @@ function tarjeta(p) {
   return `  <li class="tarjeta" data-provincia="${esc(p.provincia ?? '')}" data-libres="${d.publicada ? (d.libres > 0 ? 'si' : 'no') : 'sin-tabla'}">
     <article>
       <p class="tarjeta__lugar">${esc(p.localidad ?? '')}${p.provincia && p.provincia !== p.localidad ? ` <span class="fino">(${esc(p.provincia)})</span>` : ''}</p>
-      <h2><a href="/promocion/${esc(p.id)}/">${esc(minusculiza(p.nombre, [p.localidad, p.provincia]))}</a></h2>
+      <h2><a href="/promocion/${esc(p.id)}/">${esc(minusculiza(p.nombre, [...NOMBRES_PROPIOS, p.localidad, p.provincia]))}</a></h2>
       <p class="estado estado--${clase}">${esc(etiqueta)}</p>
+      ${botonSeguir(p.id)}
       <ul class="tarjeta__datos">
         ${p.n_viviendas ? `<li>${p.n_viviendas} viviendas</li>` : ''}
         ${p.categoria ? `<li>${esc(p.categoria)}</li>` : ''}
@@ -204,7 +278,7 @@ function paginaPromocion(p) {
 <article class="ficha">
   <header>
     <p class="tarjeta__lugar">${esc([...new Set([p.localidad, p.provincia].filter(Boolean))].join(' · '))}</p>
-    <h1>${esc(minusculiza(p.nombre, [p.localidad, p.provincia]))}</h1>
+    <h1>${esc(minusculiza(p.nombre, [...NOMBRES_PROPIOS, p.localidad, p.provincia]))}</h1>
     ${p.direccion ? `<p class="direccion">${esc(p.direccion)}</p>` : ''}
   </header>
 
@@ -224,6 +298,22 @@ function paginaPromocion(p) {
     ` : `<p class="aviso">La web oficial todavía no publica la tabla de viviendas de esta promoción, así que no
        podemos decir cuántas quedan libres. En cuanto la publique, aparecerá aquí sola.</p>`}
   </section>
+
+  ${bloquePlazos(plazosVivos(p.id), { titulo: 'Plazos de esta promoción', conPromocion: false })}
+
+  <section class="bloque bloque--seguir">
+    <h2>Que no se te pase</h2>
+    ${botonSeguir(p.id, 'grande')}
+    <ul class="docs">
+      <li><a href="/promocion/${esc(p.id)}/avisos.xml">Avisos de esta promoción por RSS</a>
+        <p class="fino">Para leerlo con tu lector de siempre o enchufarlo a Telegram.</p></li>
+      ${plazosVivos(p.id).length ? `<li><a href="/promocion/${esc(p.id)}/plazos.ics">Plazos en tu calendario (.ics)</a>
+        <p class="fino">Tu móvil te avisa 14, 7, 3 y 1 días antes del cierre.</p></li>` : ''}
+      <li><a href="/avisos/">Avisos por correo y cómo funcionan</a></li>
+    </ul>
+  </section>
+
+  ${avisosDe(p.id)}
 
   <section class="bloque">
     <h2>¿En qué punto está mi solicitud?</h2>
@@ -249,7 +339,7 @@ function paginaPromocion(p) {
 </article>
 `;
   return layout({
-    titulo: minusculiza(p.nombre, [p.localidad, p.provincia]) || 'Promoción',
+    titulo: minusculiza(p.nombre, [...NOMBRES_PROPIOS, p.localidad, p.provincia]) || 'Promoción',
     descripcion: `${p.n_viviendas ?? ''} viviendas públicas en ${p.localidad ?? ''}: estado, viviendas libres y documentos oficiales.`,
     ruta: `/promocion/${p.id}/`, cuerpo,
   });
@@ -334,6 +424,170 @@ function nombreTipo(tipo) {
     procedimiento: 'Procedimiento', tecnico: 'Documentación técnica',
     listado_nominal: 'Listado con datos personales', otro: 'Documento',
   }[tipo] ?? 'Documento';
+}
+
+/** Botón de «me interesa». Sin JS no estorba: se oculta con CSS hasta que el JS lo activa. */
+function botonSeguir(id, tamano = '') {
+  return `<button type="button" class="seguir${tamano ? ` seguir--${tamano}` : ''}" data-seguir="${esc(id)}" hidden
+        aria-pressed="false">Me interesa</button>`;
+}
+
+function ultimosAvisos() {
+  const ultimos = avisos.filter((a) => a.tipo !== 'plazo_sin_registrar').slice(0, 6);
+  if (!ultimos.length) return '';
+  return `<section class="bloque">
+  <h2>Últimos movimientos</h2>
+  <ul class="docs">
+    ${ultimos.map((a) => `<li>
+      <a href="${esc(rutaDe(a))}">${esc(a.titulo)}</a> <span class="pastilla pastilla--doc">${esc(a.fecha)}</span>
+      <p class="fino">${esc(a.detalle ?? '')}</p>
+    </li>`).join('\n    ')}
+  </ul>
+  <p class="fino"><a href="/avisos/">Todos los avisos y cómo enterarte a tiempo →</a></p>
+</section>`;
+}
+
+function avisosDe(id) {
+  const suyos = avisos.filter((a) => a.promocion_id === id && a.tipo !== 'plazo_sin_registrar').slice(0, 8);
+  if (!suyos.length) return '';
+  return `<section class="bloque">
+    <h2>Qué ha pasado aquí</h2>
+    <ul class="docs">
+      ${suyos.map((a) => `<li><strong>${esc(a.fecha)}</strong> · ${esc(a.titulo)}
+        <p class="fino">${esc(a.detalle ?? '')}</p></li>`).join('\n      ')}
+    </ul>
+  </section>`;
+}
+
+function rutaDe(a) {
+  return a.url?.startsWith(SITIO) ? a.url.slice(SITIO.length) : (a.url ?? '/');
+}
+
+function paginaAvisos() {
+  const vivos = plazosVivos();
+  const cuerpo = `
+<article class="prosa">
+<h1>Que no se te pase el plazo</h1>
+<p>El problema de esto no es entenderlo: es enterarte a tiempo. Las convocatorias salen en un boletín,
+   los listados aparecen un martes cualquiera en una web y el plazo para alegar dura unos días. Por eso
+   el proyecto vigila las fichas oficiales <strong>todos los días</strong> y avisa cuando algo se mueve.</p>
+
+<h2>Cuatro maneras de enterarte</h2>
+<h3>1. Marcar lo que te interesa en este navegador</h3>
+<p>Dale a <em>Me interesa</em> en las promociones que sigues. La portada te pone arriba lo tuyo, con sus plazos
+   y sus últimos movimientos. Se guarda solo en tu navegador: no hay cuenta, ni correo, ni nada que viaje a
+   ningún servidor. Si cambias de móvil, se queda atrás; es el precio de no pedirte datos.</p>
+
+<h3>2. Calendario (lo más eficaz para los plazos)</h3>
+<p>Suscribe tu calendario a <a href="/plazos.ics">plazos.ics</a> y cada plazo entra con avisos automáticos
+   <strong>21, 14, 7, 3 y 1 días antes</strong>, más el propio día del cierre. Te avisa tu móvil, sin depender
+   de que nosotros te mandemos nada. Cada promoción tiene además el suyo en su ficha.</p>
+
+<h3>3. RSS</h3>
+<p><a href="/avisos.xml">Todos los avisos</a>, o el de una promoción concreta desde su ficha. Va bien para
+   engancharlo a Telegram, a un lector o a lo que use la comunidad.</p>
+
+<h3>4. Correo</h3>
+<p>Los mismos avisos se envían a la lista de correo de la comunidad. Nosotros no guardamos direcciones:
+   el envío va a la lista y las altas y bajas las gestiona ella. Pregunta en
+   <a href="https://aldeapucela.org" rel="noopener">Aldea Pucela</a> para apuntarte.</p>
+
+<h2>De qué se avisa</h2>
+<ul>
+  <li><strong>Plazos que se acercan</strong>: recordatorios a 21, 14, 7, 3 y 1 días, y el día del cierre.</li>
+  <li><strong>Convocatoria nueva</strong>: aparece un anuncio de BOCYL o del boletín provincial en la ficha.</li>
+  <li><strong>Listado publicado</strong>: sale la lista de admitidos, la definitiva o la de adjudicatarios.
+      Te decimos que existe y te llevamos a la web oficial; el listado no lo copiamos.</li>
+  <li><strong>Se abre o se cierra el procedimiento</strong>.</li>
+  <li><strong>Viviendas libres</strong>: cuando aparecen viviendas sin adjudicar (se alquilan por orden de
+      solicitud) o cuando la lista se mueve porque se ocupan.</li>
+</ul>
+
+<h2>Los plazos los pone una persona</h2>
+<p>Las fechas exactas viven dentro de los PDF del boletín, que este proyecto no descarga. Así que alguien de la
+   comunidad las lee y las anota <strong>siempre con el enlace al documento</strong>. Si detectamos una
+   convocatoria abierta sin plazo anotado, el sistema lo reclama en su ejecución diaria para que no se quede
+   sin poner. Si ves una fecha mal, dilo: manda el documento oficial, no nosotros.</p>
+
+${vivos.length ? `<h2>Plazos abiertos ahora</h2>${bloquePlazos(vivos)}` :
+  '<h2>Ahora mismo no hay plazos abiertos anotados</h2><p>Cuando se abra una convocatoria aparecerá aquí, en la portada y en los cuatro canales.</p>'}
+
+<h2>Cada cuánto</h2>
+<p>La comprobación es diaria. Un cambio puede tardar hasta 24 horas en detectarse, así que para un plazo que
+   cierra hoy no te fíes solo de esto: los recordatorios empiezan tres semanas antes precisamente por eso.</p>
+</article>`;
+  return layout({
+    titulo: 'Avisos',
+    descripcion: 'Avisos de convocatorias, listados y plazos de la vivienda pública en Valladolid: calendario, RSS, correo y seguimiento en tu navegador.',
+    ruta: '/avisos/', cuerpo, activo: 'avisos',
+  });
+}
+
+// ------------------------------------------------------------- sindicación ----
+
+function feedRss(lista, titulo, ruta) {
+  const items = lista.map((a) => `  <item>
+    <title>${esc(a.titulo)}</title>
+    <link>${esc(a.url ?? SITIO)}</link>
+    <guid isPermaLink="false">${esc(a.id)}</guid>
+    <pubDate>${new Date(`${a.fecha}T09:00:00Z`).toUTCString()}</pubDate>
+    <description>${esc(`${a.detalle ?? ''}${a.enlace_documento ? ` Documento: ${a.enlace_documento}` : ''}`)}</description>
+  </item>`).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>${esc(titulo)}</title>
+  <link>${SITIO}${ruta.replace(/avisos\.xml$/, '')}</link>
+  <description>Avisos automáticos de una web vecinal. No es una comunicación oficial.</description>
+  <language>es-ES</language>
+  <lastBuildDate>${new Date(`${HOY}T09:00:00Z`).toUTCString()}</lastBuildDate>
+${items}
+</channel>
+</rss>
+`;
+}
+
+/**
+ * Calendario iCalendar con un evento por plazo y alarmas a 21, 14, 7, 3 y 1
+ * días. Es el canal más útil: avisa el móvil de cada cual, sin que tengamos que
+ * saber quién es.
+ */
+function calendario(plazos) {
+  const alarmas = [21, 14, 7, 3, 1].map((d) => `BEGIN:VALARM
+TRIGGER:-P${d}D
+ACTION:DISPLAY
+DESCRIPTION:Faltan ${d} días para el cierre del plazo
+END:VALARM`).join('\n');
+
+  const eventos = plazos.filter((z) => z.fin).map((z) => {
+    const fin = z.fin.replace(/-/g, '');
+    const finExclusivo = new Date(Date.parse(`${z.fin}T00:00:00Z`) + 86400000).toISOString().slice(0, 10).replace(/-/g, '');
+    return `BEGIN:VEVENT
+UID:${z.promocion_id}-${z.tipo}-${fin}@vivienda.aldeapucela.org
+DTSTAMP:${HOY.replace(/-/g, '')}T090000Z
+DTSTART;VALUE=DATE:${(z.inicio ?? z.fin).replace(/-/g, '')}
+DTEND;VALUE=DATE:${finExclusivo}
+SUMMARY:${ics(`${z.titulo ?? 'Plazo'} · ${nombrePromocion(z.promocion_id)}`)}
+DESCRIPTION:${ics(`Termina el ${z.fin}${z.hora_limite ? ` a las ${z.hora_limite}` : ''}. Fuente: ${z.fuente_ref ?? z.fuente_url}. Ficha: ${SITIO}/promocion/${z.promocion_id}/`)}
+URL:${SITIO}/promocion/${z.promocion_id}/
+${alarmas}
+END:VEVENT`;
+  }).join('\n');
+
+  return `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Aldea Pucela//Vivienda//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Plazos de vivienda pública (Valladolid)
+X-WR-CALDESC:Plazos anotados por la comunidad a partir de los documentos oficiales
+${eventos}${eventos ? '\n' : ''}END:VCALENDAR
+`.replace(/\n/g, '\r\n');
+}
+
+/** Escapa según iCalendar (RFC 5545). */
+function ics(s) {
+  return String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
 }
 
 function paginaDatos() {
@@ -488,6 +742,7 @@ ${filtros}
  */
 function enlacesInternos(html) {
   return html
+    .replace(/<a href="\/[^"]*\.(?:json|xml|ics)"[^>]*>([\s\S]*?)<\/a>/g, '<code>$1</code>')
     .replace(/<a href="\/data\/[^"]*"[^>]*>([\s\S]*?)<\/a>/g, '<code>$1</code>')
     .replace(/href="\/(?!\/)([^"]*)"/g, (_, resto) => `href="#/${resto}"`);
 }
@@ -559,23 +814,6 @@ function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-/**
- * Los títulos oficiales vienen en MAYÚSCULAS y gritan. Los pasamos a minúscula
- * y devolvemos sus mayúsculas a los nombres propios conocidos (config/estilo.json),
- * a la localidad y a la provincia de la propia promoción.
- */
-function minusculiza(s, propios = []) {
-  if (!s) return '';
-  let t = s;
-  if (s === s.toUpperCase()) {
-    const minus = s.toLowerCase().replace(/\s+/g, ' ').trim();
-    t = minus.charAt(0).toUpperCase() + minus.slice(1);
-  }
-  for (const propio of [...NOMBRES_PROPIOS, ...propios].filter(Boolean)) {
-    t = t.replace(new RegExp(`\\b${propio.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi'), propio);
-  }
-  return t;
-}
 
 function suma(xs) { return xs.reduce((a, b) => a + (b ?? 0), 0); }
 
