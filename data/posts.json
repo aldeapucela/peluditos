@@ -96,6 +96,21 @@
     "tipo": "evento"
   },
   {
+    "id": "tg-200846",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-12T15:36:55.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-200846.jpg",
+    "images": [
+      "img/tg-200846.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/200846",
+    "source": "telegram"
+  },
+  {
     "id": "tg-200807",
     "shelter": "Peluditos en Aldea Pucela",
     "shelterUrl": "https://t.me/AldeaPucela/91148",
