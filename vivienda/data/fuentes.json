@@ -1,0 +1,563 @@
+{
+  "actualizado": "2026-08-13",
+  "fuentes": [
+    {
+      "id": "pagina:10-viviendas-de-proteccion-publica-en-alquiler-en-astorga-leon",
+      "tipo": "web",
+      "titulo": "10 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN ASTORGA (LEÓN)",
+      "url": "https://tuyavivienda.es/10-viviendas-de-proteccion-publica-en-alquiler-en-astorga-leon/",
+      "sha256": "27a0f72884aff247525debaf4524db6a1272beab33c1d304537bf0b0537e50af",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:10-viviendas-de-proteccion-publica-en-alquiler-en-astorga-leon:747327-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-ASTORGA-signed.pdf",
+      "tipo": "procedimiento",
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/06/747327-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-ASTORGA-signed.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:10-viviendas-de-proteccion-publica-en-alquiler-en-astorga-leon:MC-Astorga_memoria-de-calidades.pdf",
+      "tipo": "tecnico",
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2024/07/MC-Astorga_memoria-de-calidades.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:10-viviendas-de-proteccion-publica-en-alquiler-en-el-barco-de-avila-avila",
+      "tipo": "web",
+      "titulo": "9 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EL BARCO DE ÁVILA (AV)",
+      "url": "https://tuyavivienda.es/10-viviendas-de-proteccion-publica-en-alquiler-en-el-barco-de-avila-avila/",
+      "sha256": "0d76f75b1361d981968bbd5667dba99a161e3b9da732e6d7c76ef98335bfe9ec",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:10-viviendas-de-proteccion-publica-en-alquiler-en-el-barco-de-avila-avila:747329-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-EL-BARCO-DE-AVILA-signed.pdf",
+      "tipo": "procedimiento",
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/06/747329-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-EL-BARCO-DE-AVILA-signed.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:10-viviendas-de-proteccion-publica-en-alquiler-en-el-barco-de-avila-avila:MC-El-Barco-de-Avila_memoria-de-calidades.pdf",
+      "tipo": "tecnico",
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2024/07/MC-El-Barco-de-Avila_memoria-de-calidades.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:10-viviendas-de-proteccion-publica-en-alquiler-en-paredes-de-nava-palencia",
+      "tipo": "web",
+      "titulo": "10 VIVIENDAS DE PROTECCIÓN PÚBLICA EN ALQUILER EN PAREDES DE NAVA (PALENCIA)",
+      "url": "https://tuyavivienda.es/10-viviendas-de-proteccion-publica-en-alquiler-en-paredes-de-nava-palencia/",
+      "sha256": "e8a8ea7ad02f3fd212e381eafbc8f0acce33fcc99281d6f9398248d799e8550b",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:10-viviendas-de-proteccion-publica-en-alquiler-en-paredes-de-nava-palencia:ACUERDO-ADJUDICACION.pdf",
+      "tipo": "listado_nominal",
+      "titulo": "Listado de admitidos",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/01/ACUERDO-ADJUDICACION.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:10-viviendas-de-proteccion-publica-en-alquiler-en-paredes-de-nava-palencia:MC-PAREDES-DE-NAVA.pdf",
+      "tipo": "tecnico",
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2024/12/MC-PAREDES-DE-NAVA.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:10-viviendas-de-proteccion-publica-en-alquiler-en-paredes-de-nava-palencia:935878-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-PAREDES-DE-NAVA-signed.pdf",
+      "tipo": "procedimiento",
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/11/935878-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-PAREDES-DE-NAVA-signed.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:10-viviendas-promocion-publica-alquiler-puebla-de-sanabria-zamora",
+      "tipo": "web",
+      "titulo": "10 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN PUEBLA DE SANABRIA (ZAMORA)",
+      "url": "https://tuyavivienda.es/10-viviendas-promocion-publica-alquiler-puebla-de-sanabria-zamora/",
+      "sha256": "3f688a0f50fc26ba8f1881682e73a998c5f2d227d238e7311736d286629a47d8",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:10-viviendas-promocion-publica-alquiler-puebla-de-sanabria-zamora:MC-PUEBLA-DE-SANABRIA.pdf",
+      "tipo": "tecnico",
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-PUEBLA-DE-SANABRIA.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:100-viviendas-promocion-publica-alquiler-leon",
+      "tipo": "web",
+      "titulo": "100 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN LEÓN",
+      "url": "https://tuyavivienda.es/100-viviendas-promocion-publica-alquiler-leon/",
+      "sha256": "6c54e6eb1a6cc166abc3c0fd93a1694a8c1e9f0e506006fc90e4ed7c6ccaf78d",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:114-viviendas-de-promocion-publica-en-alquiler-en-parquesol-valladolid",
+      "tipo": "web",
+      "titulo": "114 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN PARQUESOL EN VALLADOLID",
+      "url": "https://tuyavivienda.es/114-viviendas-de-promocion-publica-en-alquiler-en-parquesol-valladolid/",
+      "sha256": "7c066cc13a8366b4faa2eca6712f6558cfd09da80dd92e1495d32606f3baab3b",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:12-viviendas-de-proteccion-publica-en-alquiler-en-penaranda-de-bracamonte-salama",
+      "tipo": "web",
+      "titulo": "12 VIVIENDAS DE PROMOC. PÚB. EN ALQUILER EN PEÑARANDA DE BRACAMONTE (SALAMANCA)",
+      "url": "https://tuyavivienda.es/12-viviendas-de-proteccion-publica-en-alquiler-en-penaranda-de-bracamonte-salamanca/",
+      "sha256": "5796cfd63784c662bd0d040d188399e45c1c40c549adaa52a719438320b76686",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:12-viviendas-de-proteccion-publica-en-alquiler-en-penaranda-de-bracamonte-salama:SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-PENARANDA-definitivo.pdf",
+      "tipo": "procedimiento",
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/04/SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-PENARANDA-definitivo.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:12-viviendas-de-proteccion-publica-en-alquiler-en-penaranda-de-bracamonte-salama:MC-PENARANDA-DE-BRACAMONTE.pdf",
+      "tipo": "tecnico",
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-PENARANDA-DE-BRACAMONTE.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:144-viviendas-de-promocion-publica-en-alquiler-en-burgos",
+      "tipo": "web",
+      "titulo": "144 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN BURGOS",
+      "url": "https://tuyavivienda.es/144-viviendas-de-promocion-publica-en-alquiler-en-burgos/",
+      "sha256": "d9aebf330b2875ffd1396a2bde67376ca774d9020256aa9d43518bbe875254d1",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:15-viviendas-santa-cristina-de-la-polvorosa",
+      "tipo": "web",
+      "titulo": "15 VIVIENDAS PROMOCIÓN PÚBLICA EN VENTA EN STA. CRISTINA DE LA POLVOROSA (ZA)",
+      "url": "https://tuyavivienda.es/15-viviendas-santa-cristina-de-la-polvorosa/",
+      "sha256": "3575a0fb0ab719a71005303fb800b4f5a3615a4ca682993b890b8078df58bdf6",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:152-viviendas-de-promocion-publica-en-alquiler-en-parque-alameda-valladolid",
+      "tipo": "web",
+      "titulo": "152 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN PARQUE ALAMEDA (VALLADOLID)",
+      "url": "https://tuyavivienda.es/152-viviendas-de-promocion-publica-en-alquiler-en-parque-alameda-valladolid/",
+      "sha256": "015464e913fdb8ace860fa99be7b4cc5c6977ce7c4b3660bae8a49ff17b96270",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:17-viviendas-de-proteccion-publica-en-alquiler-en-soria",
+      "tipo": "web",
+      "titulo": "17 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN SORIA",
+      "url": "https://tuyavivienda.es/17-viviendas-de-proteccion-publica-en-alquiler-en-soria/",
+      "sha256": "b0005bc99a2307271c7922e2aff4519115274fdee43a8d75aff628ba48740e33",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:17-viviendas-de-proteccion-publica-en-alquiler-en-soria:MC-SORIA-1.pdf",
+      "tipo": "tecnico",
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-SORIA-1.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:19-viviendas-de-protec-publica-en-venta-en-villalon-de-campos-valladolid",
+      "tipo": "web",
+      "titulo": "19 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN VILLALÓN DE CAMPOS (VA)",
+      "url": "https://tuyavivienda.es/19-viviendas-de-protec-publica-en-venta-en-villalon-de-campos-valladolid/",
+      "sha256": "1093b51e924c00381631578ac0f7803d879d863401e7895a9e603b89d9aa242c",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:19-viviendas-de-protec-publica-en-venta-en-villalon-de-campos-valladolid:SEGUNDA-CONVOCATORIA-ADJUDICACION-VIVIENDAS-CAMINEROS-VILLALON-DE-CAMPOS.pdf",
+      "tipo": "procedimiento",
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/05/SEGUNDA-CONVOCATORIA-ADJUDICACION-VIVIENDAS-CAMINEROS-VILLALON-DE-CAMPOS.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:19-viviendas-de-protec-publica-en-venta-en-villalon-de-campos-valladolid:MC-Villalon-de-Campos.pdf",
+      "tipo": "tecnico",
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2024/05/MC-Villalon-de-Campos.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:20-viviendas-de-promocion-publica-en-alquiler-en-ponferrada",
+      "tipo": "web",
+      "titulo": "20 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN PONFERRADA (LEÓN)",
+      "url": "https://tuyavivienda.es/20-viviendas-de-promocion-publica-en-alquiler-en-ponferrada/",
+      "sha256": "01e27cca50104f68d695b4353cb696477d849e0f89d1efd7c193795efdf43b9c",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid",
+      "tipo": "web",
+      "titulo": "27 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN MEDINA DEL CAMPO (VALLADOLID)",
+      "url": "https://tuyavivienda.es/27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid/",
+      "sha256": "ff7e87bb440dcd63c6e967dc52ae4b718dae33fcc84fa4bca2130d79fb5e8600",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid:BOCYL-D-04052026-82-22.pdf",
+      "tipo": "bocyl",
+      "titulo": "BOCYL-D-04052026-82-22",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOCYL-D-04052026-82-22.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid:BOPVA-A-2026-01557.pdf",
+      "tipo": "bop",
+      "titulo": "BOPVA-A-2026-01557",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-01557.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid:LISTADO-PROVISIONAL-VIVIENDAS-MEDINA-DEL-CAMPO.pdf",
+      "tipo": "listado_nominal",
+      "titulo": "Listado provisional admitidos",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/07/LISTADO-PROVISIONAL-VIVIENDAS-MEDINA-DEL-CAMPO.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid:MEMORIA-DE-CALIDADES_MEDINA.pdf",
+      "tipo": "tecnico",
+      "titulo": "Memoria de calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/04/MEMORIA-DE-CALIDADES_MEDINA.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid:FICHAS-COLIVING_MEDINA.pdf",
+      "tipo": "tecnico",
+      "titulo": "Plano espacio coliving",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/04/FICHAS-COLIVING_MEDINA.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:28-viviendas-de-promocion-publica-en-alquiler-en-miranda-de-ebro-burgos",
+      "tipo": "web",
+      "titulo": "28 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN MIRANDA DE EBRO (BURGOS)",
+      "url": "https://tuyavivienda.es/28-viviendas-de-promocion-publica-en-alquiler-en-miranda-de-ebro-burgos/",
+      "sha256": "715e17038513d4b7a7b824f609fb596fa32e44d15ef9ca12df10d347c97deb14",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:28-viviendas-de-proteccion-publica-en-alquiler-en-valencia-de-don-juan-leon",
+      "tipo": "web",
+      "titulo": "28 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN VALENCIA DE DON JUAN (LEÓN)",
+      "url": "https://tuyavivienda.es/28-viviendas-de-proteccion-publica-en-alquiler-en-valencia-de-don-juan-leon/",
+      "sha256": "05d7a9be957d60d7b1b6353c962229ce19e99948f0d551ca31d28e7ce1dd8c1b",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:28-viviendas-de-proteccion-publica-en-alquiler-en-valencia-de-don-juan-leon:SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-VALENCIA-DE-DON-JUAN.pdf",
+      "tipo": "procedimiento",
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/04/SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-VALENCIA-DE-DON-JUAN.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:28-viviendas-de-proteccion-publica-en-alquiler-en-valencia-de-don-juan-leon:MC-Valencia-de-Don-Juan-DEF.pdf",
+      "tipo": "tecnico",
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-Valencia-de-Don-Juan-DEF.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:38-viviendas-de-promocion-publica-en-aranda-de-duero-burgos",
+      "tipo": "web",
+      "titulo": "38 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN ARANDA DE DUERO (BURGOS)",
+      "url": "https://tuyavivienda.es/38-viviendas-de-promocion-publica-en-aranda-de-duero-burgos/",
+      "sha256": "10da0e7d31a5b27ccc619fbe4255b1545da72b8364e1c88371887b70cd532efa",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:38-viviendas-promocion-publica-colaborativa-soria",
+      "tipo": "web",
+      "titulo": "38 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN SORIA",
+      "url": "https://tuyavivienda.es/38-viviendas-promocion-publica-colaborativa-soria/",
+      "sha256": "c1842b11f2e9de17edabd055da5da6eb684ee8e63b335965521bf25bb0a9010d",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:40-viviendas-promocion-publica-colaborativa-alquiler-avila",
+      "tipo": "web",
+      "titulo": "40 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN ÁVILA",
+      "url": "https://tuyavivienda.es/40-viviendas-promocion-publica-colaborativa-alquiler-avila/",
+      "sha256": "fb2aa357cc44dbf1672d272f32d4514ff6955b236bc5636b28a8c5e679014e04",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:42-viviendas-de-promocion-publica-en-alquiler-en-zamora",
+      "tipo": "web",
+      "titulo": "42 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN ZAMORA",
+      "url": "https://tuyavivienda.es/42-viviendas-de-promocion-publica-en-alquiler-en-zamora/",
+      "sha256": "57211866323741728f83e1c72bd689136aa720be9dca052bb4f8d2f6eb040027",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:50-viviendas-de-promocion-publica-en-alquiler-en-mieses-valladolid",
+      "tipo": "web",
+      "titulo": "50 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN C/MIESES EN VALLADOLID",
+      "url": "https://tuyavivienda.es/50-viviendas-de-promocion-publica-en-alquiler-en-mieses-valladolid/",
+      "sha256": "abea1abc1fda9d1d8d7180e7375d5999af9a89f88b6ed76b2cba599a03890876",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:50-viviendas-promocion-publica-alquiler-colaborativa-palencia",
+      "tipo": "web",
+      "titulo": "50 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN PALENCIA",
+      "url": "https://tuyavivienda.es/50-viviendas-promocion-publica-alquiler-colaborativa-palencia/",
+      "sha256": "1c666cc478eac10461523bf51cdbf99ee57ae4d10a2e216b8a8682d82ed38adf",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:59-viviendas-alquiler-los-viveros-valladolid",
+      "tipo": "web",
+      "titulo": "59 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN LOS VIVEROS-VALLADOLID",
+      "url": "https://tuyavivienda.es/59-viviendas-alquiler-los-viveros-valladolid/",
+      "sha256": "a563c74334b64aa799472a4d6a11a4c1eeeb836173b5ee1deb8ce9556d14e2a9",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:59-viviendas-alquiler-los-viveros-valladolid:BOPVA-A-2026-01944.pdf",
+      "tipo": "bop",
+      "titulo": "BOPVA-A-2026-01944",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/07/BOPVA-A-2026-01944.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:59-viviendas-alquiler-los-viveros-valladolid:BOCYL-D-29062026-123-15.pdf",
+      "tipo": "bocyl",
+      "titulo": "BOCYL-D-29062026-123-15",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/06/BOCYL-D-29062026-123-15.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:59-viviendas-alquiler-los-viveros-valladolid:BOCYL-D-16032026-51-24.pdf",
+      "tipo": "bocyl",
+      "titulo": "BOCYL-D-16032026-51-24",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/04/BOCYL-D-16032026-51-24.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:59-viviendas-alquiler-los-viveros-valladolid:CORRECCION-ERRORES-BOCYL-1.pdf",
+      "tipo": "bocyl",
+      "titulo": "CORRECCIÓN ERRORES BOCYL (1)",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/04/CORRECCION-ERRORES-BOCYL-1.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:59-viviendas-alquiler-los-viveros-valladolid:CORRECCION-ERRORES-BOCYL-2.pdf",
+      "tipo": "bocyl",
+      "titulo": "CORRECCIÓN ERRORES BOCYL (2)",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/04/CORRECCION-ERRORES-BOCYL-2.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:59-viviendas-alquiler-los-viveros-valladolid:CORRECCION-de-errores-BOP-3.pdf",
+      "tipo": "bocyl",
+      "titulo": "CORRECCIÓN ERRORES BOCYL (3)",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/05/CORRECCION-de-errores-BOP-3.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:59-viviendas-alquiler-los-viveros-valladolid:BOPVA-A-2026-00824.pdf",
+      "tipo": "bop",
+      "titulo": "BOPVA-A-2026-00824",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-00824.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:59-viviendas-alquiler-los-viveros-valladolid:FAQs-procedimiento-alquiler-vivienda-joven-004.pdf",
+      "tipo": "procedimiento",
+      "titulo": "Preguntas frecuentes",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/03/FAQs-procedimiento-alquiler-vivienda-joven-004.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:59-viviendas-alquiler-los-viveros-valladolid:PUBLICACION-LISTA-DEFINITIVA-Y-FIRMA-CONTRATOS-VIVIENDAS-COLABORATIVAS.pdf",
+      "tipo": "listado_nominal",
+      "titulo": "Listado de adjudicatarios",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/06/PUBLICACION-LISTA-DEFINITIVA-Y-FIRMA-CONTRATOS-VIVIENDAS-COLABORATIVAS.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:59-viviendas-alquiler-los-viveros-valladolid:MC-ALQUILER-JOVEN_SABATINI-A4_memoria-de-calidades.pdf",
+      "tipo": "tecnico",
+      "titulo": "Memoria de calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/03/MC-ALQUILER-JOVEN_SABATINI-A4_memoria-de-calidades.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:59-viviendas-alquiler-los-viveros-valladolid:FICHA-COLIVING_r6.pdf",
+      "tipo": "tecnico",
+      "titulo": "Plano espacio coliving",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/03/FICHA-COLIVING_r6.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:7-viviendas-promocion-publica-viana-de-cega-valladolid",
+      "tipo": "web",
+      "titulo": "7 VIVIENDAS DE PROMOCIÓN PÚBLICA EN VENTA EN VIANA DE CEGA (VALLADOLID)",
+      "url": "https://tuyavivienda.es/7-viviendas-promocion-publica-viana-de-cega-valladolid/",
+      "sha256": "4ab4132c757800f98a92745b9f6fd71c5008a4093e15cde79eb9e8f306e413e8",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "pagina:8-viviendas-de-promocion-publica-ciudad-rodrigo",
+      "tipo": "web",
+      "titulo": "8 VIVIENDAS DE PROTECCIÓN PÚBLICA EN ALQUILER CIUDAD RODRIGO (SAL)",
+      "url": "https://tuyavivienda.es/8-viviendas-de-promocion-publica-ciudad-rodrigo/",
+      "sha256": "199cc3eecc1bafecbb3cfa4de3095da2dfdddd44804eac279e7544f5f38c31af",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:8-viviendas-de-promocion-publica-ciudad-rodrigo:747328-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-CIUDAD-RODRIGO-signed.pdf",
+      "tipo": "procedimiento",
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/06/747328-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-CIUDAD-RODRIGO-signed.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:8-viviendas-de-promocion-publica-ciudad-rodrigo:MC-CIUDAD-RODRIGO.pdf",
+      "tipo": "tecnico",
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2024/09/MC-CIUDAD-RODRIGO.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:9-viviendas-alquiler-zamora",
+      "tipo": "web",
+      "titulo": "9 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN ZAMORA",
+      "url": "https://tuyavivienda.es/9-viviendas-alquiler-zamora/",
+      "sha256": "0367b10df5de0771e29ed88618f1b8558d7c21799981fd8fdec60ad0bcc2897b",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    },
+    {
+      "id": "doc:9-viviendas-alquiler-zamora:SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-ZAMORA-signed.pdf",
+      "tipo": "procedimiento",
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/04/SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-ZAMORA-signed.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "doc:9-viviendas-alquiler-zamora:MC-ZAMORA.pdf",
+      "tipo": "tecnico",
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-ZAMORA.pdf",
+      "sha256": null,
+      "fecha_captura": "2026-08-13",
+      "descargado": false
+    },
+    {
+      "id": "pagina:93-viviendas-promocion-publica-colaborativa-alquier-segovia",
+      "tipo": "web",
+      "titulo": "93 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN SEGOVIA",
+      "url": "https://tuyavivienda.es/93-viviendas-promocion-publica-colaborativa-alquier-segovia/",
+      "sha256": "ece5b89582add20ed8c71f2997bbdcf3529fde6bd6a57deeb99d0f84bf70dff5",
+      "fecha_captura": "2026-08-13",
+      "descargado": true
+    }
+  ]
+}

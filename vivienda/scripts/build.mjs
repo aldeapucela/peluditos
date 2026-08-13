@@ -1,0 +1,509 @@
+#!/usr/bin/env node
+// Genera el sitio estático en dist/ a partir de data/. Sin dependencias y sin
+// red: todo el contenido informativo se sirve como HTML ya renderizado, así
+// que la web funciona sin JavaScript (el JS solo filtra tarjetas).
+//
+//   node scripts/build.mjs
+
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const DIST = path.join(RAIZ, 'dist');
+const SITIO = 'https://vivienda.aldeapucela.org';
+const MATOMO_SITE_ID = null; // se rellena cuando Aldea Pucela dé el id en stats.aldeapucela.org
+const PROVINCIA_POR_DEFECTO = 'Valladolid';
+
+const indice = json('data/promociones.json');
+const NOMBRES_PROPIOS = json('config/estilo.json', { nombres_propios: [] }).nombres_propios ?? [];
+const historico = json('data/historico.json', { registros: [] });
+const promociones = indice.promociones ?? [];
+
+fs.rmSync(DIST, { recursive: true, force: true });
+fs.mkdirSync(DIST, { recursive: true });
+
+escribe('index.html', paginaPortada());
+for (const p of promociones) {
+  escribe(`promocion/${p.id}/index.html`, paginaPromocion(json(`data/promociones/${p.id}.json`)));
+}
+escribe('como-funciona/index.html', paginaDoc('docs/proceso.md', 'Cómo funciona el proceso', '/como-funciona/'));
+escribe('privacidad/index.html', paginaDoc('docs/privacidad.md', 'Privacidad', '/privacidad/'));
+escribe('fuentes/index.html', paginaDoc('docs/fuentes.md', 'De dónde salen los datos', '/fuentes/'));
+escribe('datos/index.html', paginaDatos());
+escribe('404.html', pagina404());
+escribe('sitemap.xml', sitemap());
+escribe('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITIO}/sitemap.xml\n`);
+
+copia('src/styles.css', 'styles.css');
+copia('src/app.js', 'app.js');
+copiaDir('data', 'data');
+for (const f of ['CNAME', '.nojekyll']) if (existe(f)) copia(f, f);
+
+console.log(`✔ dist/ generado: ${promociones.length} fichas de promoción + 6 páginas`);
+
+// ------------------------------------------------------------- plantillas ----
+
+function layout({ titulo, descripcion, ruta, cuerpo, activo = '' }) {
+  const t = `${titulo} · Vivienda pública en Valladolid`;
+  return `<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(t)}</title>
+<meta name="description" content="${esc(descripcion)}">
+<link rel="canonical" href="${SITIO}${ruta}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vivienda · Aldea Pucela">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="${esc(t)}">
+<meta property="og:description" content="${esc(descripcion)}">
+<meta property="og:url" content="${SITIO}${ruta}">
+<link rel="stylesheet" href="/styles.css">
+${matomo()}</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <div class="container topbar__inner">
+    <a class="marca" href="/">
+      <span class="marca__kicker">Aldea Pucela</span>
+      <span class="marca__titulo">Vivienda</span>
+    </a>
+    <nav class="menu" aria-label="Menú principal">
+      <a href="/"${activo === 'inicio' ? ' aria-current="page"' : ''}>Promociones</a>
+      <a href="/como-funciona/"${activo === 'como' ? ' aria-current="page"' : ''}>Cómo funciona</a>
+      <a href="/datos/"${activo === 'datos' ? ' aria-current="page"' : ''}>Datos</a>
+      <a href="https://aldeapucela.org" rel="noopener">Comunidad</a>
+    </nav>
+  </div>
+</header>
+<main id="contenido" class="container">
+${cuerpo}
+</main>
+<footer class="pie">
+  <div class="container">
+    <p><strong>Esta web no es oficial.</strong> Es un proyecto vecinal de la comunidad de
+      <a href="https://aldeapucela.org" rel="noopener">Aldea Pucela</a> que ordena información ya publicada por
+      <a href="https://tuyavivienda.es" rel="noopener">tuyavivienda.es</a> (SOMACYL, Junta de Castilla y León).
+      Para cualquier trámite, la fuente válida es la oficial y el BOCYL.</p>
+    <p class="fino">No publicamos datos personales de solicitantes ni adjudicatarios:
+      <a href="/privacidad/">por qué y cómo</a>. ·
+      <a href="/fuentes/">De dónde salen los datos</a> ·
+      <a href="/datos/">Datos abiertos</a></p>
+    <p class="fino">Código <a href="https://github.com/aldeapucela/vivienda" rel="noopener">AGPL-3.0</a> ·
+      Datos <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" rel="noopener">CC BY-SA 4.0</a> ·
+      Hecho por vecinas y vecinos voluntarios</p>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>
+`;
+}
+
+function paginaPortada() {
+  const deValladolid = promociones.filter((p) => p.provincia === PROVINCIA_POR_DEFECTO);
+  const conTabla = deValladolid.filter((p) => p.disponibilidad?.publicada);
+  const libres = suma(conTabla.map((p) => p.disponibilidad.libres));
+  const totalTabla = suma(conTabla.map((p) => p.disponibilidad.total));
+  const viviendas = suma(deValladolid.map((p) => p.n_viviendas ?? 0));
+
+  const cuerpo = `
+<section class="hero">
+  <h1>Vivienda pública de alquiler en Valladolid</h1>
+  <p class="hero__sub">En qué punto está cada promoción, cuántas viviendas quedan libres y qué documento oficial
+     lo dice. Sin buscar entre PDF.</p>
+  <dl class="cifras">
+    <div><dt>Promociones en la provincia</dt><dd>${deValladolid.length}</dd></div>
+    <div><dt>Viviendas anunciadas</dt><dd>${viviendas || '—'}</dd></div>
+    <div><dt>Libres ahora mismo</dt><dd>${conTabla.length ? `${libres} <span class="de">de ${totalTabla}</span>` : '—'}</dd></div>
+  </dl>
+  <p class="fino">Datos leídos de la ficha oficial de cada promoción el ${esc(indice.actualizado)}.
+     «Libres» son las viviendas que la web oficial marca como <em>LIBRE</em> en su tabla; solo algunas promociones
+     la publican todavía.</p>
+</section>
+
+<section class="filtros" aria-label="Filtros">
+  <div class="filtros__grupo" role="group" aria-label="Provincia">
+    <button type="button" data-provincia="Valladolid" class="activo">Valladolid</button>
+    <button type="button" data-provincia="todas">Toda Castilla y León</button>
+  </div>
+  <div class="filtros__grupo" role="group" aria-label="Situación">
+    <button type="button" data-estado="todas" class="activo">Todas</button>
+    <button type="button" data-estado="libres">Con viviendas libres</button>
+    <button type="button" data-estado="sin-tabla">Aún sin tabla</button>
+  </div>
+</section>
+
+<ul class="tarjetas" id="listado">
+${ordenadas(promociones).map(tarjeta).join('\n')}
+</ul>
+<p class="vacio" id="vacio" hidden>No hay promociones con ese filtro.</p>
+`;
+  return layout({
+    titulo: 'Promociones',
+    descripcion: 'Seguimiento vecinal de las promociones públicas de alquiler joven (SOMACYL) en Valladolid: estado, viviendas libres y documentos oficiales.',
+    ruta: '/', cuerpo, activo: 'inicio',
+  });
+}
+
+/** Primero lo que le sirve a quien busca casa: promociones con viviendas libres. */
+function ordenadas(lista) {
+  const prioridad = (p) => {
+    const d = p.disponibilidad ?? {};
+    if (d.publicada && d.libres > 0) return 0;
+    if (!d.publicada) return 1;
+    return 2;
+  };
+  return lista.slice().sort((a, b) =>
+    prioridad(a) - prioridad(b) ||
+    (a.localidad ?? '').localeCompare(b.localidad ?? '', 'es') ||
+    (a.nombre ?? '').localeCompare(b.nombre ?? '', 'es'));
+}
+
+function tarjeta(p) {
+  const d = p.disponibilidad ?? {};
+  const clase = d.publicada ? (d.libres > 0 ? 'libre' : 'completa') : 'pendiente';
+  const etiqueta = d.publicada
+    ? (d.libres > 0 ? `${d.libres} libres de ${d.total}` : `Sin viviendas libres (${d.total})`)
+    : 'Aún sin tabla de viviendas';
+  return `  <li class="tarjeta" data-provincia="${esc(p.provincia ?? '')}" data-libres="${d.publicada ? (d.libres > 0 ? 'si' : 'no') : 'sin-tabla'}">
+    <article>
+      <p class="tarjeta__lugar">${esc(p.localidad ?? '')}${p.provincia && p.provincia !== p.localidad ? ` <span class="fino">(${esc(p.provincia)})</span>` : ''}</p>
+      <h2><a href="/promocion/${esc(p.id)}/">${esc(minusculiza(p.nombre, [p.localidad, p.provincia]))}</a></h2>
+      <p class="estado estado--${clase}">${esc(etiqueta)}</p>
+      <ul class="tarjeta__datos">
+        ${p.n_viviendas ? `<li>${p.n_viviendas} viviendas</li>` : ''}
+        ${p.categoria ? `<li>${esc(p.categoria)}</li>` : ''}
+        ${p.estado_obra ? `<li>Obra: ${esc(p.estado_obra.toLowerCase())}</li>` : ''}
+        ${p.estado_procedimiento ? `<li>Procedimiento ${esc(p.estado_procedimiento)}</li>` : ''}
+      </ul>
+    </article>
+  </li>`;
+}
+
+function paginaPromocion(p) {
+  const d = p.disponibilidad ?? {};
+  const serie = (historico.registros ?? []).filter((r) => r.promocion_id === p.id);
+  const desfase = p.n_viviendas && d.total && p.n_viviendas !== d.total;
+
+  const cuerpo = `
+<nav class="miga"><a href="/">Promociones</a> › <span>${esc(p.localidad ?? '')}</span></nav>
+<article class="ficha">
+  <header>
+    <p class="tarjeta__lugar">${esc([...new Set([p.localidad, p.provincia].filter(Boolean))].join(' · '))}</p>
+    <h1>${esc(minusculiza(p.nombre, [p.localidad, p.provincia]))}</h1>
+    ${p.direccion ? `<p class="direccion">${esc(p.direccion)}</p>` : ''}
+  </header>
+
+  <section class="bloque">
+    <h2>Viviendas libres</h2>
+    ${d.publicada ? `
+    <dl class="cifras cifras--ficha">
+      <div class="es-libre"><dt>Libres</dt><dd>${d.libres}</dd></div>
+      <div><dt>Próximamente</dt><dd>${d.proximamente}</dd></div>
+      <div><dt>Ocupadas</dt><dd>${d.ocupadas}</dd></div>
+      <div><dt>En la tabla</dt><dd>${d.total}</dd></div>
+    </dl>
+    ${desfase ? `<p class="aviso">La ficha oficial anuncia ${p.n_viviendas} viviendas pero su tabla detalla ${d.total}.
+       No sabemos por qué: lo dejamos tal cual lo publica la fuente.</p>` : ''}
+    ${tablaViviendas(p.viviendas)}
+    ${serie.length > 1 ? historicoHtml(serie) : `<p class="fino">Empezamos a registrar los cambios de ocupación el ${esc(serie[0]?.fecha ?? p.capturado)}. Cada día que cambie algo, quedará anotado aquí.</p>`}
+    ` : `<p class="aviso">La web oficial todavía no publica la tabla de viviendas de esta promoción, así que no
+       podemos decir cuántas quedan libres. En cuanto la publique, aparecerá aquí sola.</p>`}
+  </section>
+
+  <section class="bloque">
+    <h2>¿En qué punto está mi solicitud?</h2>
+    ${situacion(p, d)}
+    <p><a href="/como-funciona/">Ver el proceso completo, paso a paso →</a></p>
+  </section>
+
+  <section class="bloque">
+    <h2>Documentos oficiales</h2>
+    ${p.documentos.length ? `<ul class="docs">
+      ${p.documentos.map(documentoHtml).join('\n      ')}
+    </ul>` : '<p class="fino">La ficha oficial no enlaza documentos todavía.</p>'}
+  </section>
+
+  <section class="bloque bloque--fuente">
+    <h2>De dónde sale esto</h2>
+    <ul class="fino">
+      <li>Fuente: <a href="${esc(p.url_oficial)}" rel="noopener nofollow">ficha oficial en tuyavivienda.es</a></li>
+      <li>Leída el ${esc(p.capturado)}${p.actualizado_fuente ? ` · la fuente dice haberla actualizado el ${esc(p.actualizado_fuente.slice(0, 10))}` : ''}</li>
+      <li>Huella sha256 de la página leída: <code>${esc((p.sha256_pagina ?? '').slice(0, 16))}…</code></li>
+    </ul>
+  </section>
+</article>
+`;
+  return layout({
+    titulo: minusculiza(p.nombre, [p.localidad, p.provincia]) || 'Promoción',
+    descripcion: `${p.n_viviendas ?? ''} viviendas públicas en ${p.localidad ?? ''}: estado, viviendas libres y documentos oficiales.`,
+    ruta: `/promocion/${p.id}/`, cuerpo,
+  });
+}
+
+function tablaViviendas(viviendas = []) {
+  if (!viviendas.length) return '';
+  const filas = viviendas.map((v) => `      <tr class="v-${esc(v.estado ?? 'sin-dato')}">
+        <td>${esc([v.portal, v.piso].filter(Boolean).join(' · '))}</td>
+        <td>${etiquetaEstado(v.estado)}</td>
+        <td class="num">${v.habitaciones ?? '—'}</td>
+        <td class="num">${v.m2 != null ? `${v.m2.toString().replace('.', ',')} m²` : '—'}</td>
+        <td class="num">${v.precio_eur_mes != null ? `${v.precio_eur_mes} €` : '—'}</td>
+      </tr>`).join('\n');
+  return `<div class="tabla-scroll">
+    <table class="tabla">
+      <caption class="fino">Cada vivienda, tal y como la publica la web oficial.</caption>
+      <thead><tr><th scope="col">Vivienda</th><th scope="col">Estado</th><th scope="col">Hab.</th><th scope="col">Superficie</th><th scope="col">Renta</th></tr></thead>
+      <tbody>
+${filas}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function etiquetaEstado(estado) {
+  const mapa = { libre: 'Libre', ocupada: 'Ocupada', proximamente: 'Próximamente' };
+  return `<span class="pastilla pastilla--${esc(estado ?? 'sin-dato')}">${esc(mapa[estado] ?? 'Sin dato')}</span>`;
+}
+
+function historicoHtml(serie) {
+  const filas = serie.slice().reverse().map((r) => `      <tr><td>${esc(r.fecha)}</td><td class="num">${r.libres}</td><td class="num">${r.ocupadas}</td><td class="num">${r.proximamente}</td></tr>`).join('\n');
+  return `<details class="historico">
+    <summary>Cómo ha ido cambiando (${serie.length} registros)</summary>
+    <div class="tabla-scroll">
+      <table class="tabla">
+        <thead><tr><th scope="col">Día</th><th scope="col">Libres</th><th scope="col">Ocupadas</th><th scope="col">Próximamente</th></tr></thead>
+        <tbody>
+${filas}
+        </tbody>
+      </table>
+    </div>
+    <p class="fino">Solo se anota el día en que algo cambia. Es la única forma honesta que tenemos de enseñar
+       cómo avanza la lista: mirando lo que la propia fuente oficial publica, sin datos de nadie.</p>
+  </details>`;
+}
+
+/** Explicación en lenguaje claro del punto del proceso, sin inventar plazos. */
+function situacion(p, d) {
+  const partes = [];
+  if (p.estado_procedimiento === 'abierto') {
+    partes.push('La ficha oficial marca el <strong>procedimiento como abierto</strong>: se pueden presentar solicitudes. Los plazos exactos están en el anuncio del BOCYL o del Boletín de la Provincia que enlazamos abajo — son los que valen.');
+  } else if (p.estado_procedimiento === 'cerrado') {
+    partes.push('La ficha oficial marca el <strong>procedimiento como cerrado</strong>: el plazo para solicitar esta promoción ya pasó. Si presentaste solicitud, tu situación depende del listado y del sorteo; los documentos publicados están abajo.');
+  } else {
+    partes.push('La ficha oficial no indica en qué fase está el procedimiento. Los documentos publicados abajo son la referencia.');
+  }
+  if (p.estado_obra) {
+    partes.push(`Estado de la obra según la fuente: <strong>${esc(p.estado_obra.toLowerCase())}</strong>.`);
+  }
+  if (d.publicada && d.libres > 0) {
+    partes.push(`Hay <strong>${d.libres} viviendas marcadas como libres</strong>. Cuando quedan viviendas sin adjudicar, SOMACYL las arrienda por orden de solicitud; para saber cómo optar a ellas hay que preguntar directamente a <a href="mailto:tuyavivienda@somacyl.es">tuyavivienda@somacyl.es</a> o al 983 450 544.`);
+  } else if (d.publicada) {
+    partes.push('Ahora mismo <strong>no hay ninguna vivienda marcada como libre</strong> en la tabla oficial. Si estás en lista de reserva, tu turno depende de que alguien renuncie: aquí verás el cambio el día que la fuente lo publique.');
+  }
+  partes.push('<strong>No tenemos ni podemos tener tu expediente.</strong> Esta web no sabe quién eres ni maneja datos de solicitantes: para consultar tu situación personal, el canal es SOMACYL.');
+  return partes.map((t) => `<p>${t}</p>`).join('\n    ');
+}
+
+function documentoHtml(doc) {
+  const nominal = doc.tipo === 'listado_nominal';
+  return `<li>
+        <a href="${esc(doc.url)}" rel="noopener nofollow">${esc(doc.titulo ?? 'Documento')}</a>
+        <span class="pastilla pastilla--doc">${esc(nombreTipo(doc.tipo))}</span>
+        ${nominal ? '<p class="fino">Contiene nombres de personas: lo enlazamos a la web oficial y no lo copiamos ni lo procesamos.</p>' : ''}
+      </li>`;
+}
+
+function nombreTipo(tipo) {
+  return {
+    bocyl: 'BOCYL', bop: 'Boletín provincial', correccion: 'Corrección de errores',
+    procedimiento: 'Procedimiento', tecnico: 'Documentación técnica',
+    listado_nominal: 'Listado con datos personales', otro: 'Documento',
+  }[tipo] ?? 'Documento';
+}
+
+function paginaDatos() {
+  const cuerpo = `
+<article class="prosa">
+<h1>Datos abiertos</h1>
+<p>Todo lo que ves en esta web sale de estos ficheros, que puedes usar libremente citando la fuente
+   (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" rel="noopener">CC BY-SA 4.0</a>).
+   Se regeneran solos cada día y su historial completo está en Git: cada cambio de un dato queda fechado.</p>
+<ul class="docs">
+  <li><a href="/data/promociones.json">promociones.json</a> <span class="pastilla pastilla--doc">Índice</span>
+      <p class="fino">Una entrada por promoción con su estado y el resumen de viviendas libres.</p></li>
+  <li><a href="/data/historico.json">historico.json</a> <span class="pastilla pastilla--doc">Serie temporal</span>
+      <p class="fino">Cuántas viviendas había libres cada día que hubo algún cambio.</p></li>
+  <li><a href="/data/fuentes.json">fuentes.json</a> <span class="pastilla pastilla--doc">Trazabilidad</span>
+      <p class="fino">Qué página o documento respalda cada dato, cuándo se leyó y con qué huella sha256.</p></li>
+  <li><a href="/data/promociones/">data/promociones/&lt;id&gt;.json</a> <span class="pastilla pastilla--doc">Detalle</span>
+      <p class="fino">Ficha completa de cada promoción, vivienda a vivienda.</p></li>
+</ul>
+<h2>Lo que no vas a encontrar aquí</h2>
+<p>Ningún dato personal: ni nombres, ni DNI, ni posiciones de lista asociadas a personas. No es un descuido,
+   es la regla del proyecto y hay un test automático que impide publicar nada que lo parezca.
+   <a href="/privacidad/">Explicación completa</a>.</p>
+<h2>Cómo se generan</h2>
+<p>Un script sin dependencias lee las fichas públicas de <code>tuyavivienda.es</code> una vez al día, respetando
+   su <code>robots.txt</code>, y extrae solo hechos: cifras, estados y enlaces. El código está
+   <a href="https://github.com/aldeapucela/vivienda" rel="noopener">en GitHub</a> y cualquiera puede revisarlo o
+   levantar su propia copia. <a href="/fuentes/">Detalle de las fuentes</a>.</p>
+</article>`;
+  return layout({ titulo: 'Datos abiertos', descripcion: 'Ficheros JSON con las promociones de vivienda pública, su disponibilidad y la trazabilidad de cada dato.', ruta: '/datos/', cuerpo, activo: 'datos' });
+}
+
+function paginaDoc(rel, titulo, ruta) {
+  const md = fs.readFileSync(path.join(RAIZ, rel), 'utf8');
+  return layout({
+    titulo, descripcion: `${titulo} · proyecto vecinal de seguimiento de la vivienda pública en Valladolid.`,
+    ruta, cuerpo: `<article class="prosa">\n${markdown(md)}\n</article>`,
+    activo: ruta === '/como-funciona/' ? 'como' : '',
+  });
+}
+
+function pagina404() {
+  return layout({
+    titulo: 'Página no encontrada', descripcion: 'Esa página no existe.', ruta: '/404.html',
+    cuerpo: '<article class="prosa"><h1>Aquí no hay nada</h1><p>Puede que la promoción haya cambiado de dirección. <a href="/">Vuelve al listado</a>.</p></article>',
+  });
+}
+
+function sitemap() {
+  const urls = ['/', '/como-funciona/', '/datos/', '/privacidad/', '/fuentes/',
+    ...promociones.map((p) => `/promocion/${p.id}/`)];
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((u) => `  <url><loc>${SITIO}${u}</loc><lastmod>${indice.actualizado}</lastmod></url>`).join('\n')}
+</urlset>
+`;
+}
+
+function matomo() {
+  if (!MATOMO_SITE_ID) return '';
+  return `<script>
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['trackPageView']); _paq.push(['enableLinkTracking']);
+  (function() { var u="//stats.aldeapucela.org/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']); _paq.push(['setSiteId', '${MATOMO_SITE_ID}']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s); })();
+</script>
+`;
+}
+
+// -------------------------------------------------------------- markdown ----
+
+/** Renderizador mínimo: encabezados, párrafos, listas, tablas, énfasis y enlaces. */
+function markdown(md) {
+  const lineas = md.split(/\r?\n/);
+  const salida = [];
+  let lista = null; let tabla = false; let parrafo = [];
+
+  const cierraParrafo = () => { if (parrafo.length) { salida.push(`<p>${enLinea(parrafo.join(' '))}</p>`); parrafo = []; } };
+  const cierraLista = () => { if (lista) { salida.push(`</${lista}>`); lista = null; } };
+  const cierraTabla = () => { if (tabla) { salida.push('</tbody></table></div>'); tabla = false; } };
+  const cierraTodo = () => { cierraParrafo(); cierraLista(); cierraTabla(); };
+
+  for (const linea of lineas) {
+    const l = linea.trimEnd();
+    if (!l.trim()) { cierraTodo(); continue; }
+
+    const enc = l.match(/^(#{1,4})\s+(.*)$/);
+    if (enc) { cierraTodo(); const n = enc[1].length; salida.push(`<h${n}>${enLinea(enc[2])}</h${n}>`); continue; }
+
+    if (/^[-*]\s+/.test(l)) {
+      cierraParrafo(); cierraTabla();
+      if (lista !== 'ul') { cierraLista(); salida.push('<ul>'); lista = 'ul'; }
+      salida.push(`<li>${enLinea(l.replace(/^[-*]\s+/, ''))}</li>`); continue;
+    }
+    if (/^\d+[.)]\s+/.test(l)) {
+      cierraParrafo(); cierraTabla();
+      if (lista !== 'ol') { cierraLista(); salida.push('<ol>'); lista = 'ol'; }
+      salida.push(`<li>${enLinea(l.replace(/^\d+[.)]\s+/, ''))}</li>`); continue;
+    }
+    if (/^\|/.test(l)) {
+      cierraParrafo(); cierraLista();
+      const celdas = l.split('|').slice(1, -1).map((c) => c.trim());
+      if (/^[-:\s|]+$/.test(l)) continue; // separador de cabecera
+      if (!tabla) {
+        salida.push('<div class="tabla-scroll"><table class="tabla"><thead><tr>');
+        salida.push(celdas.map((c) => `<th scope="col">${enLinea(c)}</th>`).join(''));
+        salida.push('</tr></thead><tbody>');
+        tabla = true; continue;
+      }
+      salida.push(`<tr>${celdas.map((c) => `<td>${enLinea(c)}</td>`).join('')}</tr>`);
+      continue;
+    }
+    if (/^>\s?/.test(l)) { cierraTodo(); salida.push(`<blockquote>${enLinea(l.replace(/^>\s?/, ''))}</blockquote>`); continue; }
+    if (/^---+$/.test(l)) { cierraTodo(); salida.push('<hr>'); continue; }
+
+    cierraLista(); cierraTabla();
+    parrafo.push(l.trim());
+  }
+  cierraTodo();
+  return salida.join('\n');
+}
+
+function enLinea(s) {
+  return esc(s)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[\s(])\*([^*]+)\*/g, '$1<em>$2</em>')
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, t, u) => `<a href="${u}"${/^https?:/.test(u) ? ' rel="noopener"' : ''}>${t}</a>`);
+}
+
+// ------------------------------------------------------------- utilidades ----
+
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+/**
+ * Los títulos oficiales vienen en MAYÚSCULAS y gritan. Los pasamos a minúscula
+ * y devolvemos sus mayúsculas a los nombres propios conocidos (config/estilo.json),
+ * a la localidad y a la provincia de la propia promoción.
+ */
+function minusculiza(s, propios = []) {
+  if (!s) return '';
+  let t = s;
+  if (s === s.toUpperCase()) {
+    const minus = s.toLowerCase().replace(/\s+/g, ' ').trim();
+    t = minus.charAt(0).toUpperCase() + minus.slice(1);
+  }
+  for (const propio of [...NOMBRES_PROPIOS, ...propios].filter(Boolean)) {
+    t = t.replace(new RegExp(`\\b${propio.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi'), propio);
+  }
+  return t;
+}
+
+function suma(xs) { return xs.reduce((a, b) => a + (b ?? 0), 0); }
+
+function json(rel, porDefecto) {
+  const f = path.join(RAIZ, rel);
+  if (!fs.existsSync(f)) {
+    if (porDefecto !== undefined) return porDefecto;
+    throw new Error(`falta ${rel}: ejecuta antes "npm run sync"`);
+  }
+  return JSON.parse(fs.readFileSync(f, 'utf8'));
+}
+
+function existe(rel) { return fs.existsSync(path.join(RAIZ, rel)); }
+
+function escribe(rel, contenido) {
+  const f = path.join(DIST, rel);
+  fs.mkdirSync(path.dirname(f), { recursive: true });
+  fs.writeFileSync(f, contenido);
+}
+
+function copia(origen, destino) {
+  const d = path.join(DIST, destino);
+  fs.mkdirSync(path.dirname(d), { recursive: true });
+  fs.copyFileSync(path.join(RAIZ, origen), d);
+}
+
+function copiaDir(origen, destino) {
+  fs.cpSync(path.join(RAIZ, origen), path.join(DIST, destino), { recursive: true });
+}

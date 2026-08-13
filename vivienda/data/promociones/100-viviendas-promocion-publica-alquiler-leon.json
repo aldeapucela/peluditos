@@ -1,0 +1,25 @@
+{
+  "id": "100-viviendas-promocion-publica-alquiler-leon",
+  "nombre": "100 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN LEÓN",
+  "url_oficial": "https://tuyavivienda.es/100-viviendas-promocion-publica-alquiler-leon/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": null,
+  "estado_obra": "En ejecución",
+  "n_viviendas": 100,
+  "localidad": "León",
+  "provincia": "León",
+  "direccion": "C/ Santa María Josefa c.v C/ Posadera Aldonza",
+  "publicado_fuente": "2025-04-25T11:25:20+00:00",
+  "actualizado_fuente": "2025-05-16T11:06:47+00:00",
+  "documentos": [],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "6c54e6eb1a6cc166abc3c0fd93a1694a8c1e9f0e506006fc90e4ed7c6ccaf78d"
+}

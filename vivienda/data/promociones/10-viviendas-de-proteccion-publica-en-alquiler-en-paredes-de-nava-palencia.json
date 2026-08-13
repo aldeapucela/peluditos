@@ -1,0 +1,125 @@
+{
+  "id": "10-viviendas-de-proteccion-publica-en-alquiler-en-paredes-de-nava-palencia",
+  "nombre": "10 VIVIENDAS DE PROTECCIÓN PÚBLICA EN ALQUILER EN PAREDES DE NAVA (PALENCIA)",
+  "url_oficial": "https://tuyavivienda.es/10-viviendas-de-proteccion-publica-en-alquiler-en-paredes-de-nava-palencia/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": "cerrado",
+  "estado_obra": "Finalizadas",
+  "n_viviendas": 10,
+  "localidad": "Paredes de Nava",
+  "provincia": "Palencia",
+  "direccion": "C/ Circunvalación nº 90. 34300 – Paredes de Nava (Palencia)",
+  "publicado_fuente": "2025-01-30T08:33:06+00:00",
+  "actualizado_fuente": "2026-08-11T10:35:48+00:00",
+  "documentos": [
+    {
+      "titulo": "Listado de admitidos",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/01/ACUERDO-ADJUDICACION.pdf",
+      "tipo": "listado_nominal",
+      "descargable": false
+    },
+    {
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2024/12/MC-PAREDES-DE-NAVA.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    },
+    {
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/11/935878-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-PAREDES-DE-NAVA-signed.pdf",
+      "tipo": "procedimiento",
+      "descargable": true
+    }
+  ],
+  "viviendas": [
+    {
+      "portal": null,
+      "piso": "BAJO A",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 68.86,
+      "precio_eur_mes": 290
+    },
+    {
+      "portal": null,
+      "piso": "BAJO B",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 56.07,
+      "precio_eur_mes": 290
+    },
+    {
+      "portal": null,
+      "piso": "BAJO C",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 57.48,
+      "precio_eur_mes": 290
+    },
+    {
+      "portal": null,
+      "piso": "BAJO D",
+      "estado": "ocupada",
+      "habitaciones": 1,
+      "m2": 53.93,
+      "precio_eur_mes": 225
+    },
+    {
+      "portal": null,
+      "piso": "1º A",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 69.66,
+      "precio_eur_mes": 295
+    },
+    {
+      "portal": null,
+      "piso": "1º B",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 57.03,
+      "precio_eur_mes": 280
+    },
+    {
+      "portal": null,
+      "piso": "1º C",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 57.48,
+      "precio_eur_mes": 280
+    },
+    {
+      "portal": null,
+      "piso": "1º D",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 67.76,
+      "precio_eur_mes": 295
+    },
+    {
+      "portal": null,
+      "piso": "2º A",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 67.63,
+      "precio_eur_mes": 300
+    },
+    {
+      "portal": null,
+      "piso": "2º B",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 55.01,
+      "precio_eur_mes": 300
+    }
+  ],
+  "disponibilidad": {
+    "publicada": true,
+    "total": 10,
+    "libres": 0,
+    "proximamente": 0,
+    "ocupadas": 10
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "e8a8ea7ad02f3fd212e381eafbc8f0acce33fcc99281d6f9398248d799e8550b"
+}

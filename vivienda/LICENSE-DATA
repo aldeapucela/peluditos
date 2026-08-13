@@ -1,0 +1,27 @@
+# Licencia de los datos
+
+Los ficheros de `data/` y los contenidos publicados en https://vivienda.aldeapucela.org se
+distribuyen bajo **Creative Commons Reconocimiento-CompartirIgual 4.0 Internacional
+(CC BY-SA 4.0)** por **Aldea Pucela**.
+
+https://creativecommons.org/licenses/by-sa/4.0/deed.es
+
+## Atribución requerida
+
+> Datos: Aldea Pucela (CC BY-SA 4.0), a partir de información publicada por SOMACYL
+> (tuyavivienda.es) y de los boletines oficiales.
+
+## Origen de los datos
+
+Son **datos de hecho** —número de viviendas, estado de ocupación, superficie, renta, fechas y
+referencias documentales— extraídos de las fichas públicas de promoción de `tuyavivienda.es`
+(Sociedad Pública de Infraestructuras y Medio Ambiente de Castilla y León, SOMACYL) y de los
+documentos oficiales que esas fichas enlazan.
+
+Cada dato lleva en `data/fuentes.json` la URL de origen, la fecha de captura y la huella `sha256`
+de la página leída, de modo que cualquiera puede comprobarlo. No se reproducen textos, imágenes,
+planos ni documentos de la fuente: siempre se enlaza al original.
+
+## Lo que no hay en estos datos
+
+Ningún dato personal de solicitantes ni de adjudicatarios. Ver `docs/privacidad.md`.

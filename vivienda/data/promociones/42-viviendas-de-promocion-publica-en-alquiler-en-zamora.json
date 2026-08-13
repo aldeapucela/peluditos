@@ -1,0 +1,25 @@
+{
+  "id": "42-viviendas-de-promocion-publica-en-alquiler-en-zamora",
+  "nombre": "42 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN ZAMORA",
+  "url_oficial": "https://tuyavivienda.es/42-viviendas-de-promocion-publica-en-alquiler-en-zamora/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": null,
+  "estado_obra": "En ejecución",
+  "n_viviendas": 42,
+  "localidad": "Zamora",
+  "provincia": "Zamora",
+  "direccion": "Calle Burgos nº12.",
+  "publicado_fuente": "2025-04-04T07:35:57+00:00",
+  "actualizado_fuente": "2025-06-04T10:22:11+00:00",
+  "documentos": [],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "57211866323741728f83e1c72bd689136aa720be9dca052bb4f8d2f6eb040027"
+}

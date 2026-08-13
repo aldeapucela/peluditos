@@ -1,0 +1,565 @@
+{
+  "id": "59-viviendas-alquiler-los-viveros-valladolid",
+  "nombre": "59 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN LOS VIVEROS-VALLADOLID",
+  "url_oficial": "https://tuyavivienda.es/59-viviendas-alquiler-los-viveros-valladolid/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": "cerrado",
+  "estado_obra": "En ejecución",
+  "n_viviendas": 59,
+  "localidad": "Valladolid",
+  "provincia": "Valladolid",
+  "direccion": "C/ de los Jardines de los Alcázares de Sevilla esquina C/ Jardines de Sabatini.",
+  "publicado_fuente": "2025-02-10T12:02:13+00:00",
+  "actualizado_fuente": "2026-08-03T09:46:33+00:00",
+  "documentos": [
+    {
+      "titulo": "BOPVA-A-2026-01944",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/07/BOPVA-A-2026-01944.pdf",
+      "tipo": "bop",
+      "descargable": true
+    },
+    {
+      "titulo": "BOCYL-D-29062026-123-15",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/06/BOCYL-D-29062026-123-15.pdf",
+      "tipo": "bocyl",
+      "descargable": true
+    },
+    {
+      "titulo": "BOCYL-D-16032026-51-24",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/04/BOCYL-D-16032026-51-24.pdf",
+      "tipo": "bocyl",
+      "descargable": true
+    },
+    {
+      "titulo": "CORRECCIÓN ERRORES BOCYL (1)",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/04/CORRECCION-ERRORES-BOCYL-1.pdf",
+      "tipo": "bocyl",
+      "descargable": true
+    },
+    {
+      "titulo": "CORRECCIÓN ERRORES BOCYL (2)",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/04/CORRECCION-ERRORES-BOCYL-2.pdf",
+      "tipo": "bocyl",
+      "descargable": true
+    },
+    {
+      "titulo": "CORRECCIÓN ERRORES BOCYL (3)",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/05/CORRECCION-de-errores-BOP-3.pdf",
+      "tipo": "bocyl",
+      "descargable": true
+    },
+    {
+      "titulo": "BOPVA-A-2026-00824",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-00824.pdf",
+      "tipo": "bop",
+      "descargable": true
+    },
+    {
+      "titulo": "Preguntas frecuentes",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/03/FAQs-procedimiento-alquiler-vivienda-joven-004.pdf",
+      "tipo": "procedimiento",
+      "descargable": true
+    },
+    {
+      "titulo": "Listado de adjudicatarios",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/06/PUBLICACION-LISTA-DEFINITIVA-Y-FIRMA-CONTRATOS-VIVIENDAS-COLABORATIVAS.pdf",
+      "tipo": "listado_nominal",
+      "descargable": false
+    },
+    {
+      "titulo": "Memoria de calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/03/MC-ALQUILER-JOVEN_SABATINI-A4_memoria-de-calidades.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    },
+    {
+      "titulo": "Plano espacio coliving",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/03/FICHA-COLIVING_r6.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    }
+  ],
+  "viviendas": [
+    {
+      "portal": "DUPLEX",
+      "piso": "DUPLEX 3D",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.67,
+      "precio_eur_mes": 434
+    },
+    {
+      "portal": "DUPLEX",
+      "piso": "DUPLEX 3E",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.74,
+      "precio_eur_mes": 434
+    },
+    {
+      "portal": "DUPLEX",
+      "piso": "DUPLEX 3F",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.66,
+      "precio_eur_mes": 434
+    },
+    {
+      "portal": "DUPLEX",
+      "piso": "DUPLEX 3G",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.65,
+      "precio_eur_mes": 434
+    },
+    {
+      "portal": "DUPLEX",
+      "piso": "DUPLEX 3H",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.64,
+      "precio_eur_mes": 434
+    },
+    {
+      "portal": "DUPLEX",
+      "piso": "DUPLEX 3I",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.56,
+      "precio_eur_mes": 433
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "BAJO A",
+      "estado": "libre",
+      "habitaciones": 1,
+      "m2": 47.5,
+      "precio_eur_mes": 324
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "BAJO B",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.75,
+      "precio_eur_mes": 434
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "BAJO C",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.61,
+      "precio_eur_mes": 440
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "BAJO D",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60.13,
+      "precio_eur_mes": 410
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "1ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.12,
+      "precio_eur_mes": 430
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "1ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.57,
+      "precio_eur_mes": 433
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "1ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.57,
+      "precio_eur_mes": 440
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "1ºD",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.4,
+      "precio_eur_mes": 432
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "2ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.31,
+      "precio_eur_mes": 431
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "2ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.75,
+      "precio_eur_mes": 434
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "2ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.66,
+      "precio_eur_mes": 441
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "2ºD",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.4,
+      "precio_eur_mes": 432
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "3ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.12,
+      "precio_eur_mes": 430
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "3ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.57,
+      "precio_eur_mes": 433
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "3ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.65,
+      "precio_eur_mes": 441
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "3ºD",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.27,
+      "precio_eur_mes": 431
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "4ºA",
+      "estado": "libre",
+      "habitaciones": 1,
+      "m2": 43.85,
+      "precio_eur_mes": 299
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "4ºB",
+      "estado": "libre",
+      "habitaciones": 1,
+      "m2": 45.55,
+      "precio_eur_mes": 310
+    },
+    {
+      "portal": "PORTAL 3A",
+      "piso": "4ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.44,
+      "precio_eur_mes": 432
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "BAJO A",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.08,
+      "precio_eur_mes": 430
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "BAJO B",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.37,
+      "precio_eur_mes": 432
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "BAJO C",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.48,
+      "precio_eur_mes": 439
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "1ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.04,
+      "precio_eur_mes": 430
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "1ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.57,
+      "precio_eur_mes": 433
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "1ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.37,
+      "precio_eur_mes": 439
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "2ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.07,
+      "precio_eur_mes": 430
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "2ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.37,
+      "precio_eur_mes": 432
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "2ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.66,
+      "precio_eur_mes": 441
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "3ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 62.93,
+      "precio_eur_mes": 429
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "3ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.57,
+      "precio_eur_mes": 433
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "3ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.5,
+      "precio_eur_mes": 440
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "4ºA",
+      "estado": "libre",
+      "habitaciones": 1,
+      "m2": 44.42,
+      "precio_eur_mes": 303
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "4ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 58.75,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": "PORTAL 3B",
+      "piso": "4ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.83,
+      "precio_eur_mes": 435
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "BAJO A",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60.16,
+      "precio_eur_mes": 410
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "BAJO B",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.6,
+      "precio_eur_mes": 440
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "BAJO C",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.61,
+      "precio_eur_mes": 433
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "BAJO D",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.42,
+      "precio_eur_mes": 432
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "1ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.47,
+      "precio_eur_mes": 432
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "1ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.27,
+      "precio_eur_mes": 438
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "1ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.55,
+      "precio_eur_mes": 433
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "1ºD",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.17,
+      "precio_eur_mes": 430
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "2ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.23,
+      "precio_eur_mes": 431
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "2ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.43,
+      "precio_eur_mes": 439
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "2ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.61,
+      "precio_eur_mes": 433
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "2ºD",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.37,
+      "precio_eur_mes": 432
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "3ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.44,
+      "precio_eur_mes": 432
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "3ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 64.43,
+      "precio_eur_mes": 439
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "3ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.56,
+      "precio_eur_mes": 433
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "3ºD",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.11,
+      "precio_eur_mes": 430
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "4ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 63.83,
+      "precio_eur_mes": 435
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "4ºB",
+      "estado": "libre",
+      "habitaciones": 1,
+      "m2": 45.58,
+      "precio_eur_mes": 310
+    },
+    {
+      "portal": "PORTAL 3C",
+      "piso": "4ºC",
+      "estado": "libre",
+      "habitaciones": 1,
+      "m2": 44,
+      "precio_eur_mes": 300
+    }
+  ],
+  "disponibilidad": {
+    "publicada": true,
+    "total": 59,
+    "libres": 59,
+    "proximamente": 0,
+    "ocupadas": 0
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "a563c74334b64aa799472a4d6a11a4c1eeeb836173b5ee1deb8ce9556d14e2a9"
+}

@@ -1,0 +1,38 @@
+{
+  "id": "12-viviendas-de-proteccion-publica-en-alquiler-en-penaranda-de-bracamonte-salama",
+  "nombre": "12 VIVIENDAS DE PROMOC. PÚB. EN ALQUILER EN PEÑARANDA DE BRACAMONTE (SALAMANCA)",
+  "url_oficial": "https://tuyavivienda.es/12-viviendas-de-proteccion-publica-en-alquiler-en-penaranda-de-bracamonte-salamanca/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": "cerrado",
+  "estado_obra": "Finalizadas",
+  "n_viviendas": 12,
+  "localidad": "Peñaranda de Bracamonte",
+  "provincia": "Salamanca",
+  "direccion": "Calle Obras Públicas nº 1-20 . 37300-Peñaranda de Bracamonte (Salamanca)",
+  "publicado_fuente": "2023-05-12T07:24:45+00:00",
+  "actualizado_fuente": "2026-06-19T12:18:11+00:00",
+  "documentos": [
+    {
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/04/SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-PENARANDA-definitivo.pdf",
+      "tipo": "procedimiento",
+      "descargable": true
+    },
+    {
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-PENARANDA-DE-BRACAMONTE.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    }
+  ],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "5796cfd63784c662bd0d040d188399e45c1c40c549adaa52a719438320b76686"
+}

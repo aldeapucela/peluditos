@@ -1,0 +1,25 @@
+{
+  "id": "38-viviendas-de-promocion-publica-en-aranda-de-duero-burgos",
+  "nombre": "38 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN ARANDA DE DUERO (BURGOS)",
+  "url_oficial": "https://tuyavivienda.es/38-viviendas-de-promocion-publica-en-aranda-de-duero-burgos/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": null,
+  "estado_obra": "En ejecución",
+  "n_viviendas": 38,
+  "localidad": "Aranda de Duero",
+  "provincia": "Burgos",
+  "direccion": "C/ Eugenio de Aviraneta",
+  "publicado_fuente": "2025-02-17T10:45:45+00:00",
+  "actualizado_fuente": "2025-05-14T08:48:14+00:00",
+  "documentos": [],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "10da0e7d31a5b27ccc619fbe4255b1545da72b8364e1c88371887b70cd532efa"
+}

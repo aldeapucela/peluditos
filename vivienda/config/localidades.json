@@ -1,0 +1,6 @@
+{
+  "_nota": "Provincia de las localidades que la ficha oficial no indica entre paréntesis y que no son capital de provincia. Se revisa a mano: el script no deduce geografía.",
+  "provincia_por_localidad": {
+    "Ponferrada": "León"
+  }
+}

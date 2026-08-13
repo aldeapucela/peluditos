@@ -1,0 +1,16 @@
+{
+  "name": "aldeapucela-vivienda",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Seguimiento vecinal de la vivienda pública de alquiler en Valladolid",
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "sync": "node scripts/sync.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/sync.mjs --self-test && node scripts/check-privacidad.mjs",
+    "validate": "npm test",
+    "dev": "npm run build && python3 -m http.server 8000 --directory dist",
+    "clean": "node -e \"import('node:fs/promises').then(fs=>fs.rm('dist',{recursive:true,force:true}))\""
+  }
+}

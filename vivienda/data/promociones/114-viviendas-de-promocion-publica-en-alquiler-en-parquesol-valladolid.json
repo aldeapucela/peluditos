@@ -1,0 +1,25 @@
+{
+  "id": "114-viviendas-de-promocion-publica-en-alquiler-en-parquesol-valladolid",
+  "nombre": "114 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN PARQUESOL EN VALLADOLID",
+  "url_oficial": "https://tuyavivienda.es/114-viviendas-de-promocion-publica-en-alquiler-en-parquesol-valladolid/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": null,
+  "estado_obra": "En ejecución",
+  "n_viviendas": 114,
+  "localidad": "Valladolid",
+  "provincia": "Valladolid",
+  "direccion": "C/ Julio Senador Gómez",
+  "publicado_fuente": "2025-05-06T11:43:48+00:00",
+  "actualizado_fuente": "2025-05-14T10:46:52+00:00",
+  "documentos": [],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "7c066cc13a8366b4faa2eca6712f6558cfd09da80dd92e1495d32606f3baab3b"
+}

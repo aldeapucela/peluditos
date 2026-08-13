@@ -1,0 +1,38 @@
+{
+  "id": "8-viviendas-de-promocion-publica-ciudad-rodrigo",
+  "nombre": "8 VIVIENDAS DE PROTECCIÓN PÚBLICA EN ALQUILER CIUDAD RODRIGO (SAL)",
+  "url_oficial": "https://tuyavivienda.es/8-viviendas-de-promocion-publica-ciudad-rodrigo/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": "cerrado",
+  "estado_obra": "Finalizada",
+  "n_viviendas": 8,
+  "localidad": "Ciudad Rodrigo",
+  "provincia": "Salamanca",
+  "direccion": "Carretera de Salamanca nº 174. 37500 – Ciudad Rodrigo (Salamanca)",
+  "publicado_fuente": "2023-05-12T07:18:48+00:00",
+  "actualizado_fuente": "2026-06-19T12:18:48+00:00",
+  "documentos": [
+    {
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/06/747328-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-CIUDAD-RODRIGO-signed.pdf",
+      "tipo": "procedimiento",
+      "descargable": true
+    },
+    {
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2024/09/MC-CIUDAD-RODRIGO.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    }
+  ],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "199cc3eecc1bafecbb3cfa4de3095da2dfdddd44804eac279e7544f5f38c31af"
+}

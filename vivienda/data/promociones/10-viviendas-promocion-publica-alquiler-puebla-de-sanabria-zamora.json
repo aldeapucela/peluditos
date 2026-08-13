@@ -1,0 +1,113 @@
+{
+  "id": "10-viviendas-promocion-publica-alquiler-puebla-de-sanabria-zamora",
+  "nombre": "10 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN PUEBLA DE SANABRIA (ZAMORA)",
+  "url_oficial": "https://tuyavivienda.es/10-viviendas-promocion-publica-alquiler-puebla-de-sanabria-zamora/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": "cerrado",
+  "estado_obra": "Finalizada",
+  "n_viviendas": 10,
+  "localidad": "Puebla de Sanabria",
+  "provincia": "Zamora",
+  "direccion": "C/ Parque Obras Públicas 1 -14. 49300-Puebla de Sanabria (Zamora)",
+  "publicado_fuente": "2025-03-18T09:09:33+00:00",
+  "actualizado_fuente": "2026-08-11T10:42:55+00:00",
+  "documentos": [
+    {
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-PUEBLA-DE-SANABRIA.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    }
+  ],
+  "viviendas": [
+    {
+      "portal": null,
+      "piso": "2",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "4",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "5",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 89.7,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "6",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "7",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 89.7,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "9",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "10",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 89.7,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "12",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 89.7,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "13",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "14",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 89.7,
+      "precio_eur_mes": 350
+    }
+  ],
+  "disponibilidad": {
+    "publicada": true,
+    "total": 10,
+    "libres": 0,
+    "proximamente": 0,
+    "ocupadas": 10
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "3f688a0f50fc26ba8f1881682e73a998c5f2d227d238e7311736d286629a47d8"
+}

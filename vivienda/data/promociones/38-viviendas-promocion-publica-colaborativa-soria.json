@@ -1,0 +1,25 @@
+{
+  "id": "38-viviendas-promocion-publica-colaborativa-soria",
+  "nombre": "38 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN SORIA",
+  "url_oficial": "https://tuyavivienda.es/38-viviendas-promocion-publica-colaborativa-soria/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": null,
+  "estado_obra": "En ejecución",
+  "n_viviendas": 38,
+  "localidad": "Soria",
+  "provincia": "Soria",
+  "direccion": "C/Eduardo Saavedra nº71.",
+  "publicado_fuente": "2025-02-17T10:21:33+00:00",
+  "actualizado_fuente": "2025-12-23T09:53:29+00:00",
+  "documentos": [],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "c1842b11f2e9de17edabd055da5da6eb684ee8e63b335965521bf25bb0a9010d"
+}

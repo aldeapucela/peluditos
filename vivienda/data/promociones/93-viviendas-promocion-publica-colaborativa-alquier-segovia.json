@@ -1,0 +1,25 @@
+{
+  "id": "93-viviendas-promocion-publica-colaborativa-alquier-segovia",
+  "nombre": "93 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN SEGOVIA",
+  "url_oficial": "https://tuyavivienda.es/93-viviendas-promocion-publica-colaborativa-alquier-segovia/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": null,
+  "estado_obra": "En ejecución",
+  "n_viviendas": 93,
+  "localidad": "Segovia",
+  "provincia": "Segovia",
+  "direccion": "Carretera de Valdevilla",
+  "publicado_fuente": "2025-02-17T11:19:22+00:00",
+  "actualizado_fuente": "2025-05-14T09:03:26+00:00",
+  "documentos": [],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "ece5b89582add20ed8c71f2997bbdcf3529fde6bd6a57deeb99d0f84bf70dff5"
+}

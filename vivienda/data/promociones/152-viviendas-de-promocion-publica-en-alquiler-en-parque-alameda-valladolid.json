@@ -1,0 +1,25 @@
+{
+  "id": "152-viviendas-de-promocion-publica-en-alquiler-en-parque-alameda-valladolid",
+  "nombre": "152 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN PARQUE ALAMEDA (VALLADOLID)",
+  "url_oficial": "https://tuyavivienda.es/152-viviendas-de-promocion-publica-en-alquiler-en-parque-alameda-valladolid/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": null,
+  "estado_obra": "En ejecución",
+  "n_viviendas": 152,
+  "localidad": "Valladolid",
+  "provincia": "Valladolid",
+  "direccion": "Intersección de las calles Campo Charro, Valdeón, Campo de Vitigudino y Salón de Abadengo",
+  "publicado_fuente": "2025-02-17T13:02:35+00:00",
+  "actualizado_fuente": "2025-05-14T10:12:51+00:00",
+  "documentos": [],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "015464e913fdb8ace860fa99be7b4cc5c6977ce7c4b3660bae8a49ff17b96270"
+}

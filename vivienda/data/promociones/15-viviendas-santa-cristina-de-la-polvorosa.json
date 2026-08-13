@@ -1,0 +1,25 @@
+{
+  "id": "15-viviendas-santa-cristina-de-la-polvorosa",
+  "nombre": "15 VIVIENDAS PROMOCIÓN PÚBLICA EN VENTA EN STA. CRISTINA DE LA POLVOROSA (ZA)",
+  "url_oficial": "https://tuyavivienda.es/15-viviendas-santa-cristina-de-la-polvorosa/",
+  "categoria": "Venta",
+  "estado_procedimiento": null,
+  "estado_obra": "Entregada",
+  "n_viviendas": 15,
+  "localidad": "Santa Cristina de la Polvorosa",
+  "provincia": "Zamora",
+  "direccion": "Calle Elisardo Fernández, 2-9; 49620 – Santa Cristina de la Polvorosa (Zamora)",
+  "publicado_fuente": "2023-05-15T15:32:34+00:00",
+  "actualizado_fuente": "2025-05-14T10:18:52+00:00",
+  "documentos": [],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "3575a0fb0ab719a71005303fb800b4f5a3615a4ca682993b890b8078df58bdf6"
+}

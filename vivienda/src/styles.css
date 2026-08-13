@@ -1,0 +1,207 @@
+/* Vivienda · Aldea Pucela — hoja única, sin framework.
+   Paleta heredada de eventos.aldeapucela.org para que se note que es la misma casa. */
+
+:root {
+  --brand-50: #f5f1fb;
+  --brand-100: #ebe3f6;
+  --brand-200: #d8c9ee;
+  --brand-600: #6b4895;
+  --brand-700: #593b7a;
+  --brand-900: #332546;
+
+  --papel: #fbfaf8;
+  --tarjeta: #ffffff;
+  --tinta: #1f2430;
+  --tinta-suave: #5a6172;
+  --linea: #e8e3dc;
+
+  --libre: #1c7c4a;
+  --libre-fondo: #e6f5ec;
+  --ocupada: #8a4b52;
+  --ocupada-fondo: #f6e9ea;
+  --proxima: #8a6a1f;
+  --proxima-fondo: #fbf1da;
+
+  --radio: 1rem;
+  --sombra: 0 6px 20px rgba(31, 36, 48, .06);
+  --ancho: 68rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --papel: #14121a;
+    --tarjeta: #1d1a26;
+    --tinta: #f1eef7;
+    --tinta-suave: #b3abc4;
+    --linea: #322c40;
+    --brand-50: #241f30;
+    --brand-100: #2c2540;
+    --brand-200: #3d3357;
+    --brand-600: #c2aee4;
+    --brand-700: #d8c9ee;
+    --libre: #6ddba0;
+    --libre-fondo: #12301f;
+    --ocupada: #e2a3a9;
+    --ocupada-fondo: #33191c;
+    --proxima: #e8c579;
+    --proxima-fondo: #33280f;
+    --sombra: none;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font: 1rem/1.6 Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+a { color: var(--brand-600); }
+a:hover { color: var(--brand-700); }
+:focus-visible { outline: 3px solid var(--brand-600); outline-offset: 2px; border-radius: 4px; }
+
+h1, h2, h3 { line-height: 1.25; text-wrap: balance; }
+h1 { font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem); margin: 0 0 .5rem; }
+h2 { font-size: 1.25rem; margin: 0 0 .75rem; }
+
+.container { width: 100%; max-width: var(--ancho); margin: 0 auto; padding: 0 1rem; }
+@media (min-width: 40rem) { .container { padding: 0 1.5rem; } }
+
+.saltar {
+  position: absolute; left: -9999px; top: 0; background: var(--brand-600); color: #fff;
+  padding: .6rem 1rem; z-index: 100;
+}
+.saltar:focus { left: 0; }
+
+/* ---------- cabecera ---------- */
+.topbar { background: var(--tarjeta); border-bottom: 1px solid var(--linea); }
+.topbar__inner {
+  display: flex; flex-wrap: wrap; gap: .5rem 1.5rem;
+  align-items: center; justify-content: space-between; padding-block: .75rem;
+}
+.marca { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+.marca__kicker { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--tinta-suave); }
+.marca__titulo { font-size: 1.3rem; font-weight: 700; color: var(--brand-600); }
+.menu { display: flex; flex-wrap: wrap; gap: .25rem 1rem; font-size: .95rem; }
+.menu a { text-decoration: none; padding: .3rem 0; border-bottom: 2px solid transparent; }
+.menu a:hover, .menu a[aria-current] { border-color: var(--brand-600); }
+
+main { padding-block: 2rem 3rem; }
+
+/* ---------- portada ---------- */
+.hero { margin-bottom: 2rem; }
+.hero__sub { font-size: 1.05rem; color: var(--tinta-suave); max-width: 44rem; margin: 0 0 1.25rem; }
+
+.cifras { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); margin: 0 0 1rem; }
+.cifras > div {
+  background: var(--tarjeta); border: 1px solid var(--linea); border-radius: var(--radio);
+  padding: .9rem 1rem; box-shadow: var(--sombra);
+}
+.cifras dt { font-size: .8rem; color: var(--tinta-suave); margin-bottom: .2rem; }
+.cifras dd { margin: 0; font-size: 1.7rem; font-weight: 700; line-height: 1.1; }
+.cifras .de { font-size: .95rem; font-weight: 400; color: var(--tinta-suave); }
+.cifras--ficha .es-libre dd { color: var(--libre); }
+
+.fino { font-size: .85rem; color: var(--tinta-suave); }
+
+/* ---------- filtros ---------- */
+.filtros { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; margin-bottom: 1.5rem; }
+.filtros__grupo { display: flex; flex-wrap: wrap; gap: .4rem; }
+.filtros button {
+  font: inherit; font-size: .9rem; cursor: pointer;
+  background: var(--tarjeta); color: var(--tinta);
+  border: 1px solid var(--linea); border-radius: 999px; padding: .35rem .9rem;
+}
+.filtros button:hover { border-color: var(--brand-600); }
+.filtros button.activo { background: var(--brand-600); border-color: var(--brand-600); color: #fff; }
+@media (prefers-color-scheme: dark) { .filtros button.activo { color: #1a1622; } }
+
+/* ---------- tarjetas ---------- */
+.tarjetas {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+}
+.tarjeta > article {
+  height: 100%; background: var(--tarjeta); border: 1px solid var(--linea);
+  border-radius: var(--radio); padding: 1.1rem; box-shadow: var(--sombra);
+  display: flex; flex-direction: column; gap: .5rem;
+}
+.tarjeta h2 { font-size: 1.05rem; margin: 0; }
+.tarjeta h2 a { text-decoration: none; color: inherit; }
+.tarjeta h2 a:hover { text-decoration: underline; }
+.tarjeta__lugar { margin: 0; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--tinta-suave); }
+.tarjeta__datos { list-style: none; margin: auto 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .3rem .75rem; font-size: .85rem; color: var(--tinta-suave); }
+.tarjeta__datos li + li::before { content: '· '; }
+
+.estado { margin: 0; font-weight: 600; font-size: .95rem; }
+.estado--libre { color: var(--libre); }
+.estado--completa { color: var(--ocupada); }
+.estado--pendiente { color: var(--tinta-suave); font-weight: 500; }
+
+.vacio { color: var(--tinta-suave); }
+
+/* ---------- ficha ---------- */
+.miga { font-size: .85rem; color: var(--tinta-suave); margin-bottom: 1rem; }
+.ficha header { margin-bottom: 1.5rem; }
+.direccion { margin: .25rem 0 0; color: var(--tinta-suave); }
+.bloque {
+  background: var(--tarjeta); border: 1px solid var(--linea); border-radius: var(--radio);
+  padding: 1.25rem; margin-bottom: 1.25rem; box-shadow: var(--sombra);
+}
+.bloque--fuente { background: var(--brand-50); }
+.bloque p:last-child { margin-bottom: 0; }
+
+.aviso {
+  background: var(--proxima-fondo); color: var(--proxima);
+  border-left: 4px solid currentColor; border-radius: .4rem;
+  padding: .75rem 1rem; font-size: .92rem;
+}
+@media (prefers-color-scheme: dark) { .aviso { color: var(--proxima); } }
+
+/* ---------- tablas ---------- */
+.tabla-scroll { overflow-x: auto; margin: 1rem 0; }
+.tabla { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.tabla caption { text-align: left; margin-bottom: .5rem; }
+.tabla th, .tabla td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--linea); white-space: nowrap; }
+.tabla th { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--tinta-suave); }
+.tabla .num { text-align: right; font-variant-numeric: tabular-nums; }
+.tabla tbody tr:hover { background: var(--brand-50); }
+
+.pastilla { display: inline-block; font-size: .75rem; font-weight: 600; padding: .1rem .5rem; border-radius: 999px; }
+.pastilla--libre { background: var(--libre-fondo); color: var(--libre); }
+.pastilla--ocupada { background: var(--ocupada-fondo); color: var(--ocupada); }
+.pastilla--proximamente { background: var(--proxima-fondo); color: var(--proxima); }
+.pastilla--sin-dato { background: var(--brand-100); color: var(--tinta-suave); }
+.pastilla--doc { background: var(--brand-100); color: var(--brand-700); font-weight: 500; }
+
+.historico summary { cursor: pointer; font-weight: 600; }
+
+.docs { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+.docs li { padding-bottom: .75rem; border-bottom: 1px solid var(--linea); }
+.docs li:last-child { border-bottom: 0; padding-bottom: 0; }
+.docs p { margin: .25rem 0 0; }
+
+/* ---------- prosa ---------- */
+.prosa { max-width: 44rem; }
+.prosa h2 { margin-top: 2rem; }
+.prosa h3 { margin-top: 1.5rem; font-size: 1.05rem; }
+.prosa li { margin-bottom: .35rem; }
+.prosa blockquote {
+  margin: 1.25rem 0; padding: .5rem 1rem; border-left: 4px solid var(--brand-200);
+  color: var(--tinta-suave);
+}
+.prosa code { background: var(--brand-50); padding: .1rem .35rem; border-radius: .3rem; font-size: .9em; }
+.prosa hr { border: 0; border-top: 1px solid var(--linea); margin: 2rem 0; }
+
+/* ---------- pie ---------- */
+.pie { border-top: 1px solid var(--linea); background: var(--tarjeta); padding-block: 1.75rem; }
+.pie p { margin: 0 0 .6rem; max-width: 52rem; font-size: .9rem; }
+.pie p:last-child { margin-bottom: 0; }
+
+@media print {
+  .topbar, .filtros, .saltar { display: none; }
+  body { background: #fff; }
+}

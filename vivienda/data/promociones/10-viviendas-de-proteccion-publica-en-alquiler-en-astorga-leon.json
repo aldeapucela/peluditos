@@ -1,0 +1,119 @@
+{
+  "id": "10-viviendas-de-proteccion-publica-en-alquiler-en-astorga-leon",
+  "nombre": "10 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN ASTORGA (LEÓN)",
+  "url_oficial": "https://tuyavivienda.es/10-viviendas-de-proteccion-publica-en-alquiler-en-astorga-leon/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": "cerrado",
+  "estado_obra": "Finalizada",
+  "n_viviendas": 10,
+  "localidad": "Astorga",
+  "provincia": "León",
+  "direccion": "Carretera Madrid-Coruña nº 249 . 24700 – Astorga (León)",
+  "publicado_fuente": "2023-05-12T06:57:45+00:00",
+  "actualizado_fuente": "2026-08-11T10:48:49+00:00",
+  "documentos": [
+    {
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/06/747327-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-ASTORGA-signed.pdf",
+      "tipo": "procedimiento",
+      "descargable": true
+    },
+    {
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2024/07/MC-Astorga_memoria-de-calidades.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    }
+  ],
+  "viviendas": [
+    {
+      "portal": null,
+      "piso": "BAJO A",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 73.7,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "BAJO B",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 73.65,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "1º A",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 73.7,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "1º B",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 73.65,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "2º A",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 73.7,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "2º B",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 73.65,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "3º A",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 73.7,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "3º B",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 73.65,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "4º A",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 73.7,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "4º B",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 73.65,
+      "precio_eur_mes": 325
+    }
+  ],
+  "disponibilidad": {
+    "publicada": true,
+    "total": 10,
+    "libres": 0,
+    "proximamente": 0,
+    "ocupadas": 10
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "27a0f72884aff247525debaf4524db6a1272beab33c1d304537bf0b0537e50af"
+}

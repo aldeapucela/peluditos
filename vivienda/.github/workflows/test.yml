@@ -1,0 +1,29 @@
+name: Pruebas
+
+# En cada PR: el parser tiene que seguir dando lo mismo sobre las fichas
+# guardadas en fixtures/ y en data/ no puede colarse nada que parezca un dato
+# personal. Sin red y sin dependencias: tarda segundos.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Self-test del parser
+        run: node scripts/sync.mjs --self-test
+
+      - name: Test de privacidad sobre data/
+        run: node scripts/check-privacidad.mjs
+
+      - name: El parser sigue leyendo las fichas guardadas
+        run: node scripts/build.mjs

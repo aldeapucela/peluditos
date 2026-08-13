@@ -1,0 +1,15 @@
+{
+  "_nota": "Los títulos oficiales vienen en MAYÚSCULAS. Al pasarlos a minúscula se pierden los nombres propios, así que se listan aquí para restaurarlos. Se revisa a mano al añadir promociones nuevas.",
+  "nombres_propios": [
+    "Los Viveros",
+    "Jardines de Sabatini",
+    "Parquesol",
+    "Parque Alameda",
+    "Mieses",
+    "Viana de Cega",
+    "Medina del Campo",
+    "Villalón de Campos",
+    "Valladolid",
+    "Castilla y León"
+  ]
+}

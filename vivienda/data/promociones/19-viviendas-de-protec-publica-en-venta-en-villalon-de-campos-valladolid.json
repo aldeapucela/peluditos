@@ -1,0 +1,159 @@
+{
+  "id": "19-viviendas-de-protec-publica-en-venta-en-villalon-de-campos-valladolid",
+  "nombre": "19 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN VILLALÓN DE CAMPOS (VA)",
+  "url_oficial": "https://tuyavivienda.es/19-viviendas-de-protec-publica-en-venta-en-villalon-de-campos-valladolid/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": "cerrado",
+  "estado_obra": "Finalizada",
+  "n_viviendas": 19,
+  "localidad": "Villalón de Campos",
+  "provincia": "Valladolid",
+  "direccion": "C/ Constitución nº 61. 47600 – Villalón de Campos (Valladolid)",
+  "publicado_fuente": "2024-05-29T09:51:12+00:00",
+  "actualizado_fuente": "2026-08-11T10:24:37+00:00",
+  "documentos": [
+    {
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/05/SEGUNDA-CONVOCATORIA-ADJUDICACION-VIVIENDAS-CAMINEROS-VILLALON-DE-CAMPOS.pdf",
+      "tipo": "procedimiento",
+      "descargable": true
+    },
+    {
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2024/05/MC-Villalon-de-Campos.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    }
+  ],
+  "viviendas": [
+    {
+      "portal": null,
+      "piso": "1º B",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 79.08,
+      "precio_eur_mes": 300
+    },
+    {
+      "portal": null,
+      "piso": "1º C",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 59.81,
+      "precio_eur_mes": 250
+    },
+    {
+      "portal": null,
+      "piso": "1º D",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 80.56,
+      "precio_eur_mes": 300
+    },
+    {
+      "portal": null,
+      "piso": "1º G",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 58.43,
+      "precio_eur_mes": 250
+    },
+    {
+      "portal": null,
+      "piso": "2º A",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 85.47,
+      "precio_eur_mes": 300
+    },
+    {
+      "portal": null,
+      "piso": "2º B",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 78.41,
+      "precio_eur_mes": 300
+    },
+    {
+      "portal": null,
+      "piso": "2º C",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 59.6,
+      "precio_eur_mes": 250
+    },
+    {
+      "portal": null,
+      "piso": "2º D",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 80.64,
+      "precio_eur_mes": 300
+    },
+    {
+      "portal": null,
+      "piso": "2º E",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 89.14,
+      "precio_eur_mes": 300
+    },
+    {
+      "portal": null,
+      "piso": "2º F",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 55.55,
+      "precio_eur_mes": 250
+    },
+    {
+      "portal": null,
+      "piso": "3º A",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 68.5,
+      "precio_eur_mes": 250
+    },
+    {
+      "portal": null,
+      "piso": "3º B",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 58.17,
+      "precio_eur_mes": 250
+    },
+    {
+      "portal": null,
+      "piso": "3º C",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 69.41,
+      "precio_eur_mes": 300
+    },
+    {
+      "portal": null,
+      "piso": "3º D",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 77.95,
+      "precio_eur_mes": 300
+    },
+    {
+      "portal": null,
+      "piso": "3º E",
+      "estado": "ocupada",
+      "habitaciones": 2,
+      "m2": 65.37,
+      "precio_eur_mes": 250
+    }
+  ],
+  "disponibilidad": {
+    "publicada": true,
+    "total": 15,
+    "libres": 0,
+    "proximamente": 0,
+    "ocupadas": 15
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "1093b51e924c00381631578ac0f7803d879d863401e7895a9e603b89d9aa242c"
+}

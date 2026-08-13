@@ -1,0 +1,111 @@
+{
+  "id": "9-viviendas-alquiler-zamora",
+  "nombre": "9 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN ZAMORA",
+  "url_oficial": "https://tuyavivienda.es/9-viviendas-alquiler-zamora/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": "cerrado",
+  "estado_obra": "Finalizada",
+  "n_viviendas": 9,
+  "localidad": "Zamora",
+  "provincia": "Zamora",
+  "direccion": "Avenida de la Frontera, 3 -5; 49026 – Zamora",
+  "publicado_fuente": "2023-05-11T09:15:28+00:00",
+  "actualizado_fuente": "2026-08-11T10:33:09+00:00",
+  "documentos": [
+    {
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/04/SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-ZAMORA-signed.pdf",
+      "tipo": "procedimiento",
+      "descargable": true
+    },
+    {
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-ZAMORA.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    }
+  ],
+  "viviendas": [
+    {
+      "portal": null,
+      "piso": "BAJO (PORTAL 3)",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 69.95,
+      "precio_eur_mes": 380
+    },
+    {
+      "portal": null,
+      "piso": "1º IZQ. (PORTAL 3)",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 74.3,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "2º DER. (PORTAL 3)",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 74.3,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "BAJO (PORTAL 5)",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 69.95,
+      "precio_eur_mes": 380
+    },
+    {
+      "portal": null,
+      "piso": "1º IZQ. (PORTAL 5)",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 74.9,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "3º DER. (PORTAL 5)",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 74.9,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "4º IZQ. (PORTAL 5)",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 74.9,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "5º IZQ. (PORTAL 5)",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 74.9,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "5º DCHA. (PORTAL 5)",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 74.9,
+      "precio_eur_mes": 400
+    }
+  ],
+  "disponibilidad": {
+    "publicada": true,
+    "total": 9,
+    "libres": 0,
+    "proximamente": 0,
+    "ocupadas": 9
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "0367b10df5de0771e29ed88618f1b8558d7c21799981fd8fdec60ad0bcc2897b"
+}

@@ -1,0 +1,63 @@
+name: Actualizar datos
+
+# Lee una vez al día las fichas oficiales, regenera data/ y, si algo ha
+# cambiado, commitea y despliega en la misma ejecución (los push con
+# GITHUB_TOKEN no disparan otros workflows).
+
+on:
+  schedule:
+    - cron: '30 6 * * *'   # 06:30 UTC, best-effort: GitHub lo retrasa a menudo
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: datos
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Self-test del parser
+        run: node scripts/sync.mjs --self-test
+
+      - name: Leer las fichas oficiales
+        run: node scripts/sync.mjs
+
+      - name: Test de privacidad
+        run: node scripts/check-privacidad.mjs
+
+      - name: Commitear si hay cambios
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          if git diff --quiet -- data/; then
+            echo "sin cambios en data/"
+          else
+            git add data/
+            git commit -m "Actualizar datos ($(date -u +%Y-%m-%d))"
+            git push
+          fi
+
+      - name: Generar el sitio
+        run: node scripts/build.mjs
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+      - id: deploy
+        uses: actions/deploy-pages@v4

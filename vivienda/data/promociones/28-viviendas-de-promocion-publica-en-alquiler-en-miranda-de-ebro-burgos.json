@@ -1,0 +1,25 @@
+{
+  "id": "28-viviendas-de-promocion-publica-en-alquiler-en-miranda-de-ebro-burgos",
+  "nombre": "28 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN MIRANDA DE EBRO (BURGOS)",
+  "url_oficial": "https://tuyavivienda.es/28-viviendas-de-promocion-publica-en-alquiler-en-miranda-de-ebro-burgos/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": null,
+  "estado_obra": "En ejecución",
+  "n_viviendas": 28,
+  "localidad": "Miranda de Ebro",
+  "provincia": "Burgos",
+  "direccion": "Avenida de Europa",
+  "publicado_fuente": "2025-05-19T11:27:54+00:00",
+  "actualizado_fuente": "2025-05-19T11:28:19+00:00",
+  "documentos": [],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "715e17038513d4b7a7b824f609fb596fa32e44d15ef9ca12df10d347c97deb14"
+}

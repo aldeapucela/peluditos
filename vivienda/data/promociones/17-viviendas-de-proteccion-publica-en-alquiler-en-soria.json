@@ -1,0 +1,169 @@
+{
+  "id": "17-viviendas-de-proteccion-publica-en-alquiler-en-soria",
+  "nombre": "17 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN SORIA",
+  "url_oficial": "https://tuyavivienda.es/17-viviendas-de-proteccion-publica-en-alquiler-en-soria/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": "cerrado",
+  "estado_obra": "Finalizada",
+  "n_viviendas": 17,
+  "localidad": "Soria",
+  "provincia": "Soria",
+  "direccion": "Avenida de Valladolid nº 39. 42004 – Soria",
+  "publicado_fuente": "2023-05-12T08:17:57+00:00",
+  "actualizado_fuente": "2026-08-11T10:38:55+00:00",
+  "documentos": [
+    {
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-SORIA-1.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    }
+  ],
+  "viviendas": [
+    {
+      "portal": null,
+      "piso": "1º A",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 81,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "1º B",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 71.9,
+      "precio_eur_mes": 380
+    },
+    {
+      "portal": null,
+      "piso": "1º D",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 82.05,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "2º A",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 81,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "2º B",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 71.9,
+      "precio_eur_mes": 380
+    },
+    {
+      "portal": null,
+      "piso": "2º C",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 78.05,
+      "precio_eur_mes": 380
+    },
+    {
+      "portal": null,
+      "piso": "2º D",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 82.05,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "3º A",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 81,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "3º B",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 71.9,
+      "precio_eur_mes": 380
+    },
+    {
+      "portal": null,
+      "piso": "3º D",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 82.05,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "4º A",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 81,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "4º B",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 71.9,
+      "precio_eur_mes": 380
+    },
+    {
+      "portal": null,
+      "piso": "4º C",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 78.05,
+      "precio_eur_mes": 380
+    },
+    {
+      "portal": null,
+      "piso": "4º D",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 82.05,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "5º A",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 81,
+      "precio_eur_mes": 400
+    },
+    {
+      "portal": null,
+      "piso": "5º C *",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 78.05,
+      "precio_eur_mes": 430
+    },
+    {
+      "portal": null,
+      "piso": "5º D *",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 82.05,
+      "precio_eur_mes": 450
+    }
+  ],
+  "disponibilidad": {
+    "publicada": true,
+    "total": 17,
+    "libres": 0,
+    "proximamente": 0,
+    "ocupadas": 17
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "b0005bc99a2307271c7922e2aff4519115274fdee43a8d75aff628ba48740e33"
+}

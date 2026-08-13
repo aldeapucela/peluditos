@@ -1,0 +1,25 @@
+{
+  "id": "7-viviendas-promocion-publica-viana-de-cega-valladolid",
+  "nombre": "7 VIVIENDAS DE PROMOCIÓN PÚBLICA EN VENTA EN VIANA DE CEGA (VALLADOLID)",
+  "url_oficial": "https://tuyavivienda.es/7-viviendas-promocion-publica-viana-de-cega-valladolid/",
+  "categoria": "Venta",
+  "estado_procedimiento": null,
+  "estado_obra": "Entregada",
+  "n_viviendas": 7,
+  "localidad": "Viana de Cega",
+  "provincia": "Valladolid",
+  "direccion": "Calle del Rio 40-52; 47150 – Viana de Cega (Valladolid)",
+  "publicado_fuente": "2023-05-15T15:18:20+00:00",
+  "actualizado_fuente": "2025-05-14T10:25:34+00:00",
+  "documentos": [],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "4ab4132c757800f98a92745b9f6fd71c5008a4093e15cde79eb9e8f306e413e8"
+}

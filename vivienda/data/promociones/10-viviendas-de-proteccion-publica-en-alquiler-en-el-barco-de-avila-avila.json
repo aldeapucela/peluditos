@@ -1,0 +1,119 @@
+{
+  "id": "10-viviendas-de-proteccion-publica-en-alquiler-en-el-barco-de-avila-avila",
+  "nombre": "9 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EL BARCO DE ÁVILA (AV)",
+  "url_oficial": "https://tuyavivienda.es/10-viviendas-de-proteccion-publica-en-alquiler-en-el-barco-de-avila-avila/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": "cerrado",
+  "estado_obra": "Finalizada",
+  "n_viviendas": 9,
+  "localidad": "El Barco de Ávila",
+  "provincia": "Ávila",
+  "direccion": "Avenida Gredos, 2 -11; 05600 – El Barco de Ávila (Ávila)",
+  "publicado_fuente": "2023-05-12T06:43:13+00:00",
+  "actualizado_fuente": "2026-08-11T10:55:16+00:00",
+  "documentos": [
+    {
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/06/747329-SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-EL-BARCO-DE-AVILA-signed.pdf",
+      "tipo": "procedimiento",
+      "descargable": true
+    },
+    {
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2024/07/MC-El-Barco-de-Avila_memoria-de-calidades.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    }
+  ],
+  "viviendas": [
+    {
+      "portal": null,
+      "piso": "2",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "3",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "4",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "5",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "6",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "7",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "8",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": null
+    },
+    {
+      "portal": null,
+      "piso": "9",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "10",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 94,
+      "precio_eur_mes": 350
+    },
+    {
+      "portal": null,
+      "piso": "11",
+      "estado": "ocupada",
+      "habitaciones": 3,
+      "m2": 90,
+      "precio_eur_mes": 350
+    }
+  ],
+  "disponibilidad": {
+    "publicada": true,
+    "total": 10,
+    "libres": 0,
+    "proximamente": 0,
+    "ocupadas": 10
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "0d76f75b1361d981968bbd5667dba99a161e3b9da732e6d7c76ef98335bfe9ec"
+}

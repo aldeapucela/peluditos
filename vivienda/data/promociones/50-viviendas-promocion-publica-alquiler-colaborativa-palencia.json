@@ -1,0 +1,25 @@
+{
+  "id": "50-viviendas-promocion-publica-alquiler-colaborativa-palencia",
+  "nombre": "50 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN PALENCIA",
+  "url_oficial": "https://tuyavivienda.es/50-viviendas-promocion-publica-alquiler-colaborativa-palencia/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": null,
+  "estado_obra": "En ejecución",
+  "n_viviendas": 50,
+  "localidad": "Palencia",
+  "provincia": "Palencia",
+  "direccion": "Calle Hijas de la Caridad nº4-6",
+  "publicado_fuente": "2025-02-20T08:55:17+00:00",
+  "actualizado_fuente": "2025-05-14T10:16:17+00:00",
+  "documentos": [],
+  "viviendas": [],
+  "disponibilidad": {
+    "publicada": false,
+    "total": null,
+    "libres": null,
+    "proximamente": null,
+    "ocupadas": null
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "1c666cc478eac10461523bf51cdbf99ee57ae4d10a2e216b8a8682d82ed38adf"
+}

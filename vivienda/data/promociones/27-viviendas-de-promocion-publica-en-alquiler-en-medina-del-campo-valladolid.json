@@ -1,0 +1,273 @@
+{
+  "id": "27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid",
+  "nombre": "27 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN MEDINA DEL CAMPO (VALLADOLID)",
+  "url_oficial": "https://tuyavivienda.es/27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": null,
+  "estado_obra": "En ejecución",
+  "n_viviendas": 27,
+  "localidad": "Medina del Campo",
+  "provincia": "Valladolid",
+  "direccion": "Calle de la Cerámica",
+  "publicado_fuente": "2025-02-17T11:42:47+00:00",
+  "actualizado_fuente": "2026-07-28T13:02:54+00:00",
+  "documentos": [
+    {
+      "titulo": "BOCYL-D-04052026-82-22",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOCYL-D-04052026-82-22.pdf",
+      "tipo": "bocyl",
+      "descargable": true
+    },
+    {
+      "titulo": "BOPVA-A-2026-01557",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/05/BOPVA-A-2026-01557.pdf",
+      "tipo": "bop",
+      "descargable": true
+    },
+    {
+      "titulo": "Listado provisional admitidos",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/07/LISTADO-PROVISIONAL-VIVIENDAS-MEDINA-DEL-CAMPO.pdf",
+      "tipo": "listado_nominal",
+      "descargable": false
+    },
+    {
+      "titulo": "Memoria de calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/04/MEMORIA-DE-CALIDADES_MEDINA.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    },
+    {
+      "titulo": "Plano espacio coliving",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2026/04/FICHAS-COLIVING_MEDINA.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    }
+  ],
+  "viviendas": [
+    {
+      "portal": "Portal 1A",
+      "piso": "1ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1A",
+      "piso": "1ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1A",
+      "piso": "1ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1A",
+      "piso": "2ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1A",
+      "piso": "2ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1A",
+      "piso": "2ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1A",
+      "piso": "3ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1A",
+      "piso": "3ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1A",
+      "piso": "3ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1B",
+      "piso": "1ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1B",
+      "piso": "1ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1B",
+      "piso": "1ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1B",
+      "piso": "2ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1B",
+      "piso": "2ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1B",
+      "piso": "2ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1B",
+      "piso": "3ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1B",
+      "piso": "3ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1B",
+      "piso": "3ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1C",
+      "piso": "1ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1C",
+      "piso": "1ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1C",
+      "piso": "1ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1C",
+      "piso": "2ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1C",
+      "piso": "2ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1C",
+      "piso": "2ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1C",
+      "piso": "3ºA",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1C",
+      "piso": "3ºB",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    },
+    {
+      "portal": "Portal 1C",
+      "piso": "3ºC",
+      "estado": "libre",
+      "habitaciones": 2,
+      "m2": 60,
+      "precio_eur_mes": 443
+    }
+  ],
+  "disponibilidad": {
+    "publicada": true,
+    "total": 27,
+    "libres": 27,
+    "proximamente": 0,
+    "ocupadas": 0
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "ff7e87bb440dcd63c6e967dc52ae4b718dae33fcc84fa4bca2130d79fb5e8600"
+}

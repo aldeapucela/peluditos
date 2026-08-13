@@ -1,0 +1,175 @@
+{
+  "id": "28-viviendas-de-proteccion-publica-en-alquiler-en-valencia-de-don-juan-leon",
+  "nombre": "28 VIVIENDAS DE PROMOCIÓN PÚBLICA EN ALQUILER EN VALENCIA DE DON JUAN (LEÓN)",
+  "url_oficial": "https://tuyavivienda.es/28-viviendas-de-proteccion-publica-en-alquiler-en-valencia-de-don-juan-leon/",
+  "categoria": "Alquiler",
+  "estado_procedimiento": "cerrado",
+  "estado_obra": "Finalizadas",
+  "n_viviendas": 28,
+  "localidad": "Valencia de Don Juan",
+  "provincia": "León",
+  "direccion": "Av. Rey Juan Carlos I, C/ Dos de Mayo nº 4, 6, 8, 10 . 24200 – Valencia de Don Juan (León)",
+  "publicado_fuente": "2023-05-12T08:08:57+00:00",
+  "actualizado_fuente": "2026-08-11T10:40:59+00:00",
+  "documentos": [
+    {
+      "titulo": "Procedimiento segunda convocatoria",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2025/04/SEGUNDAS-CONVOCATORIAS-PROCEDIMIENTO-ACUERDO-ADJUDICACION-VIVIENDAS-CAMINEROS-VALENCIA-DE-DON-JUAN.pdf",
+      "tipo": "procedimiento",
+      "descargable": true
+    },
+    {
+      "titulo": "Calidades",
+      "url": "https://tuyavivienda.es/wp-content/uploads/2023/05/MC-Valencia-de-Don-Juan-DEF.pdf",
+      "tipo": "tecnico",
+      "descargable": true
+    }
+  ],
+  "viviendas": [
+    {
+      "portal": null,
+      "piso": "BAJO A (PORTAL 4)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 290
+    },
+    {
+      "portal": null,
+      "piso": "1º B (PORTAL 4)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "2º A (PORTAL 4)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "3º B (PORTAL 4)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "BAJO A (PORTAL 4A)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 290
+    },
+    {
+      "portal": null,
+      "piso": "3º A (PORTAL 4A)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "3º B (PORTAL 4A)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "BAJO A (PORTAL 8)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 290
+    },
+    {
+      "portal": null,
+      "piso": "3º A (PORTAL 8)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "3º B (PORTAL 8)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "BAJO A (PORTAL 8A)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 290
+    },
+    {
+      "portal": null,
+      "piso": "1º A (PORTAL 8A)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "1º B (PORTAL 8A)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "2º A (PORTAL 8A)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "2º B (PORTAL 8A)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "3º A (PORTAL 8A)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    },
+    {
+      "portal": null,
+      "piso": "3º B (PORTAL 8A)",
+      "estado": "ocupada",
+      "habitaciones": 4,
+      "m2": 91.8,
+      "precio_eur_mes": 325
+    }
+  ],
+  "disponibilidad": {
+    "publicada": true,
+    "total": 17,
+    "libres": 0,
+    "proximamente": 0,
+    "ocupadas": 17
+  },
+  "capturado": "2026-08-13",
+  "sha256_pagina": "05d7a9be957d60d7b1b6353c962229ce19e99948f0d551ca31d28e7ce1dd8c1b"
+}

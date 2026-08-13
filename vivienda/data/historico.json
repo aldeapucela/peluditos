@@ -1,0 +1,85 @@
+{
+  "actualizado": "2026-08-13",
+  "registros": [
+    {
+      "fecha": "2026-08-13",
+      "promocion_id": "10-viviendas-de-proteccion-publica-en-alquiler-en-astorga-leon",
+      "total": 10,
+      "libres": 0,
+      "proximamente": 0,
+      "ocupadas": 10
+    },
+    {
+      "fecha": "2026-08-13",
+      "promocion_id": "10-viviendas-de-proteccion-publica-en-alquiler-en-el-barco-de-avila-avila",
+      "total": 10,
+      "libres": 0,
+      "proximamente": 0,
+      "ocupadas": 10
+    },
+    {
+      "fecha": "2026-08-13",
+      "promocion_id": "10-viviendas-de-proteccion-publica-en-alquiler-en-paredes-de-nava-palencia",
+      "total": 10,
+      "libres": 0,
+      "proximamente": 0,
+      "ocupadas": 10
+    },
+    {
+      "fecha": "2026-08-13",
+      "promocion_id": "10-viviendas-promocion-publica-alquiler-puebla-de-sanabria-zamora",
+      "total": 10,
+      "libres": 0,
+      "proximamente": 0,
+      "ocupadas": 10
+    },
+    {
+      "fecha": "2026-08-13",
+      "promocion_id": "17-viviendas-de-proteccion-publica-en-alquiler-en-soria",
+      "total": 17,
+      "libres": 0,
+      "proximamente": 0,
+      "ocupadas": 17
+    },
+    {
+      "fecha": "2026-08-13",
+      "promocion_id": "19-viviendas-de-protec-publica-en-venta-en-villalon-de-campos-valladolid",
+      "total": 15,
+      "libres": 0,
+      "proximamente": 0,
+      "ocupadas": 15
+    },
+    {
+      "fecha": "2026-08-13",
+      "promocion_id": "27-viviendas-de-promocion-publica-en-alquiler-en-medina-del-campo-valladolid",
+      "total": 27,
+      "libres": 27,
+      "proximamente": 0,
+      "ocupadas": 0
+    },
+    {
+      "fecha": "2026-08-13",
+      "promocion_id": "28-viviendas-de-proteccion-publica-en-alquiler-en-valencia-de-don-juan-leon",
+      "total": 17,
+      "libres": 0,
+      "proximamente": 0,
+      "ocupadas": 17
+    },
+    {
+      "fecha": "2026-08-13",
+      "promocion_id": "59-viviendas-alquiler-los-viveros-valladolid",
+      "total": 59,
+      "libres": 59,
+      "proximamente": 0,
+      "ocupadas": 0
+    },
+    {
+      "fecha": "2026-08-13",
+      "promocion_id": "9-viviendas-alquiler-zamora",
+      "total": 9,
+      "libres": 0,
+      "proximamente": 0,
+      "ocupadas": 9
+    }
+  ]
+}
