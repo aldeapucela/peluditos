@@ -1,5 +1,20 @@
 [
   {
+    "id": "tg-202049",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-14T17:13:14.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-202049.jpg",
+    "images": [
+      "img/tg-202049.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/202049",
+    "source": "telegram"
+  },
+  {
     "id": "DcAlsYOMudi",
     "shelter": "Patitas Callejeras",
     "shelterUrl": "https://www.instagram.com/patitascallejerasvalladolid/",
