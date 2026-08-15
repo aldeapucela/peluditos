@@ -12,7 +12,11 @@ import { minusculiza } from './lib.mjs';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(RAIZ, 'dist');
-const SITIO = 'https://vivienda.aldeapucela.org';
+// Dónde se publica. Por defecto, el dominio propio; con BASE_PATH y SITIO_URL
+// el mismo build vale para GitHub Pages en una subcarpeta
+// (aldeapucela.github.io/vivienda) mientras el DNS no esté listo.
+const SITIO = (process.env.SITIO_URL ?? 'https://vivienda.aldeapucela.org').replace(/\/+$/, '');
+const BASE = (process.env.BASE_PATH ?? '').replace(/\/+$/, '');
 const MATOMO_SITE_ID = null; // se rellena cuando Aldea Pucela dé el id en stats.aldeapucela.org
 const PROVINCIA_POR_DEFECTO = 'Valladolid';
 
@@ -68,7 +72,10 @@ escribe('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITIO}/sitemap.xml\
 copia('src/styles.css', 'styles.css');
 copia('src/app.js', 'app.js');
 copiaDir('data', 'data');
-for (const f of ['CNAME', '.nojekyll']) if (existe(f)) copia(f, f);
+copia('.nojekyll', '.nojekyll');
+// El CNAME solo se publica cuando el dominio propio ya apunta aquí: si se sube
+// antes, GitHub Pages deja de servir en la URL de github.io y la web «desaparece».
+if (process.env.DOMINIO_PROPIO === '1' && existe('CNAME')) copia('CNAME', 'CNAME');
 
 console.log(`✔ dist/ generado: ${promociones.length} fichas · ${PLAZOS.length} plazos · ${avisos.length} avisos`);
 
@@ -872,7 +879,14 @@ function existe(rel) { return fs.existsSync(path.join(RAIZ, rel)); }
 function escribe(rel, contenido) {
   const f = path.join(DIST, rel);
   fs.mkdirSync(path.dirname(f), { recursive: true });
-  fs.writeFileSync(f, contenido);
+  fs.writeFileSync(f, BASE ? conBase(contenido) : contenido);
+}
+
+/** Antepone el prefijo de despliegue a los enlaces internos (los externos no llevan «/» inicial). */
+function conBase(contenido) {
+  return contenido
+    .replace(/(href|src)="\/(?!\/)/g, `$1="${BASE}/`)
+    .replace(/(href|src)="\/"/g, `$1="${BASE}/"`);
 }
 
 function copia(origen, destino) {

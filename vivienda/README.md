@@ -132,9 +132,22 @@ node scripts/sync.mjs --limite 3   # ingesta parcial, para probar
 
 No hay `npm install`: el proyecto **no tiene dependencias**. Requiere Node 20+.
 
-Para desplegar: *Settings → Pages → Source = GitHub Actions*, y el dominio propio con el fichero
-[`CNAME`](CNAME). La analítica de Matomo está preparada en `scripts/build.mjs` pero desactivada
-hasta que la comunidad asigne un `siteId`.
+### Desplegar
+
+El workflow activa GitHub Pages solo (`configure-pages` con `enablement: true`), así que basta con
+subir el código y ejecutar *Actions → Desplegar en GitHub Pages*.
+
+Mientras el DNS no exista, el sitio se publica en `https://aldeapucela.github.io/vivienda` y todas
+las rutas se generan con ese prefijo. Cuando `vivienda.aldeapucela.org` apunte a GitHub Pages
+(registro CNAME hacia `aldeapucela.github.io`), se crea la **variable de repositorio
+`DOMINIO_PROPIO=1`** y el siguiente despliegue publica ya en el dominio propio, con su fichero
+[`CNAME`](CNAME). El fichero no se sube antes a propósito: si se publica sin DNS, Pages deja de
+servir en la URL de github.io y la web parece caída.
+
+En local se puede probar igual: `BASE_PATH=/vivienda SITIO_URL=https://ejemplo.org/vivienda npm run build`.
+
+La analítica de Matomo está preparada en `scripts/build.mjs` pero desactivada hasta que la comunidad
+asigne un `siteId`.
 
 ## Operación y mantenimiento
 

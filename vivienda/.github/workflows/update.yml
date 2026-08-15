@@ -21,6 +21,13 @@ concurrency:
 jobs:
   actualizar:
     runs-on: ubuntu-latest
+    env:
+      # Mientras no exista el DNS de vivienda.aldeapucela.org, el sitio se
+      # publica en aldeapucela.github.io/vivienda. Cuando el dominio apunte
+      # aquí, basta con crear la variable de repositorio DOMINIO_PROPIO=1.
+      BASE_PATH: ${{ vars.DOMINIO_PROPIO == '1' && '' || '/vivienda' }}
+      SITIO_URL: ${{ vars.DOMINIO_PROPIO == '1' && 'https://vivienda.aldeapucela.org' || 'https://aldeapucela.github.io/vivienda' }}
+      DOMINIO_PROPIO: ${{ vars.DOMINIO_PROPIO }}
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -62,6 +69,8 @@ jobs:
         run: node scripts/build.mjs
 
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true   # activa Pages en el repo la primera vez, sin tocar Settings
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
