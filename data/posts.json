@@ -1,5 +1,20 @@
 [
   {
+    "id": "tg-208491",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-25T15:13:01.000Z",
+    "caption": "Hola! Cualquier ayuda o información os la agradecemos",
+    "excerpt": "Hola! Cualquier ayuda o información os la agradecemos",
+    "image": "img/tg-208491.jpg",
+    "images": [
+      "img/tg-208491.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/208491",
+    "source": "telegram"
+  },
+  {
     "id": "DccKN8piNn_",
     "shelter": "113 Motivo Animales",
     "shelterUrl": "https://www.instagram.com/113motivoanimales/",
