@@ -1,5 +1,20 @@
 [
   {
+    "id": "tg-212219",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-08-31T11:22:08.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-212219.jpg",
+    "images": [
+      "img/tg-212219.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/212219",
+    "source": "telegram"
+  },
+  {
     "id": "Dcs0xJqOASw",
     "shelter": "CER Arroyo de la Encomienda",
     "shelterUrl": "https://www.instagram.com/voluntarios.arroyo/",
