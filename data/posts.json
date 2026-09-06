@@ -19,6 +19,21 @@
     "tipo": "otro"
   },
   {
+    "id": "tg-216112",
+    "shelter": "Peluditos en Aldea Pucela",
+    "shelterUrl": "https://t.me/AldeaPucela/91148",
+    "zone": "Valladolid",
+    "date": "2026-09-06T07:05:06.000Z",
+    "caption": "",
+    "excerpt": "",
+    "image": "img/tg-216112.jpg",
+    "images": [
+      "img/tg-216112.jpg"
+    ],
+    "permalink": "https://t.me/AldeaPucela/91148/216112",
+    "source": "telegram"
+  },
+  {
     "id": "Dc72o6BorrO",
     "shelter": "Propatas",
     "shelterUrl": "https://www.instagram.com/propatas.oficial/",
