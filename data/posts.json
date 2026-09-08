@@ -12,7 +12,9 @@
       "img/tg-218332.jpg"
     ],
     "permalink": "https://t.me/AldeaPucela/91148/218332",
-    "source": "telegram"
+    "source": "telegram",
+    "type": "otro",
+    "tipo": "perdido"
   },
   {
     "id": "DdBTMx2NPUU",
@@ -10325,18 +10327,5 @@
     "permalink": "https://www.instagram.com/p/DYIjh5UgBB2/",
     "type": "perro",
     "tipo": "adopcion"
-  },
-  {
-    "id": "DYHRpsEjvzc",
-    "shelter": "Colonia Canelitos",
-    "shelterUrl": "https://www.instagram.com/coloniacanelitos/",
-    "zone": "Valladolid",
-    "date": "2026-05-09T09:57:05.000Z",
-    "caption": "Nos encanta jugar a escondite 😅😅",
-    "excerpt": "Nos encanta jugar a escondite 😅😅",
-    "image": "img/DYHRpsEjvzc.jpg",
-    "permalink": "https://www.instagram.com/p/DYHRpsEjvzc/",
-    "type": "gato",
-    "tipo": "otro"
   }
 ]
